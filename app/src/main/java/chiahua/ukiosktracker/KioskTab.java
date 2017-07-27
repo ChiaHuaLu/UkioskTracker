@@ -4,6 +4,8 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -19,4 +21,6 @@ public class KioskTab extends Fragment {
         View rootView = inflater.inflate(R.layout.kiosk_tab, container, false);
         return rootView;
     }
+
+
 }
