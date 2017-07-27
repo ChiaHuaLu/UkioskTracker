@@ -1,5 +1,6 @@
 package chiahua.ukiosktracker;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static final String TAG = "tag";
 
 
 
@@ -89,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Snackbar.make(getView, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+        if (id == R.id.about) {
+            //Snackbar.make(getView, "Replace with your own action", Snackbar.LENGTH_LONG)
+              //      .setAction("Action", null).show();
+            aboutOnClick();
             return true;
         }
 
@@ -145,9 +149,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void aboutOnClick(View view) {
-        //Snackbar.make(view, "About Button Clicked", Snackbar.LENGTH_LONG)
-          //      .setAction("Action", null).show();
+    public void aboutOnClick() {
+        Log.d(TAG, "in about onClick");
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
 
     }
 
