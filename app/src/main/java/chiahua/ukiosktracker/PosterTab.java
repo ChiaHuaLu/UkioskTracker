@@ -23,16 +23,17 @@ import java.util.ArrayList;
 public class PosterTab extends Fragment {
 
     public ArrayList<Poster> allPosters;
+    public ArrayList<Kiosk> allKiosks;
 
-    // TODO Use bundle to pass args. Nonempty constructor cause crashes upon return
-    public PosterTab(ArrayList<Poster> posters) {
-        allPosters = posters;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.poster_tab, container, false);
+        allPosters = this.getArguments().getParcelableArrayList("allPosters");
+        allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
+        Log.d("allPosters Check", "Poster Tab's allPosters contains " + allPosters.size() + " Elements");
+        Log.d("allKiosks Check", "Poster Tab's allKiosks contains " + allKiosks.size() + " Elements");
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +71,7 @@ public class PosterTab extends Fragment {
                     // TODO Extract the data returned from the child Activity.
                     String[] returnValue = data.getStringArrayExtra("New_Poster_Info");
                     Log.d("TAG", "New poster info: "+returnValue[0] + returnValue[1] + returnValue[2] + returnValue[3]);
+                    allPosters.add(new Poster(returnValue[0], returnValue[1], returnValue[2], "", returnValue[3], allKiosks));
                 }
                 break;
             }

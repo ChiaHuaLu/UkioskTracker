@@ -4,11 +4,12 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-public class Kiosk {
+public class Kiosk implements Parcelable {
 
     //Coordinates of the Kiosks
     private double lattitude;
@@ -29,6 +30,26 @@ public class Kiosk {
         this.description = description;
         posterList = new ArrayList<Poster>();
     }
+
+    protected Kiosk(Parcel in) {
+        lattitude = in.readDouble();
+        longitude = in.readDouble();
+        kioskNumber = in.readInt();
+        description = in.readString();
+        posterList = in.createTypedArrayList(Poster.CREATOR);
+    }
+
+    public static final Creator<Kiosk> CREATOR = new Creator<Kiosk>() {
+        @Override
+        public Kiosk createFromParcel(Parcel in) {
+            return new Kiosk(in);
+        }
+
+        @Override
+        public Kiosk[] newArray(int size) {
+            return new Kiosk[size];
+        }
+    };
 
     //Get lattitude coordinate
     public double lattit() {
@@ -74,6 +95,20 @@ public class Kiosk {
         double result = (lattitudeDelta * lattitudeDelta) +
                 (longitudeDelta * longitudeDelta);
         return result = Math.sqrt(result) * 111000;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(lattitude);
+        dest.writeDouble(longitude);
+        dest.writeInt(kioskNumber);
+        dest.writeString(description);
+        dest.writeTypedList(posterList);
     }
 
    /* public int describeContents() {

@@ -4,9 +4,12 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class Poster {
+public class Poster implements Parcelable {
 
     private String title;
     private String organization;
@@ -36,6 +39,28 @@ public class Poster {
         if (time == null)
             eventTime = "";
     }
+
+    protected Poster(Parcel in) {
+        title = in.readString();
+        organization = in.readString();
+        eventLocation = in.readString();
+        eventTime = in.readString();
+        details = in.readString();
+        count = in.readInt();
+        locations = in.createBooleanArray();
+    }
+
+    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
+        @Override
+        public Poster createFromParcel(Parcel in) {
+            return new Poster(in);
+        }
+
+        @Override
+        public Poster[] newArray(int size) {
+            return new Poster[size];
+        }
+    };
 
     //Constructor helper method
     private void initializePoster(String title, String details, ArrayList<Kiosk> kiosks) {
@@ -119,6 +144,22 @@ public class Poster {
     public String[] getDetailArray() {
         String[] detailsArray = new String[] {title, organization, eventLocation, eventTime, details};
         return detailsArray;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(organization);
+        dest.writeString(eventLocation);
+        dest.writeString(eventTime);
+        dest.writeString(details);
+        dest.writeInt(count);
+        dest.writeBooleanArray(locations);
     }
 }
 

@@ -128,7 +128,11 @@ public class MainActivity extends AppCompatActivity {
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
                 case 2:
-                    PosterTab posterTab = new PosterTab(allPosters);
+                    PosterTab posterTab = new PosterTab();
+                    Bundle posterTabBundle = new Bundle();
+                    posterTabBundle.putParcelableArrayList("allPosters", allPosters);
+                    posterTabBundle.putParcelableArrayList("allKiosks", allKiosks);
+                    posterTab.setArguments(posterTabBundle);
                     return posterTab;
             }
             return null;
