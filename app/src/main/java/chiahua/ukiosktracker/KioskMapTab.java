@@ -23,16 +23,18 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     private final LatLng UT_AUSTIN = new LatLng(30.2859305,-97.7395813);
 
-    private static final float DEFAULT_MIN_ZOOM = 14.0f;
+    private static final float DEFAULT_MIN_ZOOM = 14.8f;
     private static final float DEFAULT_MAX_ZOOM = 18.0f;
 
     private static final LatLngBounds UT_AUSTIN_BOUNDS = new LatLngBounds(
             new LatLng(30.277979,-97.7428474), new LatLng(30.290262, -97.726700));
     private static final CameraPosition UT_AUSTIN_CAMERA = new CameraPosition.Builder()
-            .target(new LatLng(30.2859305,-97.7395813)).zoom(DEFAULT_MIN_ZOOM)
+            .target(new LatLng(30.284819, -97.737334)).zoom(DEFAULT_MIN_ZOOM)
             .bearing(0).tilt(0).build();
 
     private GoogleMap mMap;
+
+    public all
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +92,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
         // Add a marker in Sydney and move the camera
-        mMap.addMarker(new MarkerOptions().position(UT_AUSTIN).title("UT Tower"));
+       // mMap.addMarker(new MarkerOptions().position(UT_AUSTIN).title("UT Tower"));
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
     }
 }
