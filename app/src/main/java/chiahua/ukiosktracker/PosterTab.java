@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
@@ -39,6 +41,8 @@ public class PosterTab extends Fragment {
             debug += "   " +posters.title() + "\n";
         }
         Log.d("All Posters List", "AllPosters = \n"+debug);
+        TextView debugTV = (TextView) getActivity().findViewById(R.id.debugList);
+        //debugTV.setText(debug);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

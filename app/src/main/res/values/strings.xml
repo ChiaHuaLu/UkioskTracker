@@ -12,9 +12,8 @@
     <string name="kiosk">Kiosks</string>
     <string name="nearby">Nearby</string>
     <string name="posters">Posters</string>
-    <string name="about_app_name">Posted - UT Kiosk Tracker</string>
+    <string name="app_subtitle">UT Kiosk Tracker</string>
     <string name="about">About</string>
-    <string name="about_credits">Copyright (C) 2017 \nChia-Hua Lu - Developer \nDaniel Zheng - Developer \nHung Bao - Developer \nSabrina Herrero - Inspirer</string>
     <string name="title">Title</string>
     <string name="organization">Organization</string>
     <string name="event_location">Event Location</string>
@@ -24,5 +23,9 @@
     <string name="hint_location">Place of Event (Optional)</string>
     <string name="hint_description">Description (Optional)</string>
     <string name="add_new_poster">Add New Poster</string>
+    <string name="title_dev">Program Developers</string>
+    <string name="title_concept">Concept &amp; Core Features Design</string>
+    <string name="title_graphic">Graphics &amp; Photos</string>
+    <string name="title_locations">Kiosk Locations Mapping</string>
 
 </resources>
