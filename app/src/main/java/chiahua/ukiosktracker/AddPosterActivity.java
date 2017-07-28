@@ -29,7 +29,7 @@ public class AddPosterActivity extends AppCompatActivity {
         String org = orgField.getText().toString();
         String location = locationField.getText().toString();
         String description = descriptionField.getText().toString();
-        Poster newPoster = new Poster(name, org, location, null, description, kiosks);
+        //Poster newPoster = new Poster(name, org, location, null, description, kiosks);
 
     }
 

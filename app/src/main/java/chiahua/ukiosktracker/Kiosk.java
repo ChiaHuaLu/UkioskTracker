@@ -4,6 +4,8 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 public class Kiosk {
@@ -73,6 +75,14 @@ public class Kiosk {
                 (longitudeDelta * longitudeDelta);
         return result = Math.sqrt(result) * 111000;
     }
+
+   /* public int describeContents() {
+
+    }
+
+    public int writeToParcel() {
+
+    }*/
 
 }
 
