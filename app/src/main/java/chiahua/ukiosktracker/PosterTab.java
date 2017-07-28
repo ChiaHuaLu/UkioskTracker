@@ -28,6 +28,8 @@ public class PosterTab extends Fragment {
             public void onClick(View view) {
 
                 Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
+                addPosterIntent.putParcelableArrayListExtra("allKiosks", MainActivity.allKiosks);
+                addPosterIntent.putParcelableArrayListExtra("allPosters", MainActivity.allPosters);
                 startActivity(addPosterIntent);
 
 

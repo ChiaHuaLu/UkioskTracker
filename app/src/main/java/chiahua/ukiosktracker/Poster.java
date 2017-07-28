@@ -33,6 +33,8 @@ public class Poster {
         this.organization = organization;
         eventLocation = location;
         eventTime = time;
+        if (time == null)
+            eventTime = "";
     }
 
     //Constructor helper method
