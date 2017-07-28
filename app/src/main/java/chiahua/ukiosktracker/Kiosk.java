@@ -61,6 +61,9 @@ public class Kiosk implements Parcelable {
         return this.longitude;
     }
 
+    //Get Kiosk Name
+    public String name() { return this.description; }
+
 
     //Adds a poster to this kiosk's list of posters
     //Only call this from the Poster class

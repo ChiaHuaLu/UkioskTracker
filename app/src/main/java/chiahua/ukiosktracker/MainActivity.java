@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     KioskMapTab kioskMapTab = new KioskMapTab();
+                    Bundle kioskMapTabBundle = new Bundle();
+                    kioskMapTabBundle.putParcelableArrayList("allKiosks", allKiosks);
+                    kioskMapTab.setArguments(kioskMapTabBundle);
                     return kioskMapTab;
                 case 1:
                     NearbyTab nearbyTab = new NearbyTab();

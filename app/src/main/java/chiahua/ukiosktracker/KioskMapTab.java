@@ -1,5 +1,6 @@
 package chiahua.ukiosktracker;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.InflateException;
@@ -15,7 +16,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
@@ -24,7 +28,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
     private final LatLng UT_AUSTIN = new LatLng(30.2859305,-97.7395813);
 
     private static final float DEFAULT_MIN_ZOOM = 14.8f;
-    private static final float DEFAULT_MAX_ZOOM = 18.0f;
+    private static final float DEFAULT_MAX_ZOOM = 19.0f;
 
     private static final LatLngBounds UT_AUSTIN_BOUNDS = new LatLngBounds(
             new LatLng(30.277979,-97.7428474), new LatLng(30.290262, -97.726700));
@@ -34,7 +38,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    public all
+    public ArrayList<Kiosk> allKiosks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +58,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
         return rootView;
     }
 
@@ -93,6 +99,31 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
        // mMap.addMarker(new MarkerOptions().position(UT_AUSTIN).title("UT Tower"));
+
+        for (Kiosk kiosk : allKiosks) {
+            mMap.addMarker(new MarkerOptions().position(new LatLng(kiosk.lattit(),kiosk.longit())).title(kiosk.name()));
+
+
+
+        }
+
+        mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                //int position = (int)(marker.getTag());
+                //Using position get Value from arraylist
+                Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent kioskDetailsIntent = new Intent();
+                for (Kiosk kiosks:allKiosks) {
+                    if (marker.getTitle().equals(kiosks.name())) {
+                        kioskDetailsIntent.putExtra("kiosk", kiosks);
+                        break;
+                    }
+                }
+                startActivity(kioskDetailsIntent);
+                return false;
+            }
+        });
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
     }
 }
