@@ -29,12 +29,12 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     private static final float DEFAULT_MIN_ZOOM = 14.0f;
     private static final float DEFAULT_MAX_ZOOM = 19.0f;
-    private static final float DEFAULT_ZOOM = 15.0f;
+    private static final float DEFAULT_ZOOM = 15.3f;
 
     private static final LatLngBounds UT_AUSTIN_BOUNDS = new LatLngBounds(
-            new LatLng(30.277979,-97.7428474), new LatLng(30.290262, -97.726700));
+            new LatLng(30.280890, -97.741699), new LatLng(30.291044, -97.727639));
     private static final CameraPosition UT_AUSTIN_CAMERA = new CameraPosition.Builder()
-            .target(new LatLng(30.284819, -97.737334)).zoom(DEFAULT_ZOOM)
+            .target(new LatLng(30.285967, -97.736179)).zoom(DEFAULT_ZOOM)
             .bearing(0).tilt(0).build();
 
     private GoogleMap mMap;
@@ -101,11 +101,10 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
        // mMap.addMarker(new MarkerOptions().position(UT_AUSTIN).title("UT Tower"));
 
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(30.277979,-97.7428474)).title("Bounds A"));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(30.290262, -97.726700)).title("Bounds B"));
         for (Kiosk kiosk : allKiosks) {
             mMap.addMarker(new MarkerOptions().position(new LatLng(kiosk.lattit(),kiosk.longit())).title(kiosk.name()));
-
-
-
         }
 
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
