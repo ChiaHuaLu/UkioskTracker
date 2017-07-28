@@ -4,4 +4,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_kiosk_map_tab">Map</string>
+    <string name="map_not_ready">Map is not ready yet</string>
 </resources>

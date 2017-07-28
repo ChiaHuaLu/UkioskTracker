@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    KioskTab kioskTab = new KioskTab();
-                    return kioskTab;
+                    KioskMapTab kioskMapTab = new KioskMapTab();
+                    return kioskMapTab;
                 case 1:
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
