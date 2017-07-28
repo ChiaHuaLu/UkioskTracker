@@ -4,6 +4,7 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,14 @@ public class PosterTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
+                addPosterIntent.putParcelableArrayListExtra("allKiosks", MainActivity.allKiosks);
+                addPosterIntent.putParcelableArrayListExtra("allPosters", MainActivity.allPosters);
+                startActivity(addPosterIntent);
+
+
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
