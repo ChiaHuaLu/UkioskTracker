@@ -27,5 +27,6 @@
     <string name="title_concept">Concept &amp; Core Features Design</string>
     <string name="title_graphic">Graphics &amp; Photos</string>
     <string name="title_locations">Kiosk Locations Mapping</string>
+    <string name="dots">...</string>
 
 </resources>

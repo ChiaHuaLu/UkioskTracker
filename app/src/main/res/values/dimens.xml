@@ -8,4 +8,5 @@
     <dimen name="large_font">32sp</dimen>
     <dimen name="medium_font">24sp</dimen>
     <dimen name="regular_font">16sp</dimen>
+    <dimen name="small_font">12sp</dimen>
 </resources>

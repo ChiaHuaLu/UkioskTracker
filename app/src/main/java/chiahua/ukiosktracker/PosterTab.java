@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -41,7 +43,7 @@ public class PosterTab extends Fragment {
             debug += "   " +posters.title() + "\n";
         }
         Log.d("All Posters List", "AllPosters = \n"+debug);
-        TextView debugTV = (TextView) getActivity().findViewById(R.id.debugList);
+        //TextView debugTV = (TextView) getActivity().findViewById(R.id.debugList);
         //debugTV.setText(debug);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -57,6 +59,7 @@ public class PosterTab extends Fragment {
 //                    index++;
 //                }
 //                addPosterIntent.putExtra("NumPosters", index);
+
                 startActivityForResult(addPosterIntent, getResources().getInteger(R.integer.add_new_poster_reqCode));
                 //startActivity(addPosterIntent);
 
@@ -68,6 +71,11 @@ public class PosterTab extends Fragment {
             }
         });
         fab.setImageResource(R.drawable.add);
+
+        ListAdapter posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+        ListView allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
+        allPostersLV.setAdapter(posterListAdapter);
+
         return rootView;
     }
 
