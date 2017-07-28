@@ -115,6 +115,11 @@ public class Poster {
         }
         return false;
     }
+
+    public String[] getDetailArray() {
+        String[] detailsArray = new String[] {title, organization, eventLocation, eventTime, details};
+        return detailsArray;
+    }
 }
 
 

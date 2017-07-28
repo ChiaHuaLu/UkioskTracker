@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
                 case 2:
-                    PosterTab posterTab = new PosterTab();
+                    PosterTab posterTab = new PosterTab(allPosters);
                     return posterTab;
             }
             return null;
