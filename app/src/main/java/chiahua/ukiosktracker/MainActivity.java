@@ -1,5 +1,6 @@
 package chiahua.ukiosktracker;
 
+import java.util.ArrayList;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+;
 
 import android.widget.TextView;
 
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //public ArrayList<Kiosk> allKiosks;
-    //public ArrayList<Poster> allPosters;
+    public ArrayList<Kiosk> allKiosks;
+    public ArrayList<Poster> allPosters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        //initializeKiosks();
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -139,11 +142,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Kiosks";
+                    return getString(R.string.kiosk);
                 case 1:
-                    return "Nearby";
+                    return getString(R.string.nearby);
                 case 2:
-                    return "Posters";
+                    return getString(R.string.posters);
             }
             return null;
         }
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         double[] lattitude = new double[] {    30.289869, 30.289770, 30.289276, 30.288812, 30.288546, 30.287507,       30.287310,   30.285746, 30.285957, 30.285542, 30.285520, 30.285464,      30.285396, 30.284477, 30.284560,              30.283686, 30.283365, 30.283481,          30.281584,         30.286910};
         double[] longitude = new double[] {   -97.740050,-97.738789,-97.736690,-97.740503,-97.738872,-97.740371,      -97.738325,  -97.741567,-97.740589,-97.740069,-97.737904,-97.734187,     -97.733546,-97.738564,-97.737496,             -97.739486,-97.737626,-97.737257          -97.733119,        -97.730417};
         for (int index = 0; index < kioskNames.length; index++) {
-           // Kiosk
+           allKiosks.add(new Kiosk(index, kioskNames[index], lattitude[index], longitude[index]));
         }
 
 
