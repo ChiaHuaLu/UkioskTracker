@@ -34,6 +34,11 @@ public class PosterTab extends Fragment {
         allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
         Log.d("allPosters Check", "Poster Tab's allPosters contains " + allPosters.size() + " Elements");
         Log.d("allKiosks Check", "Poster Tab's allKiosks contains " + allKiosks.size() + " Elements");
+        String debug = "";
+        for (Poster posters : allPosters) {
+            debug += "   " +posters.title() + "\n";
+        }
+        Log.d("All Posters List", "AllPosters = \n"+debug);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
