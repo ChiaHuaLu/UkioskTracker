@@ -64,6 +64,9 @@ public class Kiosk implements Parcelable {
     //Get Kiosk Name
     public String name() { return this.description; }
 
+    //Get Kiosk ID
+    public int id() { return this.kioskNumber; }
+
 
     //Adds a poster to this kiosk's list of posters
     //Only call this from the Poster class

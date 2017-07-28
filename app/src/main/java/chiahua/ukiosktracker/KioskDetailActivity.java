@@ -17,7 +17,8 @@ public class KioskDetailActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         kiosk = receivedIntent.getParcelableExtra("kiosk");
         TextView kioskDetailsChecker = (TextView) findViewById(R.id.kiosk_detail_name);
-        kioskDetailsChecker.setText(kiosk.name());
+        kioskDetailsChecker.setText(kiosk.name() + "  ID="+kiosk.id());
+        setTitle(kiosk.name() + " Kiosk");
 
     }
 }
