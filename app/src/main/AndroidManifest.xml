@@ -57,6 +57,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="chiahua.ukiosktracker.MainActivity" />
         </activity>
+        <activity
+            android:name=".KioskDetailActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Kiosk Detail">
+
+
+        </activity>
     </application>
 
 </manifest>
