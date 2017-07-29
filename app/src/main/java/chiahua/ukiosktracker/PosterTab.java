@@ -36,8 +36,10 @@ public class PosterTab extends Fragment {
         View rootView = inflater.inflate(R.layout.poster_tab, container, false);
         allPosters = this.getArguments().getParcelableArrayList("allPosters");
         allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
-        Log.d("allPosters Check", "Poster Tab's allPosters contains " + allPosters.size() + " Elements");
-        Log.d("allKiosks Check", "Poster Tab's allKiosks contains " + allKiosks.size() + " Elements");
+        Log.d("allPosters Check", "Poster Tab's allPosters contains "
+                + allPosters.size() + " Elements");
+        Log.d("allKiosks Check", "Poster Tab's allKiosks contains "
+                + allKiosks.size() + " Elements");
         String debug = "";
         for (Poster posters : allPosters) {
             debug += "   " +posters.title() + "\n";
@@ -66,8 +68,8 @@ public class PosterTab extends Fragment {
 
 
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
         fab.setImageResource(R.drawable.add);
@@ -87,8 +89,10 @@ public class PosterTab extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
                     String[] returnValue = data.getStringArrayExtra("New_Poster_Info");
-                    Log.d("TAG", "New poster info: "+returnValue[0] + returnValue[1] + returnValue[2] + returnValue[3]);
-                    allPosters.add(new Poster(returnValue[0], returnValue[1], returnValue[2], "", returnValue[3], allKiosks));
+                    Log.d("TAG", "New poster info: "
+                            + returnValue[0] + returnValue[1] + returnValue[2] + returnValue[3]);
+                    allPosters.add(new Poster(returnValue[0], returnValue[1], returnValue[2],
+                            "", returnValue[3], allKiosks));
                 }
                 break;
             }

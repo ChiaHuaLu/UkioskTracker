@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Kiosk implements Parcelable {
 
     //Coordinates of the Kiosks
-    private double lattitude;
+    private double latitude;
     private double longitude;
 
 
@@ -23,8 +23,8 @@ public class Kiosk implements Parcelable {
     public ArrayList<Poster> posterList;
 
     //Constructor method for Kiosks
-    public Kiosk(int kioskNumber, String description, double lattitude, double longitude) {
-        this.lattitude = lattitude;
+    public Kiosk(int kioskNumber, String description, double latitude, double longitude) {
+        this.latitude = latitude;
         this.longitude = longitude;
         this.kioskNumber = kioskNumber;
         this.description = description;
@@ -32,7 +32,7 @@ public class Kiosk implements Parcelable {
     }
 
     protected Kiosk(Parcel in) {
-        lattitude = in.readDouble();
+        latitude = in.readDouble();
         longitude = in.readDouble();
         kioskNumber = in.readInt();
         description = in.readString();
@@ -51,9 +51,9 @@ public class Kiosk implements Parcelable {
         }
     };
 
-    //Get lattitude coordinate
-    public double lattit() {
-        return this.lattitude;
+    //Get latitude coordinate
+    public double latit() {
+        return this.latitude;
     }
 
     //Get longitude coordinate
@@ -94,11 +94,11 @@ public class Kiosk implements Parcelable {
     }
 
     //Calculates distance from a given location in meters
-    public double distance(double userLattitude, double userLongitude) {
+    public double distance(double userLatitude, double userLongitude) {
         //Distance = sqrt{ (y2-y1)^2 + (x2-x1)^2 }
-        double lattitudeDelta = lattitude - userLattitude;
+        double latitudeDelta = latitude - userLatitude;
         double longitudeDelta = longitude - userLongitude;
-        double result = (lattitudeDelta * lattitudeDelta) +
+        double result = (latitudeDelta * latitudeDelta) +
                 (longitudeDelta * longitudeDelta);
         return result = Math.sqrt(result) * 111000;
     }
@@ -110,7 +110,7 @@ public class Kiosk implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(lattitude);
+        dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         dest.writeInt(kioskNumber);
         dest.writeString(description);

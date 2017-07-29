@@ -23,13 +23,13 @@ public class Poster implements Parcelable {
 
 
     //Basic Constructor
-    //Precondition: All Kiosks must have already been instanciated and added to list
+    //Precondition: All Kiosks must have already been instantiated and added to list
     public Poster(String title, String details, ArrayList<Kiosk> kiosks) {
         initializePoster(title, details, kiosks);
     }
 
     //Detailed Constructor
-    //Precondition: All Kiosks must have already been instanciated and added to list
+    //Precondition: All Kiosks must have already been instantiated and added to list
     public Poster(String title, String organization, String location,
                   String time, String details, ArrayList<Kiosk> kiosks) {
         initializePoster(title, details, kiosks);
@@ -142,7 +142,8 @@ public class Poster implements Parcelable {
     }
 
     public String[] getDetailArray() {
-        String[] detailsArray = new String[] {title, organization, eventLocation, eventTime, details};
+        String[] detailsArray =
+                new String[] {title, organization, eventLocation, eventTime, details};
         return detailsArray;
     }
 

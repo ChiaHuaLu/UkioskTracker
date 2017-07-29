@@ -101,10 +101,13 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
        // mMap.addMarker(new MarkerOptions().position(UT_AUSTIN).title("UT Tower"));
 
-//        mMap.addMarker(new MarkerOptions().position(new LatLng(30.277979,-97.7428474)).title("Bounds A"));
-//        mMap.addMarker(new MarkerOptions().position(new LatLng(30.290262, -97.726700)).title("Bounds B"));
+//        mMap.addMarker(new MarkerOptions().position(
+//                new LatLng(30.277979,-97.7428474)).title("Bounds A"));
+//        mMap.addMarker(new MarkerOptions().position(
+//                new LatLng(30.290262, -97.726700)).title("Bounds B"));
         for (Kiosk kiosk : allKiosks) {
-            mMap.addMarker(new MarkerOptions().position(new LatLng(kiosk.lattit(),kiosk.longit())).title(kiosk.name()));
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(kiosk.latit(), kiosk.longit())).title(kiosk.name()));
         }
 
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
@@ -113,7 +116,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 //int position = (int)(marker.getTag());
                 //Using position get Value from arraylist
                 Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
-                Intent kioskDetailsIntent = new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
+                Intent kioskDetailsIntent =
+                        new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
                 for (Kiosk kiosks:allKiosks) {
                     if (marker.getTitle().equals(kiosks.name())) {
                         kioskDetailsIntent.putExtra("kiosk", kiosks);
