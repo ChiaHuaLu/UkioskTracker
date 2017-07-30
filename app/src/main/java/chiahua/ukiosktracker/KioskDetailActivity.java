@@ -7,17 +7,20 @@ import android.widget.TextView;
 
 public class KioskDetailActivity extends AppCompatActivity {
 
-    public Kiosk kiosk;
+    private static final String TAG = "KioskDetailActivity";
+    public int kioskID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kiosk_detail);
 
-        Intent receivedIntent = getIntent();
-        kiosk = receivedIntent.getParcelableExtra("kiosk");
+        Bundle extras = getIntent().getExtras();
+        kioskID = extras.getInt("kioskID");
+
+        Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
         TextView kioskDetailsChecker = (TextView) findViewById(R.id.kiosk_detail_name);
-        kioskDetailsChecker.setText(kiosk.name() + "\n    ID="+kiosk.id());
+        kioskDetailsChecker.setText(kiosk.name() + "\n    ID="+ kioskID);
         setTitle(kiosk.name() + " Kiosk");
 
     }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,16 +27,23 @@ import java.util.ArrayList;
 
 public class PosterTab extends Fragment {
 
+    private final static String TAG = "PosterTab";
+
     public ArrayList<Poster> allPosters;
     public ArrayList<Kiosk> allKiosks;
+
+    private ListAdapter posterListAdapter;
+    private ListView allPostersLV;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.poster_tab, container, false);
-        allPosters = this.getArguments().getParcelableArrayList("allPosters");
-        allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
+
+        allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
+        allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
+
         Log.d("allPosters Check", "Poster Tab's allPosters contains "
                 + allPosters.size() + " Elements");
         Log.d("allKiosks Check", "Poster Tab's allKiosks contains "
@@ -52,50 +60,26 @@ public class PosterTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
-//                int index = 0;
-//                for (Poster poster: allPosters) {
-//                    addPosterIntent.putExtra("Poster"+index+"Bool[]", poster.locations);
-//                    addPosterIntent.putExtra("Poster"+index+"String[]", poster.getDetailArray());
-//                    index++;
-//                }
-//                addPosterIntent.putExtra("NumPosters", index);
-
-                startActivityForResult(addPosterIntent, getResources().getInteger(R.integer.add_new_poster_reqCode));
-                //startActivity(addPosterIntent);
-
-
-
-
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                startActivityForResult(addPosterIntent,
+                        getResources().getInteger(R.integer.add_new_poster_reqCode));
             }
         });
-        fab.setImageResource(R.drawable.add);
 
-        ListAdapter posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
-        ListView allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
+        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+        allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
         allPostersLV.setAdapter(posterListAdapter);
 
+        fab.setImageResource(R.drawable.add);
         return rootView;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (1) : {
-                if (resultCode == Activity.RESULT_OK) {
-                    // TODO Extract the data returned from the child Activity.
-                    String[] returnValue = data.getStringArrayExtra("New_Poster_Info");
-                    Log.d("TAG", "New poster info: "
-                            + returnValue[0] + returnValue[1] + returnValue[2] + returnValue[3]);
-                    allPosters.add(new Poster(returnValue[0], returnValue[1], returnValue[2],
-                            "", returnValue[3], allKiosks));
-                }
-                break;
-            }
-        }
+        Log.d(TAG, "onActivityResult called");
+        ((BaseAdapter) posterListAdapter).notifyDataSetChanged();
+        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
+        allPostersLV.setAdapter(posterListAdapter);
     }
 }

@@ -2,6 +2,7 @@ package chiahua.ukiosktracker;
 
 import java.util.ArrayList;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.orm.SugarRecord;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static final String TAG = "tag";
+    private static final String TAG = "MainActivity";
 
 
 
@@ -64,9 +67,17 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        allKiosks = new ArrayList<Kiosk>();
-        allPosters = new ArrayList<Poster>();
-        initializeKiosks();
+        allKiosks = new ArrayList<>();
+        allPosters = new ArrayList<>();
+
+        Log.d(TAG, "test if Kiosk database is empty: " + Kiosk.count(Kiosk.class) + " entries, "
+                + (Kiosk.count(Kiosk.class) <= 0));
+        // build Kiosk database only if this is the first time the app has run (prevent duplicates)
+        if (Kiosk.count(Kiosk.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT KIOSKS");
+            // first time! build Kiosk database
+            Kiosk.initializeKiosks();
+        }
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -98,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about) {
-            //Snackbar.make(getView, "Replace with your own action", Snackbar.LENGTH_LONG)
-              //      .setAction("Action", null).show();
             aboutOnClick();
             return true;
         }
@@ -123,19 +132,12 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     KioskMapTab kioskMapTab = new KioskMapTab();
-                    Bundle kioskMapTabBundle = new Bundle();
-                    kioskMapTabBundle.putParcelableArrayList("allKiosks", allKiosks);
-                    kioskMapTab.setArguments(kioskMapTabBundle);
                     return kioskMapTab;
                 case 1:
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
                 case 2:
                     PosterTab posterTab = new PosterTab();
-                    Bundle posterTabBundle = new Bundle();
-                    posterTabBundle.putParcelableArrayList("allPosters", allPosters);
-                    posterTabBundle.putParcelableArrayList("allKiosks", allKiosks);
-                    posterTab.setArguments(posterTabBundle);
                     return posterTab;
             }
             return null;
@@ -165,16 +167,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
 
-    }
-
-    //Create the list of all kiosks
-    private void initializeKiosks() {
-        String[] kioskNames = new String[] {"Kinsolving",     "SSB",     "RLM",     "HSM", "Burdine",     "Bio", "Welch-Painter", "Guadalupe",     "FAC",   "Tower", "Waggner", "Winship", "Art Building",     "GSB",     "CBA", "Littlefield Fountain",     "PCL", "Gregory", "RecSports Center", "School of Music"};
-        double[] latitude = new double[] {    30.289869, 30.289770, 30.289276, 30.288812, 30.288546, 30.287507,       30.287310,   30.285746, 30.285957, 30.285542, 30.285520, 30.285464,      30.285396, 30.284477, 30.284560,              30.283686, 30.283365, 30.283481,          30.281584,         30.286910};
-        double[] longitude = new double[] {   -97.740050,-97.738789,-97.736690,-97.740503,-97.738872,-97.740371,      -97.738325,  -97.741567,-97.740589,-97.740069,-97.737904,-97.734187,     -97.733546,-97.738564,-97.737496,             -97.739486,-97.737626,-97.737257,         -97.733119,        -97.730417};
-        for (int index = 0; index < latitude.length; index++) {
-            allKiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
-        }
     }
 
     public ArrayList<Kiosk> getAllKiosks() {

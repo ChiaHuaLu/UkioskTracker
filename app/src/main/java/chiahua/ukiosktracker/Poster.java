@@ -4,12 +4,10 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import com.orm.SugarRecord;
 import java.util.ArrayList;
 
-public class Poster implements Parcelable {
+public class Poster extends SugarRecord {
 
     private String title;
     private String organization;
@@ -18,21 +16,20 @@ public class Poster implements Parcelable {
     private String details;
     private int count;
 
-    public boolean[] locations;  //Do not modify this from other classes
-    public ArrayList<Kiosk> allKiosks;
-
+    // Leave empty constructor for SugarRecords
+    public Poster() {}
 
     //Basic Constructor
     //Precondition: All Kiosks must have already been instantiated and added to list
-    public Poster(String title, String details, ArrayList<Kiosk> kiosks) {
-        initializePoster(title, details, kiosks);
+    public Poster(String title, String details) {
+        initializePoster(title, details);
     }
 
     //Detailed Constructor
     //Precondition: All Kiosks must have already been instantiated and added to list
     public Poster(String title, String organization, String location,
-                  String time, String details, ArrayList<Kiosk> kiosks) {
-        initializePoster(title, details, kiosks);
+                  String time, String details) {
+        initializePoster(title, details);
         this.organization = organization;
         eventLocation = location;
         eventTime = time;
@@ -40,37 +37,13 @@ public class Poster implements Parcelable {
             eventTime = "";
     }
 
-    protected Poster(Parcel in) {
-        title = in.readString();
-        organization = in.readString();
-        eventLocation = in.readString();
-        eventTime = in.readString();
-        details = in.readString();
-        count = in.readInt();
-        locations = in.createBooleanArray();
-    }
-
-    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
-        @Override
-        public Poster createFromParcel(Parcel in) {
-            return new Poster(in);
-        }
-
-        @Override
-        public Poster[] newArray(int size) {
-            return new Poster[size];
-        }
-    };
-
     //Constructor helper method
-    private void initializePoster(String title, String details, ArrayList<Kiosk> kiosks) {
+    private void initializePoster(String title, String details) {
         this.title = title;
         this.details = details;
-        this.allKiosks = kiosks;
         organization = "";
         eventLocation = "";
         eventTime = "";
-        locations = new boolean[kiosks.size()];
         count = 0;
     }
 
@@ -119,8 +92,8 @@ public class Poster implements Parcelable {
         return details;
     }
 
-    //Add this poster to a kiosk location
-    public boolean add(int kioskNumber) {
+    //Add this poster to a kioskID location
+    /*public boolean add(int kioskNumber) {
         if (!locations[kioskNumber]) {
             locations[kioskNumber] = true;
             allKiosks.get(kioskNumber).add(this);
@@ -128,10 +101,10 @@ public class Poster implements Parcelable {
             return true;
         }
         return false;
-    }
+    }*/
 
-    //Remove this poster from a kiosk location
-    public boolean remove(int kioskNumber) {
+    //Remove this poster from a kioskID location
+    /*public boolean remove(int kioskNumber) {
         if (locations[kioskNumber]) {
             locations[kioskNumber] = false;
             allKiosks.get(kioskNumber).remove(this);
@@ -139,28 +112,12 @@ public class Poster implements Parcelable {
             return true;
         }
         return false;
-    }
+    }*/
 
     public String[] getDetailArray() {
         String[] detailsArray =
                 new String[] {title, organization, eventLocation, eventTime, details};
         return detailsArray;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(organization);
-        dest.writeString(eventLocation);
-        dest.writeString(eventTime);
-        dest.writeString(details);
-        dest.writeInt(count);
-        dest.writeBooleanArray(locations);
     }
 }
 

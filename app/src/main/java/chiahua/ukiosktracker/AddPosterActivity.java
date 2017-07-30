@@ -3,8 +3,6 @@ package chiahua.ukiosktracker;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,17 +30,17 @@ public class AddPosterActivity extends AppCompatActivity {
         String org = orgField.getText().toString();
         String location = locationField.getText().toString();
         String description = descriptionField.getText().toString();
+
         //Poster newPoster = new Poster(name, org, location, null, description, kiosks);
-        if (name.length() < 1) {
-            Snackbar.make(view, "Error: Poster Name is a required field", Snackbar.LENGTH_LONG)
-                  .setAction("Action", null).show();
-           // Toast.makeText(getApplicationContext(), "Poster Name is a required field", Toast.LENGTH_SHORT);
+        if (name.trim().equals("")) {
+            Toast.makeText(getApplicationContext(),
+                    "Poster Name is a required field", Toast.LENGTH_SHORT).show();
         }
         else {
-            Intent resultIntent = new Intent();
-            String[] newData = new String[] {name, org, location, description};
-            resultIntent.putExtra("New_Poster_Info", newData);
-            setResult(Activity.RESULT_OK, resultIntent);
+            // TODO: Set poster event time when time EditText is created
+            // Save poster details to poster database
+            Poster poster = new Poster(name, org, location, "", description);
+            poster.save();
             finish();
         }
 

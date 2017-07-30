@@ -17,7 +17,7 @@
     <string name="title">Title</string>
     <string name="organization">Organization</string>
     <string name="event_location">Event Location</string>
-    <string name="description">Description</string>
+    <string name="name">Description</string>
     <string name="hint_name">Poster Name (Required)</string>
     <string name="hint_org">Organization (Optional)</string>
     <string name="hint_location">Place of Event (Optional)</string>
@@ -28,5 +28,7 @@
     <string name="title_graphic">Graphics &amp; Photos</string>
     <string name="title_locations">Kiosk Locations Mapping</string>
     <string name="dots">...</string>
+    <string name="hint_optional">(Optional)</string>
+    <string name="hint_required">(Required)</string>
 
 </resources>
