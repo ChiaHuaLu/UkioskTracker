@@ -9,6 +9,7 @@ import android.util.Log;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Kiosk extends SugarRecord {
 
@@ -18,12 +19,14 @@ public class Kiosk extends SugarRecord {
 
     // Short name / name for kioskID
     private String name;
+    private int ID;
 
     // Leave empty constructor for SugarRecords
     public Kiosk() {}
 
     //Constructor method for Kiosks
-    public Kiosk(String name, double latitude, double longitude) {
+    public Kiosk(int ID, String name, double latitude, double longitude) {
+        this.ID = ID;
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -41,6 +44,8 @@ public class Kiosk extends SugarRecord {
 
     //Get Kiosk Name
     public String name() { return this.name; }
+
+    public int id() { return this.ID; }
 
     //Get Kiosk ID
     /*public int id() { return this.kioskNumber; }*/
@@ -74,13 +79,15 @@ public class Kiosk extends SugarRecord {
     // Create the list of all kiosks (please only run this once!)
     public static void initializeKiosks() {
         String[] kioskNames = new String[] {"Kinsolving",     "SSB",     "RLM","Hearst Student Media", "Burdine",     "Bio", "Welch-Painter", "Guadalupe",     "FAC",   "Tower", "Waggner", "Winship", "Art Building",     "GSB",     "CBA", "Littlefield Fountain",     "PCL", "Gregory", "RecSports Center", "School of Music"};
-        double[] latitude = new double[] {    30.289897, 30.289754, 30.289301,              30.288817, 30.288587, 30.287434,       30.287372,   30.285797, 30.285912, 30.285682, 30.285526, 30.285587,      30.285494, 30.284391, 30.284579,              30.283790, 30.283373, 30.283512,          30.281537,         30.286861};
-        double[] longitude = new double[] {  -97.740086,-97.738839,-97.736685,             -97.740447,-97.738902,-97.740334,      -97.738315,  -97.741550,-97.740682,-97.739998,-97.737911,-97.734405,     -97.733426,-97.738599,-97.737465,             -97.739375,-97.737711,-97.737189,         -97.733091,        -97.730413};
-        ArrayList<Kiosk> kiosks = new ArrayList<>();
+        double[] latitude = new double[] {    30.289897, 30.289754, 30.289301,              30.288817, 30.288587, 30.287434,       30.287372,   30.285797, 30.285912, 30.285683, 30.285526, 30.285587,      30.285494, 30.284391, 30.284579,              30.283790, 30.283373, 30.283512,          30.281537,         30.286861};
+        double[] longitude = new double[] {  -97.740086,-97.738839,-97.736685,             -97.740447,-97.738902,-97.740334,      -97.738315,  -97.741550,-97.740682,-97.739996,-97.737911,-97.734405,     -97.733426,-97.738599,-97.737465,             -97.739375,-97.737711,-97.737189,         -97.733091,        -97.730413};
+        List<Kiosk> kiosks = new ArrayList<>();
         for (int index = 0; index < latitude.length; index++) {
             //allKiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
-            kiosks.add(new Kiosk(kioskNames[index], latitude[index], longitude[index]));
+            kiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
+            Kiosk.saveInTx(kiosks);
         }
+
         // Save all kiosks en-masse
         Log.d("TEST","Saving kiosks! count: " + kiosks.size());
     }
