@@ -88,6 +88,7 @@ public class Poster extends SugarRecord {
             result.setCharAt(kioskID - 1, '0');
         }
         location = result.toString();
+        this.save();
     }
 
     //Get a poster's title
