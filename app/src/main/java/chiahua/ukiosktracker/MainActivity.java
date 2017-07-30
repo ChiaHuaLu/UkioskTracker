@@ -78,6 +78,14 @@ public class MainActivity extends AppCompatActivity {
             // first time! build Kiosk database
             Kiosk.initializeKiosks();
         }
+        Log.d(TAG, "test if KioskPoster database is empty: " + KioskPoster.count(KioskPoster.class) + " entries, "
+                + (KioskPoster.count(KioskPoster.class) <= 0));
+        // build KioskPoster database only if this is the first time the app has run (prevent duplicates)
+        if (KioskPoster.count(KioskPoster.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT KioskPoster");
+            // first time! build KioskPoster database
+            Kiosk.initializeKioskPoster();
+        }
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -91,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setImageResource(R.drawable.add);*/
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

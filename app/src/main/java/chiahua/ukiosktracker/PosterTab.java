@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -69,6 +70,17 @@ public class PosterTab extends Fragment {
         posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
         allPostersLV.setAdapter(posterListAdapter);
+//        allPostersLV.setClickable(true);
+//        allPostersLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Poster posterToDetail = (Poster) allPostersLV.getItemAtPosition(position);
+//                long posterID = posterToDetail.getId();
+//                Intent intent = new Intent(getActivity(), PosterChecklistActivity.class);
+//                intent.putExtra("PosterID", posterID);
+//                startActivity(intent);
+//            }
+//        });
 
         fab.setImageResource(R.drawable.add);
         return rootView;
