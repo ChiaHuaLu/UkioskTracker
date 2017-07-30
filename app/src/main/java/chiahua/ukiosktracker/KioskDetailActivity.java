@@ -1,8 +1,10 @@
 package chiahua.ukiosktracker;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class KioskDetailActivity extends AppCompatActivity {
@@ -16,9 +18,11 @@ public class KioskDetailActivity extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         kiosk = receivedIntent.getParcelableExtra("kiosk");
-        TextView kioskDetailsChecker = (TextView) findViewById(R.id.kiosk_detail_name);
-        kioskDetailsChecker.setText(kiosk.name() + "\n    ID="+kiosk.id());
         setTitle(kiosk.name() + " Kiosk");
+        ImageView kioskImage = (ImageView) findViewById(R.id.kioskIV);
+        TypedArray imageArray = getResources().obtainTypedArray(R.array.kiosk_images);
+        kioskImage.setImageResource(imageArray.getResourceId(kiosk.id(), -1));
+        imageArray.recycle();
 
     }
 }
