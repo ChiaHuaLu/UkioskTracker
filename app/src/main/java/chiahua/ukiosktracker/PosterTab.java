@@ -6,6 +6,7 @@ package chiahua.ukiosktracker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,9 @@ public class PosterTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
         View rootView = inflater.inflate(R.layout.poster_tab, container, false);
         allPosters = this.getArguments().getParcelableArrayList("allPosters");
         allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
