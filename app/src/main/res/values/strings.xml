@@ -32,5 +32,6 @@
     <string name="hint_required">(Required)</string>
     <string name="title_activity_edit_poster">Edit Poster</string>
     <string name="edit_poster">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

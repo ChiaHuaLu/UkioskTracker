@@ -113,11 +113,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_new_poster"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/add_descriptionET"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:onClick="addPoster"/>
+        android:onClick="addPoster"
+        app:layout_constraintHorizontal_bias="0.504" />
 </android.support.constraint.ConstraintLayout>

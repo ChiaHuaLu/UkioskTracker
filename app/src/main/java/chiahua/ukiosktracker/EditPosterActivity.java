@@ -36,7 +36,6 @@ public class EditPosterActivity extends AppCompatActivity {
     }
 
     public void editPoster(View view) {
-
         String name = nameField.getText().toString();
         String org = orgField.getText().toString();
         String location = locationField.getText().toString();
@@ -54,7 +53,11 @@ public class EditPosterActivity extends AppCompatActivity {
             poster.save();
             finish();
         }
+    }
 
+    public void deletePoster(View view) {
+        poster.delete();
+        finish();
     }
 
 }

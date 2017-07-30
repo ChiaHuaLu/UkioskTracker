@@ -121,7 +121,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 //int position = (int)(marker.getTag());
                 //Using position get Value from arraylist
-                Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
                 Intent kioskDetailsIntent =
                         new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
 
