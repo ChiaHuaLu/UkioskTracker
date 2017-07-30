@@ -90,6 +90,7 @@ public class Kiosk extends SugarRecord {
 
         // Save all kiosks en-masse
         Log.d("TEST","Saving kiosks! count: " + kiosks.size());
+        SugarRecord.saveInTx(kiosks);
     }
 
     //Calculates distance from a given location in meters
