@@ -30,5 +30,7 @@
     <string name="dots">...</string>
     <string name="hint_optional">(Optional)</string>
     <string name="hint_required">(Required)</string>
+    <string name="title_activity_edit_poster">Edit Poster</string>
+    <string name="edit_poster">Edit</string>
 
 </resources>
