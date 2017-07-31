@@ -19,14 +19,12 @@ public class Kiosk extends SugarRecord {
 
     // Short name / name for kioskID
     private String name;
-    private int ID;
 
     // Leave empty constructor for SugarRecords
     public Kiosk() {}
 
     //Constructor method for Kiosks
-    public Kiosk(int ID, String name, double latitude, double longitude) {
-        this.ID = ID;
+    public Kiosk(String name, double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -44,8 +42,6 @@ public class Kiosk extends SugarRecord {
 
     //Get Kiosk Name
     public String name() { return this.name; }
-
-    public int id() { return this.ID; }
 
     //Get Kiosk ID
     /*public int id() { return this.kioskNumber; }*/
@@ -84,7 +80,7 @@ public class Kiosk extends SugarRecord {
         List<Kiosk> kiosks = new ArrayList<>();
         for (int index = 0; index < latitude.length; index++) {
             //allKiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
-            kiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
+            kiosks.add(new Kiosk(kioskNames[index], latitude[index], longitude[index]));
             Kiosk.saveInTx(kiosks);
         }
 
