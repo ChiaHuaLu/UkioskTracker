@@ -2,6 +2,7 @@ package chiahua.ukiosktracker;
 
 import java.util.ArrayList;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.orm.SugarRecord;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static final String TAG = "tag";
+    private static final String TAG = "MainActivity";
 
 
 
@@ -64,9 +67,30 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        allKiosks = new ArrayList<Kiosk>();
-        allPosters = new ArrayList<Poster>();
-        initializeKiosks();
+        allKiosks = new ArrayList<>();
+        allPosters = new ArrayList<>();
+
+        Log.d(TAG, "test if Kiosk database is empty: " + Kiosk.count(Kiosk.class) + " entries, "
+                + (Kiosk.count(Kiosk.class) <= 0));
+        // build Kiosk database only if this is the first time the app has run (prevent duplicates)
+        if (Kiosk.count(Kiosk.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT KIOSKS");
+            // first time! build Kiosk database
+            Kiosk.initializeKiosks();
+        }
+        Log.d(TAG, "test if KioskPoster database is empty: " + KioskPoster.count(KioskPoster.class) + " entries, "
+                + (KioskPoster.count(KioskPoster.class) <= 0));
+        // build KioskPoster database only if this is the first time the app has run (prevent duplicates)
+        if (KioskPoster.count(KioskPoster.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT KioskPoster");
+            // first time! build KioskPoster database
+            KioskPoster.initializeKioskPoster();
+        }
+        if (Poster.count(Poster.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT Poster");
+            // first time! build KioskPoster database
+            Poster.initializePoster();
+        }
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setImageResource(R.drawable.add);*/
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about) {
-            //Snackbar.make(getView, "Replace with your own action", Snackbar.LENGTH_LONG)
-              //      .setAction("Action", null).show();
             aboutOnClick();
             return true;
         }
@@ -123,19 +144,12 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     KioskMapTab kioskMapTab = new KioskMapTab();
-                    Bundle kioskMapTabBundle = new Bundle();
-                    kioskMapTabBundle.putParcelableArrayList("allKiosks", allKiosks);
-                    kioskMapTab.setArguments(kioskMapTabBundle);
                     return kioskMapTab;
                 case 1:
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
                 case 2:
                     PosterTab posterTab = new PosterTab();
-                    Bundle posterTabBundle = new Bundle();
-                    posterTabBundle.putParcelableArrayList("allPosters", allPosters);
-                    posterTabBundle.putParcelableArrayList("allKiosks", allKiosks);
-                    posterTab.setArguments(posterTabBundle);
                     return posterTab;
             }
             return null;
@@ -165,16 +179,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
 
-    }
-
-    //Create the list of all kiosks
-    private void initializeKiosks() {
-        String[] kioskNames = new String[] {"Kinsolving",     "SSB",     "RLM","Hearst Student Media", "Burdine",     "Bio", "Welch-Painter", "Guadalupe",     "FAC",   "Tower", "Waggner", "Winship", "Art Building",     "GSB",     "CBA", "Littlefield Fountain",     "PCL", "Gregory", "RecSports Center", "School of Music"};
-        double[] latitude = new double[] {    30.289897, 30.289754, 30.289301,              30.288817, 30.288587, 30.287434,       30.287372,   30.285797, 30.285912, 30.285682, 30.285526, 30.285587,      30.285494, 30.284391, 30.284579,              30.283790, 30.283373, 30.283512,          30.281537,         30.286861};
-        double[] longitude = new double[] {  -97.740086,-97.738839,-97.736685,             -97.740447,-97.738902,-97.740334,      -97.738315,  -97.741550,-97.740682,-97.739998,-97.737911,-97.734405,     -97.733426,-97.738599,-97.737465,             -97.739375,-97.737711,-97.737189,         -97.733091,        -97.730413};
-        for (int index = 0; index < latitude.length; index++) {
-            allKiosks.add(new Kiosk(index, kioskNames[index], latitude[index], longitude[index]));
-        }
     }
 
     public ArrayList<Kiosk> getAllKiosks() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer-array name="kiosk_images">
-        <item>@drawable/kiosk0</item>
+    <integer-array name="kioskImages">
+        <item>0</item>
         <item>@drawable/kiosk1</item>
         <item>@drawable/kiosk2</item>
         <item>@drawable/kiosk3</item>
@@ -11,18 +11,19 @@
         <item>@drawable/kiosk7</item>
         <item>@drawable/kiosk8</item>
         <item>@drawable/kiosk9</item>
-        <item>@drawable/kiosk9</item>   <!-- TODO: Obtain kiosk10 image and update this line -->
-        <item>@drawable/kiosk11</item>
+        <item>@drawable/kiosk10</item>
+        <item>@drawable/noimageavailable</item>  <!-- TODO: Get Kiosk 11 image and update this line -->
         <item>@drawable/kiosk12</item>
         <item>@drawable/kiosk13</item>
-        <item>@drawable/kiosk13</item>  <!-- TODO: Obtain kiosk14 image and update this line -->
-        <item>@drawable/kiosk15</item>
+        <item>@drawable/kiosk14</item>
+        <item>@drawable/noimageavailable</item>  <!-- TODO: Get Kiosk 15 image and update this line -->
         <item>@drawable/kiosk16</item>
         <item>@drawable/kiosk17</item>
         <item>@drawable/kiosk18</item>
         <item>@drawable/kiosk19</item>
-    </integer-array>
+        <item>@drawable/kiosk20</item>
 
+    </integer-array>
 
 
 </resources>

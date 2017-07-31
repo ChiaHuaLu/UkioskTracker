@@ -3,6 +3,7 @@ package chiahua.ukiosktracker;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KioskMapTab extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "KioskMapTab";
 
     private static View rootView;
 
@@ -39,7 +43,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    public ArrayList<Kiosk> allKiosks;
+    public List<Kiosk> allKiosks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +64,9 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        allKiosks = this.getArguments().getParcelableArrayList("allKiosks");
+        Log.d(TAG, "test if Kiosk database is empty: " + Kiosk.count(Kiosk.class) + " entries");
+
+        allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
         return rootView;
     }
 
@@ -107,7 +113,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 //                new LatLng(30.290262, -97.726700)).title("Bounds B"));
         for (Kiosk kiosk : allKiosks) {
             mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(kiosk.latit(), kiosk.longit())).title(kiosk.name()));
+                    .position(new LatLng(kiosk.latit(), kiosk.longit()))
+                    .title(kiosk.getId().toString()));
         }
 
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
@@ -115,17 +122,16 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 //int position = (int)(marker.getTag());
                 //Using position get Value from arraylist
-                Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
                 Intent kioskDetailsIntent =
                         new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
-                for (Kiosk kiosks:allKiosks) {
-                    if (marker.getTitle().equals(kiosks.name())) {
-                        kioskDetailsIntent.putExtra("kiosk", kiosks);
-                        break;
-                    }
-                }
+
+                // send in the kioskID ID (based on database)
+                int kioskID = Integer.parseInt(marker.getTitle());
+                Log.d(TAG, "testing - send in kioskID [" + kioskID + "] to kioskDetails");
+                kioskDetailsIntent.putExtra("kioskID", kioskID);
                 startActivity(kioskDetailsIntent);
-                return false;
+                return true;
             }
         });
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
