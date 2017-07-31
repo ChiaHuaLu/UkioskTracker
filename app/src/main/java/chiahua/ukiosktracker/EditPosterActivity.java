@@ -97,8 +97,8 @@ public class EditPosterActivity extends AppCompatActivity {
             List<Poster> allPosters = Poster.listAll(Poster.class);
             Log.d("TAG", "allPosters size = " + allPosters.size());
             allPosters.remove(poster);
-            Poster.saveInTx(allPosters);
-            SugarRecord.saveInTx(allPosters);
+            //Poster.saveInTx(allPosters);
+            //SugarRecord.saveInTx(allPosters);
             poster.delete();
         }
         finish();

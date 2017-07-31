@@ -82,9 +82,9 @@ public class Poster extends SugarRecord {
 
     // Create the list of all kiosks (please only run this once!)
     public static void initializePoster() {
-        List<Kiosk> posters = new ArrayList<>();
-        Log.d("TEST","Saving kiosks! count: " + posters.size());
-        SugarRecord.saveInTx(posters);
+       // List<Kiosk> posters = new ArrayList<>();
+        //Log.d("TEST","Saving kiosks! count: " + posters.size());
+        //SugarRecord.saveInTx(posters);
     }
     /*
     //Check to see if poster is at a location

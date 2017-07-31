@@ -45,9 +45,9 @@ public class KioskPoster extends SugarRecord {
     }
 
     public static void initializeKioskPoster() {
-        List<KioskPoster> kioskPosters = new ArrayList<>();
-        KioskPoster.saveInTx(kioskPosters);
-        SugarRecord.saveInTx(kioskPosters);
+        //List<KioskPoster> kioskPosters = new ArrayList<>();
+        //KioskPoster.saveInTx(kioskPosters);
+        //SugarRecord.saveInTx(kioskPosters);
     }
 
 }
