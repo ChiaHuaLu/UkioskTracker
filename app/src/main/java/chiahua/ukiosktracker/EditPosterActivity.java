@@ -102,9 +102,6 @@ public class EditPosterActivity extends AppCompatActivity {
                 if (kp.matchPoster(poster))
                     kp.delete();
             }
-            //Poster.saveInTx(allPosters);
-            //SugarRecord.saveInTx(allPosters);
-            //TODO: Deleting a poster causes endless crashes until uninstall. Suspect: Upon remove, need to also remove relevant KioskPosters
             poster.delete();
         }
         finish();

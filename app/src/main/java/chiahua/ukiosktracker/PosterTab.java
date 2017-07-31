@@ -94,6 +94,19 @@ public class PosterTab extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // TODO: notifyDataSetChanged is preferred, but can't get it to work
+        Log.d(TAG, "Notify dataset has been changed onResume");
+        allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
+        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+
+        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
+        allPostersLV.setAdapter(posterListAdapter);
+    }
+
 //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);

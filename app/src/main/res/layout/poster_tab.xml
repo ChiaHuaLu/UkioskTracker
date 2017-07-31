@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="0dp" />
+        android:layout_marginBottom="?attr/actionBarSize" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -25,8 +25,8 @@
         android:baselineAlignBottom="false"
         app:srcCompat="@drawable/add"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toBottomOf="@id/allPostersLV"
+        android:layout_marginBottom="78dp"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="16dp" />
