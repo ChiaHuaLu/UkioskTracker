@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +24,8 @@ public class EditPosterActivity extends AppCompatActivity {
     EditText locationField;
     EditText descriptionField;
     Poster poster;
+
+    Menu menu;
 
     boolean addNew;
     int kioskID;
@@ -49,16 +53,12 @@ public class EditPosterActivity extends AppCompatActivity {
             descriptionField.setText(poster.details());
         }
         else {
-            Button delete_cancel = (Button) findViewById(R.id.delete_cancel_button);
-            Button edit_add = (Button) findViewById(R.id.edit_add_button);
-            edit_add.setText(R.string.add);
-            delete_cancel.setText(R.string.cancel);
             setTitle(R.string.add_new_poster);
         }
 
     }
 
-    public void editPoster(View view) {
+    public void addEditButton() {
         String name = nameField.getText().toString();
         String org = orgField.getText().toString();
         String location = locationField.getText().toString();
@@ -100,8 +100,41 @@ public class EditPosterActivity extends AppCompatActivity {
 
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.add_edit_menu, menu);
+        if (addNew) {
+            MenuItem deleteCancelMenu = (MenuItem) menu.findItem(R.id.delete_cancel);
+            MenuItem editAddMenu = (MenuItem) menu.findItem(R.id.add_save);
+            Log.d("TAG", "DeleteCancel is null " + (deleteCancelMenu==null));
+            deleteCancelMenu.setTitle(R.string.cancel);
+            editAddMenu.setTitle(R.string.add);
+        }
+        return true;
+    }
 
-    public void deleteCancelButton(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.add_save) {
+            addEditButton();
+            return true;
+        }
+        else if (id == R.id.delete_cancel) {
+            deleteCancelButton();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void deleteCancelButton() {
         if (!addNew) {
             List<Poster> allPosters = Poster.listAll(Poster.class);
             Log.d("TAG", "allPosters size = " + allPosters.size());
