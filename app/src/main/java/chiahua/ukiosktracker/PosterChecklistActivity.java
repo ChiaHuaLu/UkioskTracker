@@ -97,7 +97,7 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
-        for (int kioskID = 1; kioskID <= 20; kioskID++) {
+        for (int kioskID = 1; kioskID <= allKiosks.size(); kioskID++) {
             Kiosk kiosk = allKiosks.get(kioskID - 1);
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(kiosk.latit(), kiosk.longit()));

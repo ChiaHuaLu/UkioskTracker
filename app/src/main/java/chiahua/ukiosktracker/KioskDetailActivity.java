@@ -58,6 +58,7 @@ public class KioskDetailActivity extends AppCompatActivity {
 
                 Intent addPosterIntent = new Intent(getBaseContext(), EditPosterActivity.class);
                 addPosterIntent.putExtra("addNew", true);
+                addPosterIntent.putExtra("KioskID", kioskID);
                 startActivity(addPosterIntent);
             }
         });

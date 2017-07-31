@@ -24,6 +24,7 @@ public class EditPosterActivity extends AppCompatActivity {
     Poster poster;
 
     boolean addNew;
+    int kioskID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class EditPosterActivity extends AppCompatActivity {
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
+        kioskID = receivedIntent.getIntExtra("KioskID", -1);
         if (!addNew) {
             long posterID = receivedIntent.getLongExtra("PosterID", -1);
             poster = Poster.findById(Poster.class, posterID);
@@ -75,6 +77,13 @@ public class EditPosterActivity extends AppCompatActivity {
                 // Save poster details to poster database
                 Poster poster = new Poster(name, org, location, "", description);
                 poster.save();
+                if (kioskID > 0) {
+                    Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                    KioskPoster kp = new KioskPoster(kiosk, poster);
+                    kp.save();
+                    poster.increaseCount();
+                    poster.save();
+                }
 
                 //List<Poster> allPosters = Poster.listAll(Poster.class);
                 //Log.d("TAG", "allPosters size = " + allPosters.size());
