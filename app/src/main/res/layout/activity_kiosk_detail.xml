@@ -40,4 +40,17 @@
                 android:layout_gravity="top"/>
         </LinearLayout>
     </ScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/KioskDetailfab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:baselineAlignBottom="false"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@drawable/add"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

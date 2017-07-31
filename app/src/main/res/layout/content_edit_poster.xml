@@ -83,7 +83,7 @@
                 android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="@string/hint_location"
-                android:inputType="textCapCharacters"
+                android:inputType="textCapWords"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/edit_locationTV"
                 app:layout_constraintRight_toRightOf="parent"

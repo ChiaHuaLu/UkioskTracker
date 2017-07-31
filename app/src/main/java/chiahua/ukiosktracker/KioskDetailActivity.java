@@ -3,9 +3,11 @@ package chiahua.ukiosktracker;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.media.Image;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -45,6 +47,20 @@ public class KioskDetailActivity extends AppCompatActivity {
         ListAdapter kioskDetailsAdapter = new PosterArrayAdapter(this, relevantPosters);
         ListView kioskDetailsLV = (ListView) findViewById(R.id.kioskDetailLV);
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.KioskDetailfab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
+//                startActivityForResult(addPosterIntent,
+//                        getResources().getInteger(R.integer.add_new_poster_reqCode));
+
+                Intent addPosterIntent = new Intent(getBaseContext(), EditPosterActivity.class);
+                addPosterIntent.putExtra("addNew", true);
+                startActivity(addPosterIntent);
+            }
+        });
         //TODO: Something wrong with the KioskDetails Listview.
     }
 }

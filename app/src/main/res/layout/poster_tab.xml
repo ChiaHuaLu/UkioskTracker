@@ -19,17 +19,18 @@
         android:layout_marginBottom="0dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/posterTabfab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="83dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="407dp"
         android:baselineAlignBottom="false"
-        app:srcCompat="@drawable/add"
-        tools:layout_constraintBottom_creator="1"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="72dp"
-        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="16dp" />
+        app:srcCompat="@drawable/add"
+        tools:layout_constraintBottom_creator="1" />
 
 
 </android.support.constraint.ConstraintLayout>
