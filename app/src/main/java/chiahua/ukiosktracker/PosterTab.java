@@ -61,9 +61,13 @@ public class PosterTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
-                startActivityForResult(addPosterIntent,
-                        getResources().getInteger(R.integer.add_new_poster_reqCode));
+//                Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
+//                startActivityForResult(addPosterIntent,
+//                        getResources().getInteger(R.integer.add_new_poster_reqCode));
+
+                Intent addPosterIntent = new Intent(getActivity(), EditPosterActivity.class);
+                addPosterIntent.putExtra("addNew", true);
+                startActivity(addPosterIntent);
             }
         });
 
@@ -86,12 +90,12 @@ public class PosterTab extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult called");
-        ((BaseAdapter) posterListAdapter).notifyDataSetChanged();
-        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
-        allPostersLV.setAdapter(posterListAdapter);
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d(TAG, "onActivityResult called");
+//        ((BaseAdapter) posterListAdapter).notifyDataSetChanged();
+//        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
+//        allPostersLV.setAdapter(posterListAdapter);
+//    }
 }

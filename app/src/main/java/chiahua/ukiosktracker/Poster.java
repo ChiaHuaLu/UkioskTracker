@@ -15,7 +15,7 @@ public class Poster extends SugarRecord {
     private String eventTime;
     private String details;
     private int count;
-    private String location;
+    //private String location;
 
     // Leave empty constructor for SugarRecords
     public Poster() {}
@@ -36,7 +36,7 @@ public class Poster extends SugarRecord {
         eventTime = time;
         if (time == null)
             eventTime = "";
-        location = "00000000000000000000"; //Represents a boolean[] where 1 = present at a kiosk
+        //location = "00000000000000000000"; //Represents a boolean[] where 1 = present at a kiosk
     }
 
     //Constructor helper method
@@ -69,6 +69,7 @@ public class Poster extends SugarRecord {
             this.details = details;
     }
 
+    /*
     //Check to see if poster is at a location
     public boolean checkKiosk(int kioskID) {
         if (location.charAt(kioskID-1) == '1')
@@ -89,7 +90,7 @@ public class Poster extends SugarRecord {
         }
         location = result.toString();
         this.save();
-    }
+    }  */
 
     //Get a poster's title
     public String title() {

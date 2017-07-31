@@ -44,14 +44,13 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
             public void onClick(View v) {
                 Intent editPosterIntent = new Intent(getContext(), EditPosterActivity.class);
                 editPosterIntent.putExtra("PosterID", posterIDToEdit);
+                editPosterIntent.putExtra("addNew", false);
                 getContext().startActivity(editPosterIntent);
             }
         });
         customView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
-
                 long posterID = posterItem.getId();
                 Intent intent = new Intent(getContext(), PosterChecklistActivity.class);
                 intent.putExtra("PosterID", posterID);

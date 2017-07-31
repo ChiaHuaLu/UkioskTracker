@@ -48,16 +48,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".AddPosterActivity"
-            android:label="@string/title_activity_add_poster"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="chiahua.ukiosktracker.MainActivity" />
-        </activity>
         <activity
             android:name=".EditPosterActivity"
             android:label="@string/title_activity_edit_poster"

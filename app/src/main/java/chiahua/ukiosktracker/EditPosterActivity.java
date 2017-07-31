@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,8 +18,11 @@ public class EditPosterActivity extends AppCompatActivity {
     EditText descriptionField;
     Poster poster;
 
+    boolean addNew;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("TAG", "IN EDIT POSTER ACTIVITY");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_poster);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -27,12 +32,23 @@ public class EditPosterActivity extends AppCompatActivity {
         locationField = (EditText) findViewById(R.id.edit_locationET);
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
         Intent receivedIntent = getIntent();
-        long posterID = receivedIntent.getLongExtra("PosterID", -1);
-        poster = Poster.findById(Poster.class, posterID);
-        nameField.setText(poster.title());
-        orgField.setText(poster.organization());
-        locationField.setText((poster.eventLocation()));
-        descriptionField.setText(poster.details());
+        addNew = receivedIntent.getBooleanExtra("addNew", true);
+        if (!addNew) {
+            long posterID = receivedIntent.getLongExtra("PosterID", -1);
+            poster = Poster.findById(Poster.class, posterID);
+            nameField.setText(poster.title());
+            orgField.setText(poster.organization());
+            locationField.setText((poster.eventLocation()));
+            descriptionField.setText(poster.details());
+        }
+        else {
+            Button delete_cancel = (Button) findViewById(R.id.delete_cancel_button);
+            Button edit_add = (Button) findViewById(R.id.edit_add_button);
+            edit_add.setText(R.string.add);
+            delete_cancel.setText(R.string.cancel);
+            setTitle(R.string.add_new_poster);
+        }
+
     }
 
     public void editPoster(View view) {
@@ -41,7 +57,7 @@ public class EditPosterActivity extends AppCompatActivity {
         String location = locationField.getText().toString();
         String description = descriptionField.getText().toString();
 
-        //Poster newPoster = new Poster(name, org, location, null, description, kiosks);
+
         if (name.trim().equals("")) {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field", Toast.LENGTH_SHORT).show();
@@ -49,14 +65,25 @@ public class EditPosterActivity extends AppCompatActivity {
         else {
             // TODO: Set poster event time when time EditText is created
             // Save poster details to poster database
-            poster.modify(name, org, location, "", description);
-            poster.save();
-            finish();
+            if (addNew) {
+                // TODO: Set poster event time when time EditText is created
+                // Save poster details to poster database
+                Poster poster = new Poster(name, org, location, "", description);
+                poster.save();
+                finish();
+            }
+            else {
+                poster.modify(name, org, location, "", description);
+                poster.save();
+                finish();
+            }
+
         }
     }
 
-    public void deletePoster(View view) {
-        poster.delete();
+    public void deleteCancelButton(View view) {
+        if (!addNew)
+            poster.delete();
         finish();
     }
 

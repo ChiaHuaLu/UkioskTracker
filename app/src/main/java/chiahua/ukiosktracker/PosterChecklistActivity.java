@@ -91,20 +91,18 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
-        for (int kioskID = 1; kioskID <= 20; kioskID++) {
-            Kiosk kiosk = allKiosks.get(kioskID - 1);
-            MarkerOptions marker = new MarkerOptions();
-            marker.position(new LatLng(kiosk.latit(), kiosk.longit()));
-            if (poster.checkKiosk(kioskID)) {
-                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
-            }
-            else {
-                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
-            }
-            mMap.addMarker(marker);
-
-
-        }
+//        for (int kioskID = 1; kioskID <= 20; kioskID++) {
+//            Kiosk kiosk = allKiosks.get(kioskID - 1);
+//            MarkerOptions marker = new MarkerOptions();
+//            marker.position(new LatLng(kiosk.latit(), kiosk.longit()));
+//            if (poster.checkKiosk(kioskID)) {
+//                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
+//            }
+//            else {
+//                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
+//            }
+//            mMap.addMarker(marker);
+//        }
 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
     }
