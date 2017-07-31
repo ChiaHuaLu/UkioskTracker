@@ -97,6 +97,11 @@ public class EditPosterActivity extends AppCompatActivity {
             List<Poster> allPosters = Poster.listAll(Poster.class);
             Log.d("TAG", "allPosters size = " + allPosters.size());
             allPosters.remove(poster);
+            List<KioskPoster> allKPs = KioskPoster.listAll(KioskPoster.class);
+            for (KioskPoster kp : allKPs) {
+                if (kp.matchPoster(poster))
+                    kp.delete();
+            }
             //Poster.saveInTx(allPosters);
             //SugarRecord.saveInTx(allPosters);
             //TODO: Deleting a poster causes endless crashes until uninstall. Suspect: Upon remove, need to also remove relevant KioskPosters
