@@ -45,5 +45,6 @@ public class KioskDetailActivity extends AppCompatActivity {
         ListAdapter kioskDetailsAdapter = new PosterArrayAdapter(this, relevantPosters);
         ListView kioskDetailsLV = (ListView) findViewById(R.id.kioskDetailLV);
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
+        //TODO: Something wrong with the KioskDetails Listview.
     }
 }
