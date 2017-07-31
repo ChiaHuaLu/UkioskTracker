@@ -6,6 +6,6 @@
         android:id="@+id/about"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        android:icon="@drawable/about"
+        android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom" />
 </menu>
