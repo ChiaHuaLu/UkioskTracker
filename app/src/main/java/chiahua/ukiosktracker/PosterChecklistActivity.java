@@ -22,8 +22,9 @@ import java.util.ArrayList;
 public class PosterChecklistActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public Poster poster;
-    private boolean[] location;
     public ArrayList<Kiosk> allKiosks;
+    public ArrayList<KioskPoster> allKPs;
+    public ArrayList<KioskPoster> relevantKPs;
 
 
     private static final float DEFAULT_MIN_ZOOM = 14.0f;
@@ -47,11 +48,15 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
         long posterID = receivedIntent.getLongExtra("PosterID", -1);
         poster = Poster.findById(Poster.class, posterID);
         setTitle(poster.title());
-        location = new boolean[20];
+        Log.d("TAG", "Poster "+posterID + " title = " + (poster.title()==null));
         allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
-
-
-
+        allKPs = (ArrayList<KioskPoster>) KioskPoster.listAll(KioskPoster.class);
+        relevantKPs = new ArrayList<KioskPoster>();
+        for (KioskPoster kp : allKPs) {
+            Log.d("TAG", "kp null = " + (kp==null));
+            if (kp.matchPoster(poster))
+                relevantKPs.add(kp);
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.checklistMap);
@@ -83,6 +88,7 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         if (!checkReady()) {
             return;
         }
@@ -95,27 +101,60 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
             Kiosk kiosk = allKiosks.get(kioskID - 1);
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(kiosk.latit(), kiosk.longit()));
-//            if (poster.checkKiosk(kioskID)) {
-//                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
-//            }
-//            else {
+            marker.title(kioskID+"");
+            if (kioskMatchFound(kiosk)!=null) {
+                marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
+            }
+            else {
                 marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
-//            }
-
+            }
             mMap.addMarker(marker);
+
+
 
         }
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                //int position = (int)(marker.getTag());
+                Log.d("TAG", "Marker title null "+(marker.getTitle()==null));
+                int position = Integer.parseInt(marker.getTitle()); //TODO: Int = null
                 //Using position get Value from arraylist
                 //Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
-                marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
-                return false;
+                Kiosk kiosk = allKiosks.get(position-1);
+                KioskPoster kp = kioskMatchFound(kiosk);
+                if (kp == null) {
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
+                    kp = new KioskPoster(kiosk, poster);
+                    kp.save();
+                    allKPs.add(kp);
+                    relevantKPs.add(kp);
+                    KioskPoster.saveInTx(allKPs);
+                    poster.increaseCount();
+                    poster.save();
+                }
+                else {
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
+                    allKPs.remove(kp);
+                    relevantKPs.remove(kp);
+                    KioskPoster.saveInTx(allKPs);
+                    poster.decreaseCount();
+                    poster.save();
+                }
+                return true;
             }
         });
 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
+    }
+
+    //Checks to see if KP match is found. True if returns valid KP. False if returns null
+    private KioskPoster kioskMatchFound(Kiosk kiosk) {
+        for (KioskPoster kp : relevantKPs) {
+            Log.d("kioskMatchFound", "KP is null "+ (kp==null));
+            if (kp.matchKiosk(kiosk)) {
+                return kp;
+            }
+        }
+        return null;
     }
 }

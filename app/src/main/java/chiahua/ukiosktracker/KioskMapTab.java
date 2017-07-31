@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
@@ -42,7 +43,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    public ArrayList<Kiosk> allKiosks;
+    public List<Kiosk> allKiosks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,7 +131,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 Log.d(TAG, "testing - send in kioskID [" + kioskID + "] to kioskDetails");
                 kioskDetailsIntent.putExtra("kioskID", kioskID);
                 startActivity(kioskDetailsIntent);
-                return false;
+                return true;
             }
         });
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));

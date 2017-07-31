@@ -4,8 +4,11 @@ package chiahua.ukiosktracker;
  * Created by ChiaHuaBladeWX on 7/27/2017.
  */
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Poster extends SugarRecord {
 
@@ -54,6 +57,14 @@ public class Poster extends SugarRecord {
         return count;
     }
 
+    public void increaseCount() {
+        count++;
+    }
+
+    public void decreaseCount() {
+        count--;
+    }
+
     //Modify a poster's data. Use null for fields that don't change
     public void modify(String title, String organization, String location,
                        String time, String details) {
@@ -69,6 +80,12 @@ public class Poster extends SugarRecord {
             this.details = details;
     }
 
+    // Create the list of all kiosks (please only run this once!)
+    public static void initializePoster() {
+        List<Kiosk> posters = new ArrayList<>();
+        Log.d("TEST","Saving kiosks! count: " + posters.size());
+        SugarRecord.saveInTx(posters);
+    }
     /*
     //Check to see if poster is at a location
     public boolean checkKiosk(int kioskID) {

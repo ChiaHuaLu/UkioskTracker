@@ -103,10 +103,6 @@ public class Kiosk extends SugarRecord {
         return Math.sqrt(result) * 111000;
     }
 
-    public static void initializeKioskPoster() {
-        List<KioskPoster> kioskPoster = new ArrayList<>();
-        KioskPoster.saveInTx(kioskPoster);
-        SugarRecord.saveInTx(kioskPoster);
-    }
+
 }
 

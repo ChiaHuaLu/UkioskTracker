@@ -51,6 +51,7 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
         customView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("ListView", "Poster is null = " + (posterItem == null));
                 long posterID = posterItem.getId();
                 Intent intent = new Intent(getContext(), PosterChecklistActivity.class);
                 intent.putExtra("PosterID", posterID);

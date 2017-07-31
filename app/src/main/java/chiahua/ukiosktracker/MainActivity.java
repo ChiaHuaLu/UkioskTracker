@@ -84,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
         if (KioskPoster.count(KioskPoster.class) <= 0) {
             Log.d(TAG, "FIRST TIME RUNNING / INIT KioskPoster");
             // first time! build KioskPoster database
-            Kiosk.initializeKioskPoster();
+            KioskPoster.initializeKioskPoster();
+        }
+        if (Poster.count(Poster.class) <= 0) {
+            Log.d(TAG, "FIRST TIME RUNNING / INIT Poster");
+            // first time! build KioskPoster database
+            Poster.initializePoster();
         }
 
         /*
