@@ -76,11 +76,11 @@ public class EditPosterActivity extends AppCompatActivity {
                 Poster poster = new Poster(name, org, location, "", description);
                 poster.save();
 
-                List<Poster> allPosters = Poster.listAll(Poster.class);
-                Log.d("TAG", "allPosters size = " + allPosters.size());
-                allPosters.add(poster);
-                Poster.saveInTx(allPosters);
-                SugarRecord.saveInTx(allPosters);
+                //List<Poster> allPosters = Poster.listAll(Poster.class);
+                //Log.d("TAG", "allPosters size = " + allPosters.size());
+                //allPosters.add(poster);
+                //Poster.saveInTx(allPosters);
+                //SugarRecord.saveInTx(allPosters);
                 finish();
             }
             else {
