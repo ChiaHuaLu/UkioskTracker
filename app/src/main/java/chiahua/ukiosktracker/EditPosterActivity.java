@@ -197,8 +197,8 @@ public class EditPosterActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         Log.d("TAG", "Starting onActivityResult Method");
+        super.onActivityResult(requestCode, resultCode, data);
         Log.d("TAG", "Request Code is: " + requestCode);
         Log.d("TAG", "Result code is: " + resultCode);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
