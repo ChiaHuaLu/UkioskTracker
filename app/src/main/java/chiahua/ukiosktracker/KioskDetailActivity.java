@@ -35,7 +35,7 @@ public class KioskDetailActivity extends AppCompatActivity {
 
         Log.d(TAG, "Kiosk " + kioskID + " is named " + kiosk.name());
         List<KioskPoster> allKPs = KioskPoster.listAll(KioskPoster.class);
-        ArrayList<Poster> relevantPosters = new ArrayList<Poster>();
+        ArrayList<Poster> relevantPosters = new ArrayList<>();
         for (KioskPoster kp : allKPs) {
             if (kp.matchKiosk(kiosk)) {
                 relevantPosters.add(kp.getPoster());
