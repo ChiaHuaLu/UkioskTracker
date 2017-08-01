@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return getString(R.string.kiosk);
                 case 1:
-                    return getString(R.string.nearby);
+                    return getString(R.string.posters);
                 /*case 1:
                     return getString(R.string.nearby);
                 case 2:

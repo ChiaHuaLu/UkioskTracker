@@ -231,9 +231,14 @@ public class EditPosterActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.delete_cancel) {
-            ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
+            if (addNew) {
+                deleteCancelButton();
+            }
+            else {
+                ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
+                confirmDelete.show(getFragmentManager(), "Delete");
+            }
 
-            confirmDelete.show(getFragmentManager(), "Delete");
             //deleteCancelButton();
             return true;
         }
