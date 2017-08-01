@@ -41,7 +41,5 @@
         android:drawableEnd="@drawable/button_more"
         android:drawableRight="@drawable/button_more"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        style="?android:attr/borderlessButtonStyle" />
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
