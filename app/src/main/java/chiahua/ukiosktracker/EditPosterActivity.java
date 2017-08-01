@@ -57,6 +57,7 @@ public class EditPosterActivity extends AppCompatActivity {
         orgField = (EditText) findViewById(R.id.edit_orgET);
         locationField = (EditText) findViewById(R.id.edit_locationET);
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
+        mImageView = (ImageView) findViewById(R.id.poster_image);
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         if (!addNew) {
@@ -66,6 +67,12 @@ public class EditPosterActivity extends AppCompatActivity {
             orgField.setText(poster.organization());
             locationField.setText((poster.eventLocation()));
             descriptionField.setText(poster.details());
+            mCurrentPhotoPath = poster.getImagePath();
+            if (mCurrentPhotoPath == null){
+            } else {
+                Log.d("TAG", "Setting Image Bitmap to mImageView");
+                mImageView.setImageBitmap(mImageBitmap);
+            }
         }
         else {
             Button delete_cancel = (Button) findViewById(R.id.delete_cancel_button);
@@ -75,7 +82,6 @@ public class EditPosterActivity extends AppCompatActivity {
             setTitle(R.string.add_new_poster);
             if (cameraAccess) {
                 ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
-                ImageView iv = (ImageView) findViewById(R.id.poster_image);
                 Log.d("TAG", "Creating on click listener.");
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -192,6 +198,7 @@ public class EditPosterActivity extends AppCompatActivity {
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         Log.d("TAG", "Current Photo Path: " + mCurrentPhotoPath);
+
         return image;
     }
 
@@ -204,12 +211,17 @@ public class EditPosterActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.d("TAG", "Request to take photo OK");
             try {
+                Log.d("TAG", "Getting Image Bitmap");
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
                         Uri.parse(mCurrentPhotoPath));
+                Log.d("TAG", "Setting Image Bitmap to mImageView");
                 mImageView.setImageBitmap(mImageBitmap);
+                poster.setImagePath(mCurrentPhotoPath);
             } catch (IOException e) {
+                Log.d("TAG", "IOException in onActivityResult");
                 e.printStackTrace();
             }
+            Log.d("TAG", "Hitting return on onActivityResult");
             return;
         }
         //Log.d("TAG", "Using super.onActivityResult");

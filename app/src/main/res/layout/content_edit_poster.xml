@@ -9,14 +9,10 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="0dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -107,14 +103,14 @@
 
             <ImageView
                 android:id="@+id/poster_image"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@mipmap/ic_launcher"
-                app:layout_constraintRight_toLeftOf="@+id/camera_icon"
+                android:src="@drawable/noimageavailable"
+                android:adjustViewBounds="true"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_descriptionET"
+                app:layout_constraintTop_toBottomOf="@+id/edit_add_button"
                 />
             
             <ImageButton
@@ -123,10 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/edit_descriptionET"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/poster_image"/>
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
             <EditText
                 android:id="@+id/edit_nameET"
@@ -156,8 +151,6 @@
                 app:layout_constraintLeft_toRightOf="@+id/edit_add_button"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/camera_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="32dp"
                 app:layout_constraintVertical_bias="1.0" />
 
             <Button
@@ -170,8 +163,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/delete_cancel_button"
                 app:layout_constraintTop_toBottomOf="@+id/camera_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="32dp"
                 app:layout_constraintVertical_bias="0.478" />
 
             <TextView

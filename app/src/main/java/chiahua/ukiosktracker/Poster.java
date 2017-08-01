@@ -17,6 +17,7 @@ public class Poster extends SugarRecord {
     private String eventLocation;
     private String eventTime;
     private String details;
+    private String imagePath;
     private int count;
     //private String location;
 
@@ -132,6 +133,14 @@ public class Poster extends SugarRecord {
     //Get a poster's details
     public String details() {
         return details;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String iPath) {
+        imagePath = iPath;
     }
 
     //Add this poster to a kioskID location
