@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by ChiaHuaBladeWX on 7/28/2017.
@@ -38,7 +40,8 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
         TextView subtitleTV = (TextView) customView.findViewById(R.id.poster_item_subtitle);
         Button editPosterButton = (Button) customView.findViewById(R.id.poster_item_edit);
         titleTV.setText(posterItem.title());
-        subtitleTV.setText("Poster Locations: " + posterItem.count() + "    " + posterItem.organization());
+        subtitleTV.setText("Poster Locations: " + posterItem.count() + "    " +
+                convertMMDDYYYY(posterItem) + "    " + posterItem.organization());
         final long posterIDToEdit = posterItem.getId();
         editPosterButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -59,85 +62,25 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
                 getContext().startActivity(intent);
             }
         });
-        Log.d("TAG", "Event time is "+ posterItem.eventTime());
         if (posterItem.eventTime().length()>0) {
-            if (Integer.parseInt(posterItem.eventTime())+1 < Integer.parseInt(systemTime())) {
+            if (Integer.parseInt(posterItem.eventTime())+1 < Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))) {
                 customView.setBackgroundColor(Color.parseColor("#fca9a9"));
             }
         }
-
-
+        Date currentDate = new Date();
+        currentDate.getYear();
 
         return customView;
     }
 
-    private String systemTime() {
-        long systemTime = System.currentTimeMillis();
-        long year = systemTime / (525600*60*1000)+997;
-        long dayOfYear = systemTime % (525600*60*1000) / (1000 * 3600 * 24) +203;
-        int month = 0;
-        if (dayOfYear < 31) {
-            month = 1;
+    private String convertMMDDYYYY(Poster poster) {
+        String result = "";
+        String posterDate = poster.eventTime();
+        if (posterDate.length()>0) {
+            result += posterDate.substring(4, 6) +"/"+ posterDate.substring(6)
+                    +"/"+ posterDate.substring(0, 4);
         }
-        else {
-            dayOfYear -= 31;
-            if ((isLeapYear(year) && dayOfYear<30) || !isLeapYear(year) && dayOfYear<29) {
-                month = 2;
-            }
-            else {
-                dayOfYear-=28;
-                if (isLeapYear(year))
-                    dayOfYear--;
-                if ((dayOfYear-=31)<1) {
-                    month=3;
-                    dayOfYear+=31;
-                } else if ((dayOfYear-=30)<1) {
-                    month=4;
-                    dayOfYear+=30;
-                } else if ((dayOfYear-=31)<1) {
-                    month=5;
-                    dayOfYear+=31;
-                } else if ((dayOfYear-=30)<1) {
-                    month=6;
-                    dayOfYear+=30;
-                } else if ((dayOfYear-=31)<1) {
-                    month=7;
-                    dayOfYear+=31;
-                } else if ((dayOfYear-=31)<1) {
-                    month=8;
-                    dayOfYear+=31;
-                } else if ((dayOfYear-=30)<1) {
-                    month=9;
-                    dayOfYear+=30;
-                } else if ((dayOfYear-=31)<1) {
-                    month=10;
-                    dayOfYear+=31;
-                } else if ((dayOfYear-=30)<1) {
-                    month=11;
-                    dayOfYear+=30;
-                } else {
-                    month=12;
-                }
-
-            }
-
-        }
-        Log.d("TIME", systemTime + " = " + month+ "/"+dayOfYear+"/"+year);
-        return padDateInts((int) year, 4) + padDateInts(month, 2) + padDateInts((int)dayOfYear, 2);
-    }
-    private String padDateInts(int number, int length) {
-        StringBuilder result = new StringBuilder("");
-        result.append(number);
-        while (result.length()<length) {
-            result.insert(0, "0");
-        }
-        return result.toString();
+        return result;
     }
 
-    private boolean isLeapYear(long year) {
-        if ((year % 4 == 0) && (year % 100 != 0) ||(year % 400 == 0))
-            return true;
-        else
-            return false;
-    }
 }
