@@ -36,7 +36,7 @@
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="date">Date</string>
+    <string name="date"> Expiration Date</string>
     <string name="slash">/</string>
     <string name="time">Time</string>
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.StringBuilderPrinter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class EditPosterActivity extends AppCompatActivity {
 
@@ -23,6 +25,10 @@ public class EditPosterActivity extends AppCompatActivity {
     EditText orgField;
     EditText locationField;
     EditText descriptionField;
+    EditText monthField;
+    EditText dateField;
+    EditText yearField;
+    String mmddyyyy;
     Poster poster;
 
     Menu menu;
@@ -41,6 +47,10 @@ public class EditPosterActivity extends AppCompatActivity {
         orgField = (EditText) findViewById(R.id.edit_orgET);
         locationField = (EditText) findViewById(R.id.edit_locationET);
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
+        monthField = (EditText) findViewById(R.id.edit_monthET);
+        dateField = (EditText) findViewById(R.id.edit_dateET);
+        yearField = (EditText) findViewById(R.id.edit_yearET);
+
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         kioskID = receivedIntent.getIntExtra("KioskID", -1);
@@ -51,6 +61,7 @@ public class EditPosterActivity extends AppCompatActivity {
             orgField.setText(poster.organization());
             locationField.setText((poster.eventLocation()));
             descriptionField.setText(poster.details());
+            getDateAndTime();
         }
         else {
             setTitle(R.string.add_new_poster);
@@ -72,10 +83,15 @@ public class EditPosterActivity extends AppCompatActivity {
         else {
             // TODO: Set poster event time when time EditText is created
             // Save poster details to poster database
+            //String time = "" + month ;
+            String time = "";
+
+
+
             if (addNew) {
                 // TODO: Set poster event time when time EditText is created
                 // Save poster details to poster database
-                Poster poster = new Poster(name, org, location, "", description);
+                Poster poster = new Poster(name, org, location, time.toString(), description);
                 poster.save();
                 if (kioskID > 0) {
                     Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
@@ -90,16 +106,102 @@ public class EditPosterActivity extends AppCompatActivity {
                 //allPosters.add(poster);
                 //Poster.saveInTx(allPosters);
                 //SugarRecord.saveInTx(allPosters);
-                finish();
+                if (validateAndSetDate())
+                    finish();
             }
             else {
-                poster.modify(name, org, location, "", description);
+                poster.modify(name, org, location, time.toString(), description);
+                validateAndSetDate();
                 poster.save();
-                finish();
+                if (validateAndSetDate())
+                    finish();
             }
 
         }
     }
+
+    //Make sure Date is valid before calling this
+    private void getDateAndTime() {
+        String mmddyyyy = poster.getDetailArray()[3];
+        if (mmddyyyy.length()>0) {
+            monthField.setText(mmddyyyy.substring(0, 2));
+            dateField.setText(mmddyyyy.substring(2, 4));
+            yearField.setText(mmddyyyy.substring(4));
+        }
+
+
+    }
+
+    private boolean validateAndSetDate() {
+        String month = monthField.getText().toString();
+        String date = dateField.getText().toString();
+        String year = yearField.getText().toString();
+        if (month.length()>0 || date.length()>0 || year.length()>0) {
+            if (month.length()==0 || date.length()==0 || year.length()==0) {
+                Toast.makeText(getApplicationContext(),
+                        "Date not properly filled out", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                int monthInt = integerVerifier(month);
+                int dateInt = integerVerifier(date);
+                int yearInt = integerVerifier(year);
+                if (!(monthInt == -1 && dateInt == -1 && yearInt == -1)) {
+                    if (monthInt > 12 || monthInt < 1) {
+                        Toast.makeText(getApplicationContext(),
+                                "Invalid Month", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                    else {
+                        if (((dateInt <= 31) && (monthInt == 1 || monthInt == 3 || monthInt == 5 || monthInt == 7 || monthInt == 8 || monthInt == 10 || monthInt == 12)) ||
+                                ((dateInt <= 30) && (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)) ||
+                                ((dateInt <= 29) && monthInt == 2)) {
+                            String dateString = padDateInts(monthInt, 2) + padDateInts(dateInt, 2) + padDateInts(yearInt, 4);
+                            poster.modify(null, null, null, dateString, null);
+                            poster.save();
+                            return true;
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Invalid Date", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),
+                            "Date Entered is invalid", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+
+            }
+        }
+        else {
+            return true;
+        }
+    }
+
+    private String padDateInts(int number, int length) {
+        StringBuilder result = new StringBuilder("");
+        result.append(number);
+        while (result.length()<length) {
+            result.insert(0, "0");
+        }
+        return result.toString();
+    }
+
+    private int integerVerifier (String intString) {
+        int result = -1;
+        Scanner scanner = new Scanner(intString);
+        if (scanner.hasNextInt()) {
+            result = scanner.nextInt();
+        }
+        scanner.close();
+        return result;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
