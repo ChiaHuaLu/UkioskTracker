@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         fab.setImageResource(R.drawable.add);*/
-
     }
 
     @Override

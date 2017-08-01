@@ -92,6 +92,7 @@ public class EditPosterActivity extends AppCompatActivity {
                 // TODO: Set poster event time when time EditText is created
                 // Save poster details to poster database
                 Poster poster = new Poster(name, org, location, time.toString(), description);
+                this.poster = poster;
                 poster.save();
                 if (kioskID > 0) {
                     Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
@@ -128,9 +129,11 @@ public class EditPosterActivity extends AppCompatActivity {
             dateField.setText(mmddyyyy.substring(6));
             yearField.setText(mmddyyyy.substring(0, 4));
         }
-
-
     }
+
+
+
+
 
     private boolean validateAndSetDate() {
         String month = monthField.getText().toString();
