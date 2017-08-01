@@ -1,29 +1,47 @@
 package chiahua.ukiosktracker;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.orm.SugarRecord;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EditPosterActivity extends AppCompatActivity {
 
+    public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
     EditText nameField;
     EditText orgField;
     EditText locationField;
     EditText descriptionField;
     Poster poster;
+    private String mCurrentPhotoPath;
+    private Bitmap mImageBitmap;
+    private ImageView mImageView;
 
     boolean addNew;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +70,41 @@ public class EditPosterActivity extends AppCompatActivity {
             edit_add.setText(R.string.add);
             delete_cancel.setText(R.string.cancel);
             setTitle(R.string.add_new_poster);
+            ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
+            ImageView iv = (ImageView) findViewById(R.id.poster_image);
+            Log.d("TAG", "Creating on click listener.");
+            ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    invokeCamera();
+                }
+            });
         }
 
+    }
+
+    private void invokeCamera() {
+        Log.d("TAG", "Camera icon clicked.");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            }
+            catch (IOException ex){
+                // Error occurred while creating the file.
+                Log.d("TAG", "IOException for createImageFile method.");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                //Uri photoURI = FileProvider.getUriForFile(this, "chiahua.ukiosktracker.fileprovider",
+                //        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
     }
 
     public void editPoster(View view) {
@@ -90,6 +141,41 @@ public class EditPosterActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        Log.d("TAG", "Creating Image File");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.d("TAG", "Current Photo Path: " + mCurrentPhotoPath);
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            try {
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
+                        Uri.parse(mCurrentPhotoPath));
+                mImageView.setImageBitmap(mImageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
     }
 
     public void deleteCancelButton(View view) {
