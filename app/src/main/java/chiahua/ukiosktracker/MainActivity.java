@@ -145,11 +145,14 @@ public class MainActivity extends AppCompatActivity {
                     KioskMapTab kioskMapTab = new KioskMapTab();
                     return kioskMapTab;
                 case 1:
+                    PosterTab posterTab = new PosterTab();
+                    return posterTab;
+                /*case 1:
                     NearbyTab nearbyTab = new NearbyTab();
                     return nearbyTab;
                 case 2:
                     PosterTab posterTab = new PosterTab();
-                    return posterTab;
+                    return posterTab;*/
             }
             return null;
         }
@@ -157,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            //return 3;
+            return 2;
         }
 
         @Override
@@ -167,8 +171,10 @@ public class MainActivity extends AppCompatActivity {
                     return getString(R.string.kiosk);
                 case 1:
                     return getString(R.string.nearby);
+                /*case 1:
+                    return getString(R.string.nearby);
                 case 2:
-                    return getString(R.string.posters);
+                    return getString(R.string.posters);*/
             }
             return null;
         }
