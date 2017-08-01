@@ -39,5 +39,6 @@
     <string name="date"> Expiration Date</string>
     <string name="slash">/</string>
     <string name="time">Time</string>
+    <string name="deletePosterConfirm">Delete Poster</string>
 
 </resources>
