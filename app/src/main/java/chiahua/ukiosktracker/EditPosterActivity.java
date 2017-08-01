@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +32,7 @@ import java.util.List;
 
 public class EditPosterActivity extends AppCompatActivity {
 
-    public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
+    public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
     EditText nameField;
     EditText orgField;
     EditText locationField;
@@ -41,6 +43,7 @@ public class EditPosterActivity extends AppCompatActivity {
     private ImageView mImageView;
 
     boolean addNew;
+    private boolean cameraAccess = true;
     static final int REQUEST_TAKE_PHOTO = 1;
 
     @Override
@@ -70,17 +73,44 @@ public class EditPosterActivity extends AppCompatActivity {
             edit_add.setText(R.string.add);
             delete_cancel.setText(R.string.cancel);
             setTitle(R.string.add_new_poster);
-            ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
-            ImageView iv = (ImageView) findViewById(R.id.poster_image);
-            Log.d("TAG", "Creating on click listener.");
-            ib.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    invokeCamera();
-                }
-            });
+            if (cameraAccess) {
+                ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
+                ImageView iv = (ImageView) findViewById(R.id.poster_image);
+                Log.d("TAG", "Creating on click listener.");
+                ib.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int permissionCheck = ContextCompat.checkSelfPermission(EditPosterActivity.this,
+                                Manifest.permission.CAMERA);
+                        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                            invokeCamera();
+                        } else {
+                            ActivityCompat.requestPermissions(EditPosterActivity.this,
+                                    new String[]{Manifest.permission.CAMERA},
+                                    CAMERA_PERMISSION_REQUEST_CODE);
+                        }
+                    }
+                });
+            }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[],
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    invokeCamera();
+                }
+                else {
+                    cameraAccess = false;
+                }
+                return;
+            }
+        }
     }
 
     private void invokeCamera() {
@@ -99,9 +129,12 @@ public class EditPosterActivity extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                //Uri photoURI = FileProvider.getUriForFile(this, "chiahua.ukiosktracker.fileprovider",
-                //        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                Log.d("TAG", "Accessing Camera...");
+                Uri photoURI = FileProvider.getUriForFile(EditPosterActivity.this, "chiahua.ukiosktracker.provider",
+                        photoFile);
+                Log.d("TAG", "Photo URI is: " + photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                Log.d("TAG", "Placed Extra in Picture Intent");
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
@@ -165,7 +198,11 @@ public class EditPosterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("TAG", "Starting onActivityResult Method");
+        Log.d("TAG", "Request Code is: " + requestCode);
+        Log.d("TAG", "Result code is: " + resultCode);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Log.d("TAG", "Request to take photo OK");
             try {
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
                         Uri.parse(mCurrentPhotoPath));
@@ -175,7 +212,7 @@ public class EditPosterActivity extends AppCompatActivity {
             }
             return;
         }
-
+        //Log.d("TAG", "Using super.onActivityResult");
     }
 
     public void deleteCancelButton(View view) {
