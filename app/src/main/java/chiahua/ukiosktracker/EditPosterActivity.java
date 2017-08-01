@@ -69,9 +69,18 @@ public class EditPosterActivity extends AppCompatActivity {
             descriptionField.setText(poster.details());
             mCurrentPhotoPath = poster.getImagePath();
             if (mCurrentPhotoPath == null){
+                Log.d("TAG", "mCurrentPhotoPath is null.");
+                mImageView.setImageResource(R.drawable.noimageavailable);
             } else {
                 Log.d("TAG", "Setting Image Bitmap to mImageView");
-                mImageView.setImageBitmap(mImageBitmap);
+                try {
+                    mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
+                            Uri.parse(mCurrentPhotoPath));
+                    mImageView.setImageBitmap(mImageBitmap);
+                } catch (IOException e) {
+                    Log.d("TAG", "IOException in poster load");
+                    mImageView.setImageResource(R.drawable.noimageavailable);
+                }
             }
         }
         else {
