@@ -124,9 +124,9 @@ public class EditPosterActivity extends AppCompatActivity {
     private void getDateAndTime() {
         String mmddyyyy = poster.getDetailArray()[3];
         if (mmddyyyy.length()>0) {
-            monthField.setText(mmddyyyy.substring(0, 2));
-            dateField.setText(mmddyyyy.substring(2, 4));
-            yearField.setText(mmddyyyy.substring(4));
+            monthField.setText(mmddyyyy.substring(4, 6));
+            dateField.setText(mmddyyyy.substring(6));
+            yearField.setText(mmddyyyy.substring(0, 4));
         }
 
 
@@ -156,7 +156,7 @@ public class EditPosterActivity extends AppCompatActivity {
                         if (((dateInt <= 31) && (monthInt == 1 || monthInt == 3 || monthInt == 5 || monthInt == 7 || monthInt == 8 || monthInt == 10 || monthInt == 12)) ||
                                 ((dateInt <= 30) && (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)) ||
                                 ((dateInt <= 29) && monthInt == 2)) {
-                            String dateString = padDateInts(monthInt, 2) + padDateInts(dateInt, 2) + padDateInts(yearInt, 4);
+                            String dateString = padDateInts(yearInt, 4) + padDateInts(monthInt, 2) + padDateInts(dateInt, 2);
                             poster.modify(null, null, null, dateString, null);
                             poster.save();
                             return true;
