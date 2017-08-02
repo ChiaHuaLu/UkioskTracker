@@ -3,9 +3,14 @@ package chiahua.ukiosktracker;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.media.Image;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -28,10 +33,7 @@ public class KioskDetailActivity extends AppCompatActivity {
 
         Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
         setTitle(kiosk.name() + " Kiosk");
-        ImageView kioskImage = (ImageView) findViewById(R.id.kioskImage);
-        TypedArray kioskImages = getResources().obtainTypedArray(R.array.kioskImages);
-        kioskImage.setImageResource(kioskImages.getResourceId(kioskID, -1));
-        kioskImages.recycle();
+
         Log.d(TAG, "Kiosk " + kioskID + " is named " + kiosk.name());
         List<KioskPoster> allKPs = KioskPoster.listAll(KioskPoster.class);
         ArrayList<Poster> relevantPosters = new ArrayList<>();
@@ -43,7 +45,29 @@ public class KioskDetailActivity extends AppCompatActivity {
         Log.d("Kiosk Detail", "Relevant posters size = "+relevantPosters.size());
         ListAdapter kioskDetailsAdapter = new PosterArrayAdapter(this, relevantPosters);
         ListView kioskDetailsLV = (ListView) findViewById(R.id.kioskDetailLV);
+        ImageView kioskImage = (ImageView) findViewById(R.id.kioskImageIV);
+        TypedArray kioskImages = getResources().obtainTypedArray(R.array.kioskImages);
+        kioskImage.setImageResource(kioskImages.getResourceId(kioskID, -1));
+        kioskImages.recycle();
+//        LayoutInflater inflater = getLayoutInflater();
+//        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.kiosk_detail_image, kioskDetailsLV, false);
+//        kioskDetailsLV.addHeaderView(kioskImage);
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.KioskDetailfab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent addPosterIntent = new Intent(getActivity(), AddPosterActivity.class);
+//                startActivityForResult(addPosterIntent,
+//                        getResources().getInteger(R.integer.add_new_poster_reqCode));
+
+                Intent addPosterIntent = new Intent(getBaseContext(), EditPosterActivity.class);
+                addPosterIntent.putExtra("addNew", true);
+                addPosterIntent.putExtra("KioskID", kioskID);
+                startActivity(addPosterIntent);
+            }
+        });
         //TODO: Something wrong with the KioskDetails Listview.
     }
 }

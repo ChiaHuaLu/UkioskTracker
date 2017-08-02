@@ -50,6 +50,7 @@
             android:value="@string/google_maps_key" />
         <activity
             android:name=".EditPosterActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_edit_poster"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>

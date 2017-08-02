@@ -61,7 +61,7 @@ public class PosterTab extends Fragment {
         //TextView debugTV = (TextView) getActivity().findViewById(R.id.debugList);
         //debugTV.setText(debug);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.posterTabfab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

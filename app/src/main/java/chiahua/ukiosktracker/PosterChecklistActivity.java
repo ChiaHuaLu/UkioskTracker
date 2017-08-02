@@ -1,9 +1,13 @@
 package chiahua.ukiosktracker;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -97,7 +101,7 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
-        for (int kioskID = 1; kioskID <= 20; kioskID++) {
+        for (int kioskID = 1; kioskID <= allKiosks.size(); kioskID++) {
             Kiosk kiosk = allKiosks.get(kioskID - 1);
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(kiosk.latit(), kiosk.longit()));
@@ -109,9 +113,6 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                 marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
             }
             mMap.addMarker(marker);
-
-
-
         }
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -127,6 +128,7 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                     kp = new KioskPoster(kiosk, poster);
                     kp.save();
                     allKPs.add(kp);
+
                     relevantKPs.add(kp);
                     //KioskPoster.saveInTx(allKPs);
                     poster.increaseCount();
@@ -136,6 +138,7 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                     marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
                     allKPs.remove(kp);
                     relevantKPs.remove(kp);
+                    KioskPoster.delete(kp);
                     //KioskPoster.saveInTx(allKPs);
                     poster.decreaseCount();
                     poster.save();
