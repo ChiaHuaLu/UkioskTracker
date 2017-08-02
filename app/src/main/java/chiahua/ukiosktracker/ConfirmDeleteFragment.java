@@ -37,7 +37,6 @@ public class ConfirmDeleteFragment extends DialogFragment {
                                 dismiss();
                             }
                         });
-        // Create the AlertDialog object and return it
         return builder.create();
     }
 }

@@ -78,30 +78,6 @@ public class MainActivity extends AppCompatActivity {
             // first time! build Kiosk database
             Kiosk.initializeKiosks();
         }
-        Log.d(TAG, "test if KioskPoster database is empty: " + KioskPoster.count(KioskPoster.class) + " entries, "
-                + (KioskPoster.count(KioskPoster.class) <= 0));
-        // build KioskPoster database only if this is the first time the app has run (prevent duplicates)
-        if (KioskPoster.count(KioskPoster.class) <= 0) {
-            Log.d(TAG, "FIRST TIME RUNNING / INIT KioskPoster");
-            // first time! build KioskPoster database
-            KioskPoster.initializeKioskPoster();
-        }
-        if (Poster.count(Poster.class) <= 0) {
-            Log.d(TAG, "FIRST TIME RUNNING / INIT Poster");
-            // first time! build KioskPoster database
-            Poster.initializePoster();
-        }
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        fab.setImageResource(R.drawable.add);*/
     }
 
     @Override
@@ -117,13 +93,11 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.about) {
             aboutOnClick();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
