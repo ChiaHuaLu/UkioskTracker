@@ -115,6 +115,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
                     .title(kiosk.getId().toString()));
+
         }
 
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {

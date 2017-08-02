@@ -6,6 +6,7 @@ package chiahua.ukiosktracker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,9 @@ public class PosterTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
         View rootView = inflater.inflate(R.layout.poster_tab, container, false);
 
         allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
@@ -57,7 +61,7 @@ public class PosterTab extends Fragment {
         //TextView debugTV = (TextView) getActivity().findViewById(R.id.debugList);
         //debugTV.setText(debug);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.posterTabfab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +92,19 @@ public class PosterTab extends Fragment {
 
         fab.setImageResource(R.drawable.add);
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // TODO: notifyDataSetChanged is preferred, but can't get it to work
+        Log.d(TAG, "Notify dataset has been changed onResume");
+        allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
+        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+
+        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
+        allPostersLV.setAdapter(posterListAdapter);
     }
 
 //    @Override
