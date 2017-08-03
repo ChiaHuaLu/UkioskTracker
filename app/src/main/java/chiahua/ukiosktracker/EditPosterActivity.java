@@ -5,17 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.orm.SugarRecord;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,11 +21,7 @@ public class EditPosterActivity extends AppCompatActivity {
     EditText monthField;
     EditText dateField;
     EditText yearField;
-    String mmddyyyy;
     Poster poster;
-
-    Menu menu;
-
     boolean addNew;
     int kioskID;
 
@@ -54,6 +43,8 @@ public class EditPosterActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         kioskID = receivedIntent.getIntExtra("KioskID", -1);
+        Log.d("TAG", "KioskID is: " + kioskID);
+        Log.d("TAG", "addNew is: " + addNew);
         if (!addNew) {
             long posterID = receivedIntent.getLongExtra("PosterID", -1);
             poster = Poster.findById(Poster.class, posterID);
@@ -75,49 +66,42 @@ public class EditPosterActivity extends AppCompatActivity {
         String location = locationField.getText().toString();
         String description = descriptionField.getText().toString();
 
-
         if (name.trim().equals("")) {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field", Toast.LENGTH_SHORT).show();
         }
         else {
-            // TODO: Set poster event time when time EditText is created
-            // Save poster details to poster database
-            //String time = "" + month ;
             String time = "";
-
-
-
             if (addNew) {
-                // TODO: Set poster event time when time EditText is created
-                // Save poster details to poster database
-                Poster poster = new Poster(name, org, location, time.toString(), description);
-                this.poster = poster;
-                poster.save();
-                if (kioskID > 0) {
-                    Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
-                    KioskPoster kp = new KioskPoster(kiosk, poster);
-                    kp.save();
-                    poster.increaseCount();
-                    poster.save();
+                //Add new poster
+                if (kioskID == -1) {
+                    poster = new Poster(name, org, location, null, description);
+                    if (validateAndSetDate()) {
+                        poster.save();
+                        finish();
+                    }
                 }
-
-                //List<Poster> allPosters = Poster.listAll(Poster.class);
-                //Log.d("TAG", "allPosters size = " + allPosters.size());
-                //allPosters.add(poster);
-                //Poster.saveInTx(allPosters);
-                //SugarRecord.saveInTx(allPosters);
-                if (validateAndSetDate())
-                    finish();
+                //Add new poster and autoconnect it to a kiosk
+                else {
+                    poster = new Poster(name, org, location, null, description);
+                    if (validateAndSetDate()) {
+                        poster.increaseCount();
+                        poster.save();
+                        Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                        KioskPoster kp = new KioskPoster(kiosk, poster);
+                        kp.save();
+                        finish();
+                    }
+                }
             }
             else {
-                poster.modify(name, org, location, time.toString(), description);
-                validateAndSetDate();
-                poster.save();
-                if (validateAndSetDate())
+                //validateAndSetDate();
+                if (validateAndSetDate()) {
+                    poster.modify(name, org, location, time.toString(), description);
+                    poster.save();
                     finish();
+                }
             }
-
         }
     }
 
@@ -130,10 +114,6 @@ public class EditPosterActivity extends AppCompatActivity {
             yearField.setText(mmddyyyy.substring(0, 4));
         }
     }
-
-
-
-
 
     private boolean validateAndSetDate() {
         String month = monthField.getText().toString();
@@ -169,15 +149,12 @@ public class EditPosterActivity extends AppCompatActivity {
                             return false;
                         }
                     }
-
                 }
                 else {
                     Toast.makeText(getApplicationContext(),
                             "Date Entered is invalid", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-
-
             }
         }
         else {
@@ -238,11 +215,8 @@ public class EditPosterActivity extends AppCompatActivity {
                 ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
                 confirmDelete.show(getFragmentManager(), "Delete");
             }
-
-            //deleteCancelButton();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

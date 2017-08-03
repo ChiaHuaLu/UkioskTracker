@@ -3,7 +3,6 @@ package chiahua.ukiosktracker;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +21,6 @@ import java.util.Date;
 
 class PosterArrayAdapter extends ArrayAdapter<Poster> {
 
-
-
     public PosterArrayAdapter(@NonNull Context context, ArrayList<Poster> posterList) {
         super(context, R.layout.poster_row, posterList);
     }
@@ -34,8 +29,10 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.poster_row, parent, false);
-
         final Poster posterItem = getItem(position);
+        Log.d("TAG", "Posteritem is null: " + (posterItem==null));
+        Log.d("TAG", "Poster position is: " + position);
+
         TextView titleTV = (TextView) customView.findViewById(R.id.poster_item_title);
         TextView subtitleTV = (TextView) customView.findViewById(R.id.poster_item_subtitle);
         Button editPosterButton = (Button) customView.findViewById(R.id.poster_item_edit);
