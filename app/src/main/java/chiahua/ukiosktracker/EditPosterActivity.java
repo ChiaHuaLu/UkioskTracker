@@ -2,6 +2,7 @@ package chiahua.ukiosktracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,7 +29,6 @@ public class EditPosterActivity extends AppCompatActivity {
     EditText monthField;
     EditText dateField;
     EditText yearField;
-    String mmddyyyy;
     Poster poster;
 
     Menu menu;
@@ -47,9 +47,6 @@ public class EditPosterActivity extends AppCompatActivity {
         orgField = (EditText) findViewById(R.id.edit_orgET);
         locationField = (EditText) findViewById(R.id.edit_locationET);
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
-        monthField = (EditText) findViewById(R.id.edit_monthET);
-        dateField = (EditText) findViewById(R.id.edit_dateET);
-        yearField = (EditText) findViewById(R.id.edit_yearET);
 
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
@@ -260,6 +257,11 @@ public class EditPosterActivity extends AppCompatActivity {
             poster.delete();
         }
         finish();
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
 }
