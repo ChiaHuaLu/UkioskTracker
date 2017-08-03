@@ -41,11 +41,7 @@ public class KioskDetailActivity extends AppCompatActivity {
         Log.d("TAG", "allKPs size: " + allKPs.size());
         for (KioskPoster kp : allKPs) {
             if (kp.matchKiosk(kiosk)) {
-                if (kp.getPoster() == null) {
-                    Log.d("TAG", "KDA: getPoster is null.");
-                } else {
-                    relevantPosters.add(kp.getPoster());
-                }
+                relevantPosters.add(kp.getPoster());
             }
         }
         Log.d("Kiosk Detail", "Relevant posters size = "+relevantPosters.size());
@@ -57,17 +53,17 @@ public class KioskDetailActivity extends AppCompatActivity {
         kioskImage.setImageResource(kioskImages.getResourceId(kioskID, -1));
         kioskImages.recycle();
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.KioskDetailfab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent addPosterIntent = new Intent(getBaseContext(), EditPosterActivity.class);
-//                addPosterIntent.putExtra("addNew", true);
-//                //addPosterIntent.putExtra("KioskID", kioskID);
-//                startActivity(addPosterIntent);
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.KioskDetailfab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addPosterIntent = new Intent(getBaseContext(), EditPosterActivity.class);
+                addPosterIntent.putExtra("addNew", true);
+                addPosterIntent.putExtra("KioskID", kioskID);
+                Log.d("TAG", "Intent adding kioskID " + kioskID);
+                startActivity(addPosterIntent);
+            }
+        });
     }
 
     @Override

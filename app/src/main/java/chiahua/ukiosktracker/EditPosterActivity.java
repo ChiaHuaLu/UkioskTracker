@@ -73,43 +73,26 @@ public class EditPosterActivity extends AppCompatActivity {
         else {
             String time = "";
             if (addNew) {
-                Log.d("TAG", "Poster attributes are: " + name + ", " + org + ", " + location);
-                Poster poster = new Poster(name, org, location, null, description);
-                KioskPoster kp = null;
-                this.poster = poster;
-                Log.d("TAG", "kioskID is: " + kioskID);
-                if (kioskID > 0) {
-//                    Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
-//                    if (kiosk == null) {
-//                        Log.d("TAG", "kiosk in EditPosterActivity is null.");
-//                    } else {
-//                        Log.d("TAG", "kiosk in EditPosterActivity is not null.");
-//                    }
-//                    kp = new KioskPoster(kiosk, poster);
-//                    Log.d("TAG", "Kp in EPA is null is " + (kp==null));
-//                    kp.save();
-//                    poster.increaseCount();
-//                    poster.save();
-                }
-                if (validateAndSetDate()) {
-                    Log.d("TAG", "Saving Poster...");
-                    if (kioskID > 0) {
-                        Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
-                        if (kiosk == null) {
-                            Log.d("TAG", "kiosk in EditPosterActivity is null.");
-                        } else {
-                            Log.d("TAG", "kiosk in EditPosterActivity is not null.");
-                        }
-                        kp = new KioskPoster(kiosk, poster);
-                        Log.d("TAG", "Kp in EPA is null is " + (kp==null));
-                        kp.save();
-                        Log.d("TAG", "kp list size at EPA: " + ((KioskPoster.listAll(KioskPoster.class)).size()));
-                        poster.increaseCount();
+                //Add new poster
+                if (kioskID == -1) {
+                    poster = new Poster(name, org, location, null, description);
+                    if (validateAndSetDate()) {
+                        poster.save();
+                        finish();
                     }
-                    poster.save();
-                    finish();
                 }
-                   // finish();
+                //Add new poster and autoconnect it to a kiosk
+                else {
+                    poster = new Poster(name, org, location, null, description);
+                    if (validateAndSetDate()) {
+                        poster.increaseCount();
+                        poster.save();
+                        Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                        KioskPoster kp = new KioskPoster(kiosk, poster);
+                        kp.save();
+                        finish();
+                    }
+                }
             }
             else {
                 //validateAndSetDate();
