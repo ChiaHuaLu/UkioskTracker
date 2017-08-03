@@ -98,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
             aboutOnClick();
             return true;
         }
+        if (id == R.id.help) {
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.clear) {
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
