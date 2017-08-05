@@ -71,7 +71,7 @@ public class KioskDetailActivity extends AppCompatActivity {
         super.onResume();
         // TODO: notifyDataSetChanged is preferred, but can't get it to work
         Log.d(TAG, "Notify dataset has been changed onResume");
-
+        allKPs = KioskPoster.listAll(KioskPoster.class);
         relevantPosters = new ArrayList<>();
         Log.d("TAG", "allKPs size: " + allKPs.size());
         for (KioskPoster kp : allKPs) {
@@ -89,4 +89,6 @@ public class KioskDetailActivity extends AppCompatActivity {
         kioskDetailsLV = (ListView) findViewById(R.id.kioskDetailLV);
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
     }
+
+
 }
