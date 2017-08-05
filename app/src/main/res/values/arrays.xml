@@ -21,8 +21,13 @@
         <item>@drawable/kiosk17</item>
         <item>@drawable/kiosk18</item>
         <item>@drawable/kiosk19</item>
-
     </integer-array>
+    <string-array name="sortBy">
+        <item>Poster Title</item>
+        <item>Organization</item>
+        <item>Number Posted</item>
+        <item>Expiration</item>
+    </string-array>
 
 
 </resources>

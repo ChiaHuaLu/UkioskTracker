@@ -14,11 +14,11 @@
         android:title="@string/action_settings"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom" />
-    <!--<item
-        android:id="@+id/clear"
+    <item
+        android:id="@+id/sortBy"
         android:orderInCategory="100"
-        android:title="@string/clear_data"
-        android:icon="@android:drawable/ic_menu_delete"
-        app:showAsAction="ifRoom" />-->
+        android:title="@string/sortby"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        app:showAsAction="ifRoom" />
 
 </menu>

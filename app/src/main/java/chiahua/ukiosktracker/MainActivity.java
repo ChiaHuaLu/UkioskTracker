@@ -1,6 +1,8 @@
 package chiahua.ukiosktracker;
 
 import java.util.ArrayList;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
@@ -101,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.help) {
             Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
+        }
+        if (id == R.id.sortBy) {
+            SharedPreferences pref = getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+            int currentMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
+            SortByFragment sortByFragment
+                    = SortByFragment.newInstance(currentMode);
+            sortByFragment.show(getFragmentManager(), "SortBy");
+            return true;
         }
 //        if (id == R.id.clear) {
 //
