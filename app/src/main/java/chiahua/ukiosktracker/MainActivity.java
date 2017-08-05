@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
         }
-        if (id == R.id.clear) {
-
-        }
+//        if (id == R.id.clear) {
+//
+//        }
         return super.onOptionsItemSelected(item);
     }
 
