@@ -32,8 +32,6 @@ public class PosterTab extends Fragment {
     private ListAdapter posterListAdapter;
     private ListView allPostersLV;
     private Spinner sortBy;
-    private int sortMode;
-    private SharedPreferences pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,15 +47,21 @@ public class PosterTab extends Fragment {
                 startActivity(addPosterIntent);
             }
         });
-        pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-
-        sortMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
-        sort(sortMode);
-        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+//        pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+//        sortMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
+//        sort(sortMode);
+//        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
-        allPostersLV.setAdapter(posterListAdapter);
+//        allPostersLV.setAdapter(posterListAdapter);
+        update();
         fab.setImageResource(R.drawable.add);
         return rootView;
+    }
+
+    public void update() {
+
+        sort();
+        allPostersLV.deferNotifyDataSetChanged();
     }
 
     @Override
@@ -65,15 +69,16 @@ public class PosterTab extends Fragment {
         super.onResume();
         // TODO: notifyDataSetChanged is preferred, but can't get it to work
         Log.d(TAG, "Notify dataset has been changed onResume");
-        sortMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
-        Log.d("Poster Tab Sort Mode", "Mode = " + sortMode);
-        sort(sortMode);
-        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
-        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
-        allPostersLV.setAdapter(posterListAdapter);
+        update();
+//        sort(sortMode);
+//        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+//        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
+//        allPostersLV.setAdapter(posterListAdapter);
     }
 
-    public void sort(int mode) {
+    public void sort() {
+        SharedPreferences pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+        int mode = Integer.parseInt(pref.getString("SORTMODE", "0"));
         allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
         //Sort by poster name
         if (mode == 0) {
@@ -132,7 +137,11 @@ public class PosterTab extends Fragment {
                 }
             });
         }
+        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+//        allPostersLV = (ListView) getActivity().findViewById(R.id.allPostersLV);
+        allPostersLV.setAdapter(posterListAdapter);
     }
+
 }
 
 

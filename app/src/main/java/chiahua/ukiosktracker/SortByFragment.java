@@ -57,7 +57,7 @@ public class SortByFragment extends DialogFragment {
                         SharedPreferences pref = getActivity().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
                         pref.edit().putString("SORTMODE", newMode+"").commit();
 
-//                        ((AndroidTicTacToe)getActivity()).setDifficulty(newDifficulty);
+
                         dismiss();
                     }
                 })

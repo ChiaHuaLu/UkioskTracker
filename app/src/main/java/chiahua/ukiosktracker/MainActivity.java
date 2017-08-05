@@ -171,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     public void aboutOnClick() {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
