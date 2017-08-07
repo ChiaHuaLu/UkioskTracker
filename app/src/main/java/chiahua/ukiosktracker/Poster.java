@@ -13,6 +13,7 @@ public class Poster extends SugarRecord {
     private String eventLocation;
     private String eventTime;
     private String details;
+    private String imagePath;
     private int count;
 
     // Leave empty constructor for SugarRecords
@@ -98,6 +99,38 @@ public class Poster extends SugarRecord {
     public String details() {
         return details;
     }
+
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String iPath) {
+        imagePath = iPath;
+    }
+
+    //Add this poster to a kioskID location
+    /*public boolean add(int kioskNumber) {
+        if (!locations[kioskNumber]) {
+            locations[kioskNumber] = true;
+            allKiosks.get(kioskNumber).add(this);
+            count++;
+            return true;
+        }
+        return false;
+    }*/
+
+    //Remove this poster from a kioskID location
+    /*public boolean remove(int kioskNumber) {
+        if (locations[kioskNumber]) {
+            locations[kioskNumber] = false;
+            allKiosks.get(kioskNumber).remove(this);
+            count--;
+            return true;
+        }
+        return false;
+    }*/
+
 
     public String[] getDetailArray() {
         String[] detailsArray =
