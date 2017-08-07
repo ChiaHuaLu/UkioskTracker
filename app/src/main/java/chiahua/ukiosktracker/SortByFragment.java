@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +18,8 @@ public class SortByFragment extends DialogFragment {
     private static final String TAG = "SortBy Dialog";
     private static final String SORT_MODE = "sortBy";
     /**
-     * Create a new instance of Difficulty, initialized to
-     * show the current difficulty.
+     * Create a new instance of SortByFragment, initialized to
+     * show the current SortMode.
      */
     public static SortByFragment newInstance(int sortMode) {
         SortByFragment result = new SortByFragment();
@@ -56,7 +57,8 @@ public class SortByFragment extends DialogFragment {
                         Log.d(TAG, "User clicked okay. Changing mode to: " + newMode);
                         SharedPreferences pref = getActivity().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
                         pref.edit().putString("SORTMODE", newMode+"").commit();
-
+                        Intent refresh = new Intent(getActivity(), Refresh.class);
+                        startActivity(refresh);
 
                         dismiss();
                     }

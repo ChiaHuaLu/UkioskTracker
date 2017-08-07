@@ -60,11 +60,12 @@
             android:label="Kiosk Detail"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".PosterChecklistActivity" />
-
-        <activity android:name=".HelpActivity"
-            android:label="@string/help"
+        <activity
+            android:name=".HelpActivity"
             android:allowTaskReparenting="true"
-            android:parentActivityName=".MainActivity"/>
+            android:label="@string/help"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Refresh"></activity>
     </application>
 
 </manifest>
