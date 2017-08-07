@@ -14,29 +14,32 @@
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:textSize="@dimen/medium_font"/>
+        android:textSize="@dimen/medium_font"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/poster_item_subtitle" />
 
     <TextView
         android:id="@+id/poster_item_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="8dp"
+        android:textSize="@dimen/small_font"
         app:layout_constraintTop_toBottomOf="@+id/poster_item_title"
-        android:textSize="@dimen/small_font"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/poster_item_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/button_more"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="413dp"
+        android:drawableEnd="@android:drawable/ic_menu_edit"
         android:drawableRight="@drawable/button_more"
-        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        style="?android:attr/borderlessButtonStyle" />
+        app:layout_constraintVertical_bias="1.0" />
 </android.support.constraint.ConstraintLayout>

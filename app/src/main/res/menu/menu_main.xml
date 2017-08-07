@@ -3,9 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="chiahua.ukiosktracker.MainActivity">
     <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:title="@string/help"
+        android:icon="@android:drawable/ic_menu_help"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/about"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         android:icon="@android:drawable/ic_menu_info_details"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/sortBy"
+        android:orderInCategory="100"
+        android:title="@string/sortby"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        app:showAsAction="ifRoom" />
+
 </menu>

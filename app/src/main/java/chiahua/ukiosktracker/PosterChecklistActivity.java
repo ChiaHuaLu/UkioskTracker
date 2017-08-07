@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,18 +24,14 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
     public ArrayList<Kiosk> allKiosks;
     public ArrayList<KioskPoster> allKPs;
     public ArrayList<KioskPoster> relevantKPs;
-
-
     private static final float DEFAULT_MIN_ZOOM = 14.0f;
     private static final float DEFAULT_MAX_ZOOM = 19.0f;
     private static final float DEFAULT_ZOOM = 15.3f;
-
     private static final LatLngBounds UT_AUSTIN_BOUNDS = new LatLngBounds(
             new LatLng(30.280890, -97.741699), new LatLng(30.291044, -97.727639));
     private static final CameraPosition UT_AUSTIN_CAMERA = new CameraPosition.Builder()
             .target(new LatLng(30.285967, -97.736179)).zoom(DEFAULT_ZOOM)
             .bearing(0).tilt(0).build();
-
     private GoogleMap mMap;
 
     @Override
@@ -87,17 +82,14 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         if (!checkReady()) {
             return;
         }
-
         mMap.setLatLngBoundsForCameraTarget(UT_AUSTIN_BOUNDS);
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
-        for (int kioskID = 1; kioskID <= 20; kioskID++) {
+        for (int kioskID = 1; kioskID <= allKiosks.size(); kioskID++) {
             Kiosk kiosk = allKiosks.get(kioskID - 1);
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(kiosk.latit(), kiosk.longit()));
@@ -109,41 +101,36 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                 marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
             }
             mMap.addMarker(marker);
-
-
-
         }
         mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Log.d("TAG", "Marker title null "+(marker.getTitle()==null));
-                int position = Integer.parseInt(marker.getTitle()); //TODO: Int = null
-                //Using position get Value from arraylist
-                //Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+                int position = Integer.parseInt(marker.getTitle());
                 Kiosk kiosk = allKiosks.get(position-1);
                 KioskPoster kp = kioskMatchFound(kiosk);
                 if (kp == null) {
+                    Log.d("TAG", "kp is null in PCA");
                     marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_on_background));
                     kp = new KioskPoster(kiosk, poster);
                     kp.save();
                     allKPs.add(kp);
                     relevantKPs.add(kp);
-                    //KioskPoster.saveInTx(allKPs);
                     poster.increaseCount();
                     poster.save();
                 }
                 else {
+                    Log.d("TAG", "kp is not null in PCA");
                     marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
                     allKPs.remove(kp);
                     relevantKPs.remove(kp);
-                    //KioskPoster.saveInTx(allKPs);
+                    KioskPoster.delete(kp);
                     poster.decreaseCount();
                     poster.save();
                 }
                 return true;
             }
         });
-
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
     }
 

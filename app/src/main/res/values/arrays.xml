@@ -12,18 +12,22 @@
         <item>@drawable/kiosk8</item>
         <item>@drawable/kiosk9</item>
         <item>@drawable/kiosk10</item>
-        <item>@drawable/noimageavailable</item>  <!-- TODO: Get Kiosk 11 image and update this line -->
+        <item>@drawable/kiosk11</item>
         <item>@drawable/kiosk12</item>
         <item>@drawable/kiosk13</item>
         <item>@drawable/kiosk14</item>
-        <item>@drawable/noimageavailable</item>  <!-- TODO: Get Kiosk 15 image and update this line -->
+        <item>@drawable/kiosk15</item>
         <item>@drawable/kiosk16</item>
         <item>@drawable/kiosk17</item>
         <item>@drawable/kiosk18</item>
         <item>@drawable/kiosk19</item>
-        <item>@drawable/kiosk20</item>
-
     </integer-array>
+    <string-array name="sortBy">
+        <item>Poster Title</item>
+        <item>Organization</item>
+        <item>Number Posted</item>
+        <item>Expiration</item>
+    </string-array>
 
 
 </resources>

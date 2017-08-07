@@ -1,11 +1,7 @@
 package chiahua.ukiosktracker;
 
 import android.util.Log;
-
 import com.orm.SugarRecord;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Daniel on 7/29/2017.
@@ -25,11 +21,9 @@ public class KioskPoster extends SugarRecord {
     public KioskPoster(Kiosk kiosk, Poster poster) {
         this.kiosk = kiosk;
         this.poster = poster;
-        this.save();
     }
 
     public boolean matchPoster(Poster p) {
-
         Log.d("TAG", "poster is null = " + (poster==null));
         if (!poster.title().equals(p.title()))
             return false;
@@ -46,12 +40,6 @@ public class KioskPoster extends SugarRecord {
 
     public Poster getPoster() {
         return poster;
-    }
-
-    public static void initializeKioskPoster() {
-        //List<KioskPoster> kioskPosters = new ArrayList<>();
-        //KioskPoster.saveInTx(kioskPosters);
-        //SugarRecord.saveInTx(kioskPosters);
     }
 
 }
