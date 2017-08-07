@@ -7,8 +7,10 @@ package chiahua.ukiosktracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.orm.SugarRecord;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +33,7 @@ public class PosterTab extends Fragment {
     private final static String TAG = "PosterTab";
     public ArrayList<Poster> allPosters;
     public ArrayList<Kiosk> allKiosks;
-    private ListAdapter posterListAdapter;
+    private CursorAdapter posterListAdapter;
     private ListView allPostersLV;
     private Spinner sortBy;
 
@@ -47,10 +51,11 @@ public class PosterTab extends Fragment {
                 startActivity(addPosterIntent);
             }
         });
-//        pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-//        sortMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
-//        sort(sortMode);
-//        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+        SharedPreferences pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+        int mode = pref.getInt("SORTMODE", 0);
+
+        Cursor cursor = SugarRecord.getCursor(Poster.class, null, null, null, getSortMode(mode), null);
+        posterListAdapter = new PosterCursorAdapter(getActivity(), cursor);
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
 //        allPostersLV.setAdapter(posterListAdapter);
         update();
@@ -76,9 +81,34 @@ public class PosterTab extends Fragment {
 //        allPostersLV.setAdapter(posterListAdapter);
     }
 
+    public String getSortMode(int mode) {
+        String sortMode;
+        switch(mode) {
+            case 0:
+                sortMode = "title";
+                break;
+            case 1:
+                sortMode = "organization";
+                break;
+            case 2:
+                sortMode = "count";
+                break;
+            case 3:
+                sortMode = "eventTime";
+                break;
+            default:
+                sortMode = null;
+        }
+        return sortMode;
+    }
+
     public void sort() {
-        SharedPreferences pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-        int mode = Integer.parseInt(pref.getString("SORTMODE", "0"));
+        SharedPreferences pref = getContext().
+                getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+        int mode = pref.getInt("SORTMODE", 0);
+
+        String orderBy;
+
         allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
         //Sort by poster name
         if (mode == 0) {
@@ -137,7 +167,7 @@ public class PosterTab extends Fragment {
                 }
             });
         }
-        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
+        //posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
 //        allPostersLV = (ListView) getActivity().findViewById(R.id.allPostersLV);
         allPostersLV.setAdapter(posterListAdapter);
     }

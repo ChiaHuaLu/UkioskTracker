@@ -314,53 +314,6 @@ public class EditPosterActivity extends AppCompatActivity {
         }
     }
 
-//    private boolean validateAndSetDate() {
-//        String month = monthField.getText().toString();
-//        String date = dateField.getText().toString();
-//        String year = yearField.getText().toString();
-//        if (month.length()>0 || date.length()>0 || year.length()>0) {
-//            if (month.length()==0 || date.length()==0 || year.length()==0) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Date not properly filled out", Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//            else {
-//                int monthInt = integerVerifier(month);
-//                int dateInt = integerVerifier(date);
-//                int yearInt = integerVerifier(year);
-//                if (!(monthInt == -1 && dateInt == -1 && yearInt == -1)) {
-//                    if (monthInt > 12 || monthInt < 1) {
-//                        Toast.makeText(getApplicationContext(),
-//                                "Invalid Month", Toast.LENGTH_SHORT).show();
-//                        return false;
-//                    }
-//                    else {
-//                        if (((dateInt <= 31) && (monthInt == 1 || monthInt == 3 || monthInt == 5 || monthInt == 7 || monthInt == 8 || monthInt == 10 || monthInt == 12)) ||
-//                                ((dateInt <= 30) && (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)) ||
-//                                ((dateInt <= 29) && monthInt == 2)) {
-//                            String dateString = padDateInts(yearInt, 4) + padDateInts(monthInt, 2) + padDateInts(dateInt, 2);
-//                            poster.modify(null, null, null, dateString, null);
-//                            poster.save();
-//                            return true;
-//                        } else {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "Invalid Date", Toast.LENGTH_SHORT).show();
-//                            return false;
-//                        }
-//                    }
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(),
-//                            "Date Entered is invalid", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
-//            }
-//        }
-//        else {
-//            return true;
-//        }
-//    }
-
     private String getDateString() {
         String result = "";
         if (!datePicker.getText().equals(getString(R.string.date_picker_btn))) {
@@ -382,17 +335,6 @@ public class EditPosterActivity extends AppCompatActivity {
         }
         return result.toString();
     }
-
-    private int integerVerifier (String intString) {
-        int result = -1;
-        Scanner scanner = new Scanner(intString);
-        if (scanner.hasNextInt()) {
-            result = scanner.nextInt();
-        }
-        scanner.close();
-        return result;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

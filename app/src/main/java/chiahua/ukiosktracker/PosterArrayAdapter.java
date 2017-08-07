@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ChiaHuaBladeWX on 7/28/2017.
@@ -60,7 +61,7 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
             }
         });
         if (posterItem.eventTime().length()>0) {
-            if (Integer.parseInt(posterItem.eventTime())+1 < Integer.parseInt(new SimpleDateFormat("yyyyMMdd").format(new Date()))) {
+            if (Integer.parseInt(posterItem.eventTime())+1 < Integer.parseInt(new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date()))) {
                 customView.setBackgroundColor(Color.parseColor("#fca9a9"));
             }
         }
