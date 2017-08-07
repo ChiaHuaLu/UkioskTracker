@@ -1,6 +1,7 @@
 package chiahua.ukiosktracker;
 
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 
 import android.content.Intent;
@@ -27,8 +28,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -207,7 +212,7 @@ public class EditPosterActivity extends AppCompatActivity {
     };
 
     private void updateDateText() {
-        datePicker.setText((date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.DAY_OF_MONTH)+"/"+date.get(Calendar.YEAR));
+        datePicker.setText((date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.DAY_OF_MONTH)+"/"+date.get(Calendar.YEAR));}
 
 
     private void invokeCamera() {
@@ -413,11 +418,19 @@ public class EditPosterActivity extends AppCompatActivity {
         if (id == R.id.add_save) {
             addEditButton();
             return true;
-        }
-        else if (id == R.id.delete_cancel) {
+        } else if (id == R.id.delete_cancel) {
             if (addNew) {
                 //deleteCancelButton();
                 cancel();
+            }
+            else {
+                ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
+                confirmDelete.show(getFragmentManager(), "Delete");
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     private File createImageFile() throws IOException {
@@ -476,15 +489,11 @@ public class EditPosterActivity extends AppCompatActivity {
             for (KioskPoster kp : allKPs) {
                 if (kp.matchPoster(poster))
                     kp.delete();
+            }
 
-            }
-            else {
-                ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
-                confirmDelete.show(getFragmentManager(), "Delete");
-            }
-            return true;
+            return;
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     public void cancel() {
