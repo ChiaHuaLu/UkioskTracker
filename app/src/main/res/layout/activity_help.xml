@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="chiahua.ukiosktracker.HelpActivity">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/helpTV1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help1" />
+
+            <TextView
+                android:id="@+id/helpTV2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help2" />
+
+            <TextView
+                android:id="@+id/helpTV3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help3" />
+
+            <TextView
+                android:id="@+id/helpTV4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help4" />
+
+            <TextView
+                android:id="@+id/helpTV5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help5" />
+
+            <TextView
+                android:id="@+id/helpTV6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help6" />
+
+            <TextView
+                android:id="@+id/helpTV7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help7" />
+
+            <TextView
+                android:id="@+id/helpTV8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help8" />
+
+            <TextView
+                android:id="@+id/helpTV9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help9" />
+
+            <TextView
+                android:id="@+id/helpTV10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help10" />
+            <TextView
+                android:id="@+id/helpTV11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/large_font"
+                android:text="@string/help11" />
+
+            <TextView
+                android:id="@+id/helpTV12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/help12" />
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

@@ -23,11 +23,11 @@ public class ConfirmDeleteFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.deletePosterConfirm);
-        builder.setMessage("Are you sure you want to Delete this poster?")
+        builder.setMessage(R.string.delete_poster_text)
                 .setPositiveButton(R.string.delete,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                parent.deleteCancelButton();
+                                parent.delete();
                                 dismiss();
                             }
                         })
@@ -37,7 +37,6 @@ public class ConfirmDeleteFragment extends DialogFragment {
                                 dismiss();
                             }
                         });
-        // Create the AlertDialog object and return it
         return builder.create();
     }
 }

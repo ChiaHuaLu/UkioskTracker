@@ -48,17 +48,23 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
             android:name=".EditPosterActivity"
-            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_edit_poster"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".KioskDetailActivity"
             android:label="Kiosk Detail"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".PosterChecklistActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".PosterChecklistActivity" />
+
+        <activity android:name=".HelpActivity"
+            android:label="@string/help"
+            android:allowTaskReparenting="true"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
