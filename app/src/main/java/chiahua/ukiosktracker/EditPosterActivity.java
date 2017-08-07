@@ -33,6 +33,7 @@ import java.util.List;
 public class EditPosterActivity extends AppCompatActivity {
 
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
+    public static final int FILE_WRITE_PERMISSION_REQUEST_CODE = 16;
     EditText nameField;
     EditText orgField;
     EditText locationField;
@@ -44,6 +45,7 @@ public class EditPosterActivity extends AppCompatActivity {
 
     boolean addNew;
     private boolean cameraAccess = true;
+    private boolean fileAccess = false;
     static final int REQUEST_TAKE_PHOTO = 1;
 
     @Override
@@ -61,6 +63,7 @@ public class EditPosterActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         if (!addNew) {
+            Log.d("TAG", "Editing Poster");
             long posterID = receivedIntent.getLongExtra("PosterID", -1);
             poster = Poster.findById(Poster.class, posterID);
             nameField.setText(poster.title());
@@ -89,6 +92,7 @@ public class EditPosterActivity extends AppCompatActivity {
             edit_add.setText(R.string.add);
             delete_cancel.setText(R.string.cancel);
             setTitle(R.string.add_new_poster);
+            Log.d("TAG", "Adding New Poster.");
             if (cameraAccess) {
                 ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
                 Log.d("TAG", "Creating on click listener.");
@@ -97,13 +101,28 @@ public class EditPosterActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         int permissionCheck = ContextCompat.checkSelfPermission(EditPosterActivity.this,
                                 Manifest.permission.CAMERA);
-                        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                        int permissionCheck2 = ContextCompat.checkSelfPermission(EditPosterActivity.this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        if ((permissionCheck == PackageManager.PERMISSION_GRANTED && permissionCheck2 == PackageManager.PERMISSION_GRANTED)
+                                ||(fileAccess && cameraAccess)) {
+                            Log.d("TAG", "Permissions Granted, Invoking Camera");
                             invokeCamera();
+                            //return;
                         } else {
+                            Log.d("TAG", "Requesting Camera Permissions.");
                             ActivityCompat.requestPermissions(EditPosterActivity.this,
                                     new String[]{Manifest.permission.CAMERA},
                                     CAMERA_PERMISSION_REQUEST_CODE);
+                            Log.d("TAG", "Requesting Write External Storage Permissions.");
+                            ActivityCompat.requestPermissions(EditPosterActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    FILE_WRITE_PERMISSION_REQUEST_CODE);
                         }
+                        /*if (fileAccess && cameraAccess) {
+                            Log.d("TAG", "fileAccess and cameraAccess are true.");
+                            invokeCamera();
+                            return;
+                        }*/
                     }
                 });
             }
@@ -118,11 +137,22 @@ public class EditPosterActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    invokeCamera();
+
+                    cameraAccess = true;
                 }
                 else {
                     cameraAccess = false;
                 }
+                Log.d("TAG", "cameraAccess is: " + cameraAccess);
+            }
+            case FILE_WRITE_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fileAccess = true;
+                }
+                else {
+                    fileAccess = false;
+                }
+                Log.d("TAG", "fileAccess is: " + fileAccess);
                 return;
             }
         }
@@ -136,6 +166,7 @@ public class EditPosterActivity extends AppCompatActivity {
             // Create the File where the photo should go
             File photoFile = null;
             try {
+                Log.d("TAG", "Creating Image file");
                 photoFile = createImageFile();
             }
             catch (IOException ex){
@@ -194,7 +225,7 @@ public class EditPosterActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        Log.d("TAG", "Creating Image File");
+        Log.d("TAG", "Creating Image File in createImageFile Method");
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -203,11 +234,13 @@ public class EditPosterActivity extends AppCompatActivity {
                 ".jpg",
                 storageDir
         );
-
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         Log.d("TAG", "Current Photo Path: " + mCurrentPhotoPath);
-
+        if(poster != null) {
+            Log.d("TAG", "Poster is not null.");
+            poster.setImagePath(mCurrentPhotoPath);
+        }
         return image;
     }
 
@@ -221,6 +254,7 @@ public class EditPosterActivity extends AppCompatActivity {
             Log.d("TAG", "Request to take photo OK");
             try {
                 Log.d("TAG", "Getting Image Bitmap");
+                Log.d("TAG", "mCurrentPhotoPath is: " + mCurrentPhotoPath);
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
                         Uri.parse(mCurrentPhotoPath));
                 Log.d("TAG", "Setting Image Bitmap to mImageView");
