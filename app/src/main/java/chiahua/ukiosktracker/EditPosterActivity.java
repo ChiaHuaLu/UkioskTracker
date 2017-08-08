@@ -3,7 +3,6 @@ package chiahua.ukiosktracker;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,28 +23,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class EditPosterActivity extends AppCompatActivity {
-
 
     Calendar date = Calendar.getInstance();
     private EditText nameField;
@@ -120,10 +113,6 @@ public class EditPosterActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(EditPosterActivity.this,
                             new String[]{Manifest.permission.CAMERA},
                             CAMERA_PERMISSION_REQUEST_CODE);
-                            /*Log.d("TAG", "Requesting Write External Storage Permissions.");
-                            ActivityCompat.requestPermissions(EditPosterActivity.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    FILE_WRITE_PERMISSION_REQUEST_CODE);*/
                 }
             }
         });
@@ -149,13 +138,11 @@ public class EditPosterActivity extends AppCompatActivity {
             mCurrentPhotoPath = poster.getImagePath();
             mAbsFilePath = poster.getAbsPath();
             displayImage();
-
         }
         else {
             setTitle(R.string.add_new_poster);
             Log.d("TAG", "Adding New Poster.");
         }
-
     }
 
     @Override
@@ -253,7 +240,6 @@ public class EditPosterActivity extends AppCompatActivity {
         return rotate;
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
@@ -333,7 +319,6 @@ public class EditPosterActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
-
     }
 
     public void addEditButton() {
@@ -352,7 +337,6 @@ public class EditPosterActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
         else {
-//            String time = "";
             if (addNew) {
                 //Add new poster
                 poster = new Poster(name, org, location, getDateString(), description);
@@ -364,7 +348,6 @@ public class EditPosterActivity extends AppCompatActivity {
                 }
                 //Add new poster and autoconnect it to a kiosk
                 else {
-
                     poster.increaseCount();
                     poster.save();
                     Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
@@ -374,12 +357,9 @@ public class EditPosterActivity extends AppCompatActivity {
                 }
             }
             else {
-                //validateAndSetDate();
-//                if (validateAndSetDate()) {
-                    poster.modify(name, org, location, getDateString(), description, mCurrentPhotoPath, mAbsFilePath);
-                    poster.save();
-                    finish();
-//                }
+                poster.modify(name, org, location, getDateString(), description, mCurrentPhotoPath, mAbsFilePath);
+                poster.save();
+                finish();
             }
         }
     }
@@ -394,7 +374,6 @@ public class EditPosterActivity extends AppCompatActivity {
     }
 
 
-    //
     private void restoreDateInfo() {
         String yyyymmdd = poster.getDetailArray()[3];
         if (yyyymmdd.length()>0) {
@@ -404,52 +383,6 @@ public class EditPosterActivity extends AppCompatActivity {
         }
     }
 
-//    private boolean validateAndSetDate() {
-//        String month = monthField.getText().toString();
-//        String date = dateField.getText().toString();
-//        String year = yearField.getText().toString();
-//        if (month.length()>0 || date.length()>0 || year.length()>0) {
-//            if (month.length()==0 || date.length()==0 || year.length()==0) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Date not properly filled out", Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//            else {
-//                int monthInt = integerVerifier(month);
-//                int dateInt = integerVerifier(date);
-//                int yearInt = integerVerifier(year);
-//                if (!(monthInt == -1 && dateInt == -1 && yearInt == -1)) {
-//                    if (monthInt > 12 || monthInt < 1) {
-//                        Toast.makeText(getApplicationContext(),
-//                                "Invalid Month", Toast.LENGTH_SHORT).show();
-//                        return false;
-//                    }
-//                    else {
-//                        if (((dateInt <= 31) && (monthInt == 1 || monthInt == 3 || monthInt == 5 || monthInt == 7 || monthInt == 8 || monthInt == 10 || monthInt == 12)) ||
-//                                ((dateInt <= 30) && (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11)) ||
-//                                ((dateInt <= 29) && monthInt == 2)) {
-//                            String dateString = padDateInts(yearInt, 4) + padDateInts(monthInt, 2) + padDateInts(dateInt, 2);
-//                            poster.modify(null, null, null, dateString, null);
-//                            poster.save();
-//                            return true;
-//                        } else {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "Invalid Date", Toast.LENGTH_SHORT).show();
-//                            return false;
-//                        }
-//                    }
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(),
-//                            "Date Entered is invalid", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
-//            }
-//        }
-//        else {
-//            return true;
-//        }
-//    }
 
     private String getDateString() {
         String result = "";
@@ -471,16 +404,6 @@ public class EditPosterActivity extends AppCompatActivity {
             result.insert(0, "0");
         }
         return result.toString();
-    }
-
-    private int integerVerifier (String intString) {
-        int result = -1;
-        Scanner scanner = new Scanner(intString);
-        if (scanner.hasNextInt()) {
-            result = scanner.nextInt();
-        }
-        scanner.close();
-        return result;
     }
 
 
@@ -510,8 +433,8 @@ public class EditPosterActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.delete_cancel) {
             if (addNew) {
-                //deleteCancelButton();
-                cancel();
+                //cancel Editing Poster
+                finish();
             }
             else {
                 ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
@@ -540,7 +463,6 @@ public class EditPosterActivity extends AppCompatActivity {
         Log.d("TAG", "Current Photo Path: " + mCurrentPhotoPath);
         if(poster != null) {
             Log.d("TAG", "Poster is not null.");
-            //poster.setImagePath(mCurrentPhotoPath);
         }
         return image;
     }
@@ -554,7 +476,6 @@ public class EditPosterActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             displayImage();
         }
-        //Log.d("TAG", "Using super.onActivityResult");
     }
 
     public static int calculateInSampleSize(
@@ -562,7 +483,6 @@ public class EditPosterActivity extends AppCompatActivity {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
-
         if (height > reqHeight || width > reqWidth) {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
@@ -576,7 +496,6 @@ public class EditPosterActivity extends AppCompatActivity {
 
     public static Bitmap decodeSampledBitmapFromUri(Context c, Uri uri, int reqWidth, int reqHeight)
             throws FileNotFoundException {
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, options);
@@ -584,26 +503,6 @@ public class EditPosterActivity extends AppCompatActivity {
         options.inSampleSize = calculateInSampleSize(options, 400, 640);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, options);
-
-    }
-
-    public void deleteCancelButton(View view) {
-        if (!addNew) {
-            List<Poster> allPosters = Poster.listAll(Poster.class);
-            Log.d("TAG", "allPosters size = " + allPosters.size());
-            allPosters.remove(poster);
-            List<KioskPoster> allKPs = KioskPoster.listAll(KioskPoster.class);
-            for (KioskPoster kp : allKPs) {
-                if (kp.matchPoster(poster))
-                    kp.delete();
-            }
-
-            return;
-        }
-    }
-
-    public void cancel() {
-        finish();
     }
 
     public void delete() {
