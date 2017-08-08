@@ -14,6 +14,7 @@ public class Poster extends SugarRecord {
     private String eventTime;
     private String details;
     private String imagePath;
+    private String absPath;
     private int count;
 
     // Leave empty constructor for SugarRecords
@@ -62,7 +63,7 @@ public class Poster extends SugarRecord {
 
     //Modify a poster's data. Use null for fields that don't change
     public void modify(String title, String organization, String location,
-                       String time, String details) {
+                       String time, String details, String iPath, String aPath) {
         if (title != null)
             this.title = title;
         if (organization != null)
@@ -73,6 +74,10 @@ public class Poster extends SugarRecord {
             this.eventTime = time;
         if (details != null)
             this.details = details;
+        if (iPath != null)
+            imagePath = iPath;
+        if (aPath != null)
+            absPath = aPath;
     }
 
     //Get a poster's title
@@ -108,6 +113,10 @@ public class Poster extends SugarRecord {
     public void setImagePath(String iPath) {
         imagePath = iPath;
     }
+
+    public String getAbsPath(){ return absPath; }
+
+    public void setAbsPath(String aPath) { absPath = aPath; }
 
     //Add this poster to a kioskID location
     /*public boolean add(int kioskNumber) {

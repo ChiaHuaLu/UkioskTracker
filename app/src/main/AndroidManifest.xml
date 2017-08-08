@@ -68,7 +68,8 @@
             android:label="@string/title_activity_edit_poster"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".KioskDetailActivity"
             android:label="Kiosk Detail"

@@ -114,14 +114,14 @@
 
             <ImageView
                 android:id="@+id/poster_image"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/noimageavailable"
                 android:adjustViewBounds="true"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_add_button"
+                app:layout_constraintTop_toBottomOf="@+id/camera_icon"
                 />
             
             <ImageButton
@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/edit_descriptionET"
+                app:layout_constraintTop_toBottomOf="@+id/datePickerButton"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
