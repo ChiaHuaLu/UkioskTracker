@@ -59,7 +59,7 @@ public class EditPosterActivity extends AppCompatActivity {
     private String mPrevAbsFilePath;
     private Bitmap mImageBitmap;
     private ImageView mImageView;
-    private boolean cameraAccess = true;
+    private boolean cameraAccess = false;
     private boolean fileAccess = false;
     private int mWidth = 400;
     private int mHeight = 640;
