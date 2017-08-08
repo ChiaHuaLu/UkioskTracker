@@ -53,12 +53,15 @@ public class KioskDetailActivity extends AppCompatActivity {
         sort();
         Log.d("Kiosk Detail", "Relevant posters size = "+relevantPosters.size());
         kioskDetailsAdapter = new PosterArrayAdapter(this, relevantPosters);
+
         ImageView kioskImage = (ImageView) findViewById(R.id.kioskImageIV);
         TypedArray kioskImages = getResources().obtainTypedArray(R.array.kioskImages);
         Log.d("SetImage KioskID", kioskID + "");
         kioskImage.setImageResource(kioskImages.getResourceId(kioskID, -1));
         kioskImages.recycle();
+
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.KioskDetailfab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +90,7 @@ public class KioskDetailActivity extends AppCompatActivity {
 
     public void sort() {
         SharedPreferences pref = getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-        int mode = Integer.parseInt(pref.getString("SORTMODE", "0"));
+        int mode = pref.getInt("SORTMODE", 0);
         allKPs = KioskPoster.listAll(KioskPoster.class);
         relevantPosters = new ArrayList<>();
         Log.d("TAG", "allKPs size: " + allKPs.size());

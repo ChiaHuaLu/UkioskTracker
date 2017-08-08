@@ -29,9 +29,11 @@ public class PosterTab extends Fragment {
     private Button buttonSort;
     private int mode;
     private SharedPreferences sharedPreferences;
+    private String[] sortMode;
 
     // Listener defined by anonymous inner class.
-    public SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
+    public SharedPreferences.OnSharedPreferenceChangeListener spChanged =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -39,9 +41,10 @@ public class PosterTab extends Fragment {
             if (key.equals("SORTMODE")) {
                 Log.d(TAG, "Sort mode preferences has changed.");
                 mode = sharedPreferences.getInt("SORTMODE", 0);
-                buttonSort.setText(getString(R.string.sortby) + " " + getSortMode(mode));
+                buttonSort.setText(getString(R.string.sortby) + " " + sortMode[mode]);
 
                 // set how the list is sorted via ORDER BY clause in SQLite
+                // SELECT * FROM POSTER ORDER BY getSortMode(mode)
                 Cursor cursor = SugarRecord.getCursor(
                         Poster.class, null, null, null, getSortMode(mode), null);
 
@@ -49,6 +52,7 @@ public class PosterTab extends Fragment {
                 posterListAdapter.swapCursor(cursor);
                 posterListAdapter.notifyDataSetChanged();
                 allPostersLV.setAdapter(posterListAdapter);
+                cursor.close();
             }
         }
     };
@@ -68,6 +72,8 @@ public class PosterTab extends Fragment {
             }
         });
 
+        sortMode = getResources().getStringArray(R.array.sortBy);
+
         sharedPreferences =
                 getActivity().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
 
@@ -86,11 +92,14 @@ public class PosterTab extends Fragment {
             }
         });
 
-        buttonSort.setText(getString(R.string.sortby) + " " + getSortMode(mode));
+        buttonSort.setText(getString(R.string.sortby) + " " + sortMode[mode]);
 
+        // SELECT * FROM POSTER ORDER BY getSortMode(mode)
         Cursor cursor = SugarRecord.getCursor(
                 Poster.class, null, null, null, getSortMode(mode), null);
         posterListAdapter = new PosterCursorAdapter(getActivity(), cursor);
+        cursor.close();
+
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
         fab.setImageResource(R.drawable.add);
         return rootView;
@@ -109,6 +118,7 @@ public class PosterTab extends Fragment {
         posterListAdapter.swapCursor(cursor);
         posterListAdapter.notifyDataSetChanged();
         allPostersLV.setAdapter(posterListAdapter);
+        cursor.close();
     }
 
     @Override

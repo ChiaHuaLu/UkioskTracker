@@ -37,8 +37,7 @@ public class PosterCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
         String result = "[ ";
-        for (String s : cursor.getColumnNames()
-             ) {
+        for (String s : cursor.getColumnNames()) {
             result += s + " ";
         }
         Log.d(TAG, "Cursor getColumns: " + result + "]");
