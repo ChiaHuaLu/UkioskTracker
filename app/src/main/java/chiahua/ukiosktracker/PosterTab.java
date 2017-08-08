@@ -121,16 +121,16 @@ public class PosterTab extends Fragment {
         String sortMode;
         switch(mode) {
             case 0:
-                sortMode = "title";
+                sortMode = "TITLE";
                 break;
             case 1:
-                sortMode = "organization";
+                sortMode = "ORGANIZATION";
                 break;
             case 2:
-                sortMode = "count";
+                sortMode = "COUNT";
                 break;
             case 3:
-                sortMode = "eventTime";
+                sortMode = "EVENT_TIME";
                 break;
             default:
                 sortMode = null;
