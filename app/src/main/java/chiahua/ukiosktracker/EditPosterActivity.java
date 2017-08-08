@@ -4,9 +4,13 @@ package chiahua.ukiosktracker;
 import android.Manifest;
 import android.app.DatePickerDialog;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,6 +34,8 @@ import android.widget.Toast;
 
 
 import java.io.File;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,10 +61,15 @@ public class EditPosterActivity extends AppCompatActivity {
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
     public static final int FILE_WRITE_PERMISSION_REQUEST_CODE = 16;
     private String mCurrentPhotoPath;
+    private String mPreviousPhotoPath;
+    private String mAbsFilePath;
+    private String mPrevAbsFilePath;
     private Bitmap mImageBitmap;
     private ImageView mImageView;
     private boolean cameraAccess = true;
     private boolean fileAccess = false;
+    private int mWidth = 400;
+    private int mHeight = 640;
     static final int REQUEST_TAKE_PHOTO = 1;
 
 
@@ -89,7 +101,32 @@ public class EditPosterActivity extends AppCompatActivity {
         });
 
         mImageView = (ImageView) findViewById(R.id.poster_image);
-
+        ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
+        Log.d("TAG", "Creating on click listener.");
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int permissionCheck = ContextCompat.checkSelfPermission(EditPosterActivity.this,
+                        Manifest.permission.CAMERA);
+                int permissionCheck2 = ContextCompat.checkSelfPermission(EditPosterActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if ((permissionCheck == PackageManager.PERMISSION_GRANTED && permissionCheck2 == PackageManager.PERMISSION_GRANTED)
+                        ||(fileAccess && cameraAccess)) {
+                    Log.d("TAG", "Permissions Granted, Invoking Camera");
+                    invokeCamera();
+                    return;
+                } else {
+                    Log.d("TAG", "Requesting Camera Permissions.");
+                    ActivityCompat.requestPermissions(EditPosterActivity.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            CAMERA_PERMISSION_REQUEST_CODE);
+                            /*Log.d("TAG", "Requesting Write External Storage Permissions.");
+                            ActivityCompat.requestPermissions(EditPosterActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    FILE_WRITE_PERMISSION_REQUEST_CODE);*/
+                }
+            }
+        });
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         kioskID = receivedIntent.getIntExtra("KioskID", -1);
@@ -108,64 +145,114 @@ public class EditPosterActivity extends AppCompatActivity {
                 restoreDateInfo();
                 updateDateText();
             }
-//            getDateAndTime();
-
+            mImageView.setImageResource(R.drawable.noimageavailable);
             mCurrentPhotoPath = poster.getImagePath();
-            if (mCurrentPhotoPath == null){
-                Log.d("TAG", "mCurrentPhotoPath is null.");
-                mImageView.setImageResource(R.drawable.noimageavailable);
-            } else {
-                Log.d("TAG", "Setting Image Bitmap to mImageView");
-                try {
-                    mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                            Uri.parse(mCurrentPhotoPath));
-                    mImageView.setImageBitmap(mImageBitmap);
-                } catch (IOException e) {
-                    Log.d("TAG", "IOException in poster load");
-                    mImageView.setImageResource(R.drawable.noimageavailable);
-                }
-            }
+            mAbsFilePath = poster.getAbsPath();
+            displayImage();
 
         }
         else {
             setTitle(R.string.add_new_poster);
             Log.d("TAG", "Adding New Poster.");
-            if (cameraAccess) {
-                ImageButton ib = (ImageButton) findViewById(R.id.camera_icon);
-                Log.d("TAG", "Creating on click listener.");
-                ib.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int permissionCheck = ContextCompat.checkSelfPermission(EditPosterActivity.this,
-                                Manifest.permission.CAMERA);
-                        int permissionCheck2 = ContextCompat.checkSelfPermission(EditPosterActivity.this,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        if ((permissionCheck == PackageManager.PERMISSION_GRANTED && permissionCheck2 == PackageManager.PERMISSION_GRANTED)
-                                ||(fileAccess && cameraAccess)) {
-                            Log.d("TAG", "Permissions Granted, Invoking Camera");
-                            invokeCamera();
-                            //return;
-                        } else {
-                            Log.d("TAG", "Requesting Camera Permissions.");
-                            ActivityCompat.requestPermissions(EditPosterActivity.this,
-                                    new String[]{Manifest.permission.CAMERA},
-                                    CAMERA_PERMISSION_REQUEST_CODE);
-                            Log.d("TAG", "Requesting Write External Storage Permissions.");
-                            ActivityCompat.requestPermissions(EditPosterActivity.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    FILE_WRITE_PERMISSION_REQUEST_CODE);
-                        }
-                        /*if (fileAccess && cameraAccess) {
-                            Log.d("TAG", "fileAccess and cameraAccess are true.");
-                            invokeCamera();
-                            return;
-                        }*/
-                    }
-                });
-            }
         }
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d("TAG", "Entering onSaveInstanceState");
+        outState.putCharSequence("nameField", nameField.getText());
+        outState.putCharSequence("orgField", orgField.getText());
+        outState.putCharSequence("locationField", locationField.getText());
+        outState.putCharSequence("descriptionField", descriptionField.getText());
+        outState.putInt("kioskID", kioskID);
+        outState.putString("mCurrentPhotoPath", mCurrentPhotoPath);
+        outState.putString("mPreviousPhotoPath", mPreviousPhotoPath);
+        outState.putString("mAbsFilePath", mAbsFilePath);
+        outState.putString("mPrevAbsFilePath", mPrevAbsFilePath);
+        outState.putBoolean("cameraAccess", cameraAccess);
+        outState.putBoolean("fileAccess", fileAccess);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        nameField.setText(savedInstanceState.getCharSequence("nameField"));
+        orgField.setText(savedInstanceState.getCharSequence("orgField"));
+        locationField.setText(savedInstanceState.getCharSequence("locationField"));
+        descriptionField.setText(savedInstanceState.getCharSequence("descriptionField"));
+        kioskID = savedInstanceState.getInt("kioskID");
+        mCurrentPhotoPath = savedInstanceState.getString("mCurrentPhotoPath");
+        mPreviousPhotoPath = savedInstanceState.getString("mPreviousPhotoPath");
+        mAbsFilePath = savedInstanceState.getString("mAbsFilePath");
+        mPrevAbsFilePath = savedInstanceState.getString("mPrevAbsFilePath");
+        cameraAccess = savedInstanceState.getBoolean("cameraAccess");
+        fileAccess = savedInstanceState.getBoolean("fileAccess");
+        displayImage();
+    }
+
+    private void displayImage() {
+        if (mCurrentPhotoPath == null){
+            Log.d("TAG", "mCurrentPhotoPath is null.");
+            mImageView.setImageResource(R.drawable.noimageavailable);
+        } else {
+            Log.d("TAG", "Setting Image Bitmap to mImageView");
+            try {
+                //mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
+                  //      Uri.parse(mCurrentPhotoPath));
+                mImageBitmap = decodeSampledBitmapFromUri(getApplicationContext(), Uri.parse(mCurrentPhotoPath), mWidth, mHeight);
+                if (mImageBitmap != null) {
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(setOrientation());
+                    mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
+                    mImageView.setImageBitmap(mImageBitmap);
+                    mPreviousPhotoPath = mCurrentPhotoPath;
+                    mPrevAbsFilePath = mAbsFilePath;
+                }
+                else {
+                    Log.d("TAG", "Image Bitmap is null.");
+                    if (mCurrentPhotoPath == mPreviousPhotoPath) {
+                        mImageView.setImageResource(R.drawable.noimageavailable);
+                    }
+                    else {
+                        mCurrentPhotoPath = mPreviousPhotoPath;
+                        mAbsFilePath = mPrevAbsFilePath;
+                        displayImage();
+                    }
+                }
+            } catch (IOException e) {
+                Log.d("TAG", "IOException in poster load");
+                mImageView.setImageResource(R.drawable.noimageavailable);
+            }
+        }
+    }
+
+    private int setOrientation() {
+        int rotate = 0;
+        try {
+            ExifInterface exif = new ExifInterface(mAbsFilePath);
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d("TAG", "Rotate is: " + rotate);
+        return rotate;
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -176,6 +263,10 @@ public class EditPosterActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     cameraAccess = true;
+                    ActivityCompat.requestPermissions(EditPosterActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            FILE_WRITE_PERMISSION_REQUEST_CODE);
+                    break;
                 }
                 else {
                     cameraAccess = false;
@@ -185,12 +276,13 @@ public class EditPosterActivity extends AppCompatActivity {
             case FILE_WRITE_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fileAccess = true;
+                    invokeCamera();
+                    break;
                 }
                 else {
                     fileAccess = false;
                 }
                 Log.d("TAG", "fileAccess is: " + fileAccess);
-                return;
             }
         }
     }
@@ -254,7 +346,7 @@ public class EditPosterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field", Toast.LENGTH_SHORT).show();
         }
-        if (alreadyContains(name) && addNew) {
+        else if (alreadyContains(name) && addNew) {
             Toast.makeText(getApplicationContext(),
                     "There is already a poster titled \""+name+"\". Please choose a different title.",
                     Toast.LENGTH_LONG).show();
@@ -263,30 +355,28 @@ public class EditPosterActivity extends AppCompatActivity {
 //            String time = "";
             if (addNew) {
                 //Add new poster
+                poster = new Poster(name, org, location, getDateString(), description);
+                poster.setImagePath(mCurrentPhotoPath);
+                poster.setAbsPath(mAbsFilePath);
                 if (kioskID == -1) {
-                    poster = new Poster(name, org, location, getDateString(), description);
-//                    if (validateAndSetDate()) {
-                        poster.save();
-                        finish();
-//                    }
+                    poster.save();
+                    finish();
                 }
                 //Add new poster and autoconnect it to a kiosk
                 else {
-                    poster = new Poster(name, org, location, getDateString(), description);
-//                    if (validateAndSetDate()) {
-                        poster.increaseCount();
-                        poster.save();
-                        Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
-                        KioskPoster kp = new KioskPoster(kiosk, poster);
-                        kp.save();
-                        finish();
-//                    }
+
+                    poster.increaseCount();
+                    poster.save();
+                    Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                    KioskPoster kp = new KioskPoster(kiosk, poster);
+                    kp.save();
+                    finish();
                 }
             }
             else {
                 //validateAndSetDate();
 //                if (validateAndSetDate()) {
-                    poster.modify(name, org, location, getDateString(), description);
+                    poster.modify(name, org, location, getDateString(), description, mCurrentPhotoPath, mAbsFilePath);
                     poster.save();
                     finish();
 //                }
@@ -387,11 +477,12 @@ public class EditPosterActivity extends AppCompatActivity {
                 storageDir
         );
         // Save a file: path for use with ACTION_VIEW intents
+        mAbsFilePath = image.getAbsolutePath();
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         Log.d("TAG", "Current Photo Path: " + mCurrentPhotoPath);
         if(poster != null) {
             Log.d("TAG", "Poster is not null.");
-            poster.setImagePath(mCurrentPhotoPath);
+            //poster.setImagePath(mCurrentPhotoPath);
         }
         return image;
     }
@@ -403,23 +494,39 @@ public class EditPosterActivity extends AppCompatActivity {
         Log.d("TAG", "Request Code is: " + requestCode);
         Log.d("TAG", "Result code is: " + resultCode);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Log.d("TAG", "Request to take photo OK");
-            try {
-                Log.d("TAG", "Getting Image Bitmap");
-                Log.d("TAG", "mCurrentPhotoPath is: " + mCurrentPhotoPath);
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                        Uri.parse(mCurrentPhotoPath));
-                Log.d("TAG", "Setting Image Bitmap to mImageView");
-                mImageView.setImageBitmap(mImageBitmap);
-                poster.setImagePath(mCurrentPhotoPath);
-            } catch (IOException e) {
-                Log.d("TAG", "IOException in onActivityResult");
-                e.printStackTrace();
-            }
-            Log.d("TAG", "Hitting return on onActivityResult");
-            return;
+            displayImage();
         }
         //Log.d("TAG", "Using super.onActivityResult");
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromUri(Context c, Uri uri, int reqWidth, int reqHeight)
+            throws FileNotFoundException {
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, options);
+
+        options.inSampleSize = calculateInSampleSize(options, 400, 640);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, options);
+
     }
 
     public void deleteCancelButton(View view) {
@@ -431,8 +538,9 @@ public class EditPosterActivity extends AppCompatActivity {
             for (KioskPoster kp : allKPs) {
                 if (kp.matchPoster(poster))
                     kp.delete();
-
             }
+
+            return;
         }
     }
 
