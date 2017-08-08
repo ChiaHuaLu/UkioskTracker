@@ -1,8 +1,9 @@
 package chiahua.ukiosktracker;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -55,8 +56,6 @@ public class SortByFragment extends DialogFragment {
                         SharedPreferences pref = getActivity().
                                 getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
                         pref.edit().putInt("SORTMODE", newMode).apply();
-
-
                         dismiss();
                     }
                 })

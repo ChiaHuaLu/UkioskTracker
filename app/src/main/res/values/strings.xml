@@ -27,7 +27,7 @@
     <string name="title_concept">Concept &amp; Core Features Design</string>
     <string name="title_graphic">Graphics &amp; Photos</string>
     <string name="title_locations">Kiosk Locations Mapping</string>
-    <string name="dots">...</string>
+    <string name="dots">&#8230;</string>
     <string name="hint_optional">(Optional)</string>
     <string name="hint_required">(Required)</string>
     <string name="title_activity_edit_poster">Edit Poster</string>
@@ -59,7 +59,7 @@
     <string name="date_picker_btn">(OPTIONAL)</string>
     <string name="sort_mode_choose">Sort posters by:</string>
     <string name="ok">Ok</string>
-    <string name="sortby">Sort By</string>
+    <string name="sortby">Sort By:</string>
 
 
 </resources>

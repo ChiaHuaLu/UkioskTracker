@@ -16,26 +16,42 @@ import android.view.LayoutInflater;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.orm.SugarRecord;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class PosterTab extends Fragment {
 
     private final static String TAG = "PosterTab";
-    public ArrayList<Poster> allPosters;
-    public ArrayList<Kiosk> allKiosks;
     private CursorAdapter posterListAdapter;
     private ListView allPostersLV;
-    private Spinner sortBy;
+    private Button buttonSort;
+    private int mode;
+    private SharedPreferences sharedPreferences;
+
+    // Listener defined by anonymous inner class.
+    public SharedPreferences.OnSharedPreferenceChangeListener spChanged = new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d("debug", "A preference has been changed");
+            if (key.equals("SORTMODE")) {
+                Log.d(TAG, "Sort mode preferences has changed.");
+                mode = sharedPreferences.getInt("SORTMODE", 0);
+                buttonSort.setText(getString(R.string.sortby) + " " + getSortMode(mode));
+
+                // set how the list is sorted via ORDER BY clause in SQLite
+                Cursor cursor = SugarRecord.getCursor(
+                        Poster.class, null, null, null, getSortMode(mode), null);
+
+                // switch cursor to new cursor with updated database
+                posterListAdapter.swapCursor(cursor);
+                posterListAdapter.notifyDataSetChanged();
+                allPostersLV.setAdapter(posterListAdapter);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,34 +67,54 @@ public class PosterTab extends Fragment {
                 startActivity(addPosterIntent);
             }
         });
-        SharedPreferences pref = getContext().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-        int mode = pref.getInt("SORTMODE", 0);
 
-        Cursor cursor = SugarRecord.getCursor(Poster.class, null, null, null, getSortMode(mode), null);
+        sharedPreferences =
+                getActivity().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
+
+        mode = sharedPreferences.getInt("SORTMODE", 0);
+
+        buttonSort = (Button) rootView.findViewById(R.id.sort_button);
+
+        buttonSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SortByFragment sortByFragment
+                        = SortByFragment.newInstance(mode);
+                sortByFragment.show(getActivity().getSupportFragmentManager(), "SortBy");
+            }
+        });
+
+        buttonSort.setText(getString(R.string.sortby) + " " + getSortMode(mode));
+
+        Cursor cursor = SugarRecord.getCursor(
+                Poster.class, null, null, null, getSortMode(mode), null);
         posterListAdapter = new PosterCursorAdapter(getActivity(), cursor);
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
-//        allPostersLV.setAdapter(posterListAdapter);
-        update();
         fab.setImageResource(R.drawable.add);
         return rootView;
-    }
-
-    public void update() {
-
-        sort();
-        allPostersLV.deferNotifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // TODO: notifyDataSetChanged is preferred, but can't get it to work
         Log.d(TAG, "Notify dataset has been changed onResume");
-        update();
-//        sort(sortMode);
-//        posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
-//        allPostersLV = (ListView) this.getActivity().findViewById(R.id.allPostersLV);
-//        allPostersLV.setAdapter(posterListAdapter);
+
+        // set how the list is sorted via ORDER BY clause in SQLite
+        Cursor cursor =
+                SugarRecord.getCursor(Poster.class, null, null, null, getSortMode(mode), null);
+
+        // switch cursor to new cursor with updated database
+        posterListAdapter.swapCursor(cursor);
+        posterListAdapter.notifyDataSetChanged();
+        allPostersLV.setAdapter(posterListAdapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(spChanged);
     }
 
     public String getSortMode(int mode) {
@@ -101,77 +137,4 @@ public class PosterTab extends Fragment {
         }
         return sortMode;
     }
-
-    public void sort() {
-        SharedPreferences pref = getContext().
-                getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-        int mode = pref.getInt("SORTMODE", 0);
-
-        String orderBy;
-
-        allPosters = (ArrayList<Poster>) Poster.listAll(Poster.class);
-        //Sort by poster name
-        if (mode == 0) {
-            Collections.sort(allPosters, new Comparator<Poster>() {
-                @Override
-                public int compare(Poster p1, Poster p2) {
-                    return p1.title().compareTo(p2.title());
-                }
-            });
-        }
-        //Sort by Org
-        else if (mode == 1) {
-            Collections.sort(allPosters, new Comparator<Poster>() {
-                @Override
-                public int compare(Poster p1, Poster p2) {
-                    String org1 = p1.organization();
-                    String org2 = p2.organization();
-                    if (org1.equals(org2)) {
-                        return p1.title().compareTo(p2.title());
-                    }
-                    else {
-                       return p1.organization().compareTo(p2.organization());
-                    }
-                }
-            });
-        }
-        //Sort by number posted
-        else if (mode == 2) {
-            Collections.sort(allPosters, new Comparator<Poster>() {
-                @Override
-                public int compare(Poster p1, Poster p2) {
-                    if (p1.count()==p2.count())
-                        return p1.title().compareTo(p2.title());
-                    return p1.count()-p2.count();
-                }
-            });
-        }
-        //Sort by expiration
-        else {
-            Collections.sort(allPosters, new Comparator<Poster>() {
-                @Override
-                public int compare(Poster p1, Poster p2) {
-                    String exp1 = p1.eventTime();
-                    String exp2 = p2.eventTime();
-                    if (exp1.equals("")) {
-                        if (exp2.equals("")) {
-                            return p1.title().compareTo(p2.title());
-                        }
-                        else {
-                            return 1;
-                        }
-                    }
-                    else if (!exp1.equals(""))
-                        return -1;
-                    return p1.eventTime().compareTo(p2.eventTime());
-                }
-            });
-        }
-        //posterListAdapter = new PosterArrayAdapter(this.getContext(), allPosters);
-//        allPostersLV = (ListView) getActivity().findViewById(R.id.allPostersLV);
-        allPostersLV.setAdapter(posterListAdapter);
-    }
-
 }
-
-

@@ -104,14 +104,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
         }
-        if (id == R.id.sortBy) {
-            SharedPreferences pref = getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-            int currentMode = Integer.parseInt(pref.getString("SORTMODE", "0"));
-            SortByFragment sortByFragment
-                    = SortByFragment.newInstance(currentMode);
-            sortByFragment.show(getFragmentManager(), "SortBy");
-            return true;
-        }
 //        if (id == R.id.clear) {
 //
 //        }
