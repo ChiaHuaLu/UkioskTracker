@@ -36,9 +36,18 @@ class PosterArrayAdapter extends ArrayAdapter<Poster> {
         TextView titleTV = (TextView) customView.findViewById(R.id.poster_item_title);
         TextView subtitleTV = (TextView) customView.findViewById(R.id.poster_item_subtitle);
         Button editPosterButton = (Button) customView.findViewById(R.id.poster_item_edit);
-        titleTV.setText(posterItem.title());
+        int maxlength = 24;
+        if (posterItem.title().length() > maxlength) {
+            titleTV.setText(posterItem.title().substring(0, maxlength)+"...");
+        }
+        else {
+            titleTV.setText(posterItem.title());
+        }
+        String org = posterItem.organization();
+        if (org.length() > maxlength-posterItem.eventTime().length())
+            org = org.substring(0, maxlength-posterItem.eventTime().length()) + "...";
         subtitleTV.setText("Poster Locations: " + posterItem.count() + "    " +
-                convertMMDDYYYY(posterItem) + "    " + posterItem.organization());
+                convertMMDDYYYY(posterItem) + "    " + org);
         final long posterIDToEdit = posterItem.getId();
         editPosterButton.setOnClickListener( new View.OnClickListener() {
             @Override
