@@ -60,7 +60,9 @@ public class EditPosterActivity extends AppCompatActivity {
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
     public static final int FILE_WRITE_PERMISSION_REQUEST_CODE = 16;
     private String mCurrentPhotoPath;
+    private String mPreviousPhotoPath;
     private String mAbsFilePath;
+    private String mPrevAbsFilePath;
     private Bitmap mImageBitmap;
     private ImageView mImageView;
     private boolean cameraAccess = true;
@@ -164,7 +166,9 @@ public class EditPosterActivity extends AppCompatActivity {
         outState.putCharSequence("descriptionField", descriptionField.getText());
         outState.putInt("kioskID", kioskID);
         outState.putString("mCurrentPhotoPath", mCurrentPhotoPath);
+        outState.putString("mPreviousPhotoPath", mPreviousPhotoPath);
         outState.putString("mAbsFilePath", mAbsFilePath);
+        outState.putString("mPrevAbsFilePath", mPrevAbsFilePath);
         outState.putBoolean("cameraAccess", cameraAccess);
         outState.putBoolean("fileAccess", fileAccess);
         super.onSaveInstanceState(outState);
@@ -179,7 +183,9 @@ public class EditPosterActivity extends AppCompatActivity {
         descriptionField.setText(savedInstanceState.getCharSequence("descriptionField"));
         kioskID = savedInstanceState.getInt("kioskID");
         mCurrentPhotoPath = savedInstanceState.getString("mCurrentPhotoPath");
+        mPreviousPhotoPath = savedInstanceState.getString("mPreviousPhotoPath");
         mAbsFilePath = savedInstanceState.getString("mAbsFilePath");
+        mPrevAbsFilePath = savedInstanceState.getString("mPrevAbsFilePath");
         cameraAccess = savedInstanceState.getBoolean("cameraAccess");
         fileAccess = savedInstanceState.getBoolean("fileAccess");
         displayImage();
@@ -200,9 +206,19 @@ public class EditPosterActivity extends AppCompatActivity {
                     matrix.postRotate(setOrientation());
                     mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
                     mImageView.setImageBitmap(mImageBitmap);
+                    mPreviousPhotoPath = mCurrentPhotoPath;
+                    mPrevAbsFilePath = mAbsFilePath;
                 }
                 else {
                     Log.d("TAG", "Image Bitmap is null.");
+                    if (mCurrentPhotoPath == mPreviousPhotoPath) {
+                        mImageView.setImageResource(R.drawable.noimageavailable);
+                    }
+                    else {
+                        mCurrentPhotoPath = mPreviousPhotoPath;
+                        mAbsFilePath = mPrevAbsFilePath;
+                        displayImage();
+                    }
                 }
             } catch (IOException e) {
                 Log.d("TAG", "IOException in poster load");
@@ -232,6 +248,7 @@ public class EditPosterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.d("TAG", "Rotate is: " + rotate);
         return rotate;
     }
 
@@ -328,7 +345,7 @@ public class EditPosterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field", Toast.LENGTH_SHORT).show();
         }
-        if (alreadyContains(name) && addNew) {
+        else if (alreadyContains(name) && addNew) {
             Toast.makeText(getApplicationContext(),
                     "There is already a poster titled \""+name+"\". Please choose a different title.",
                     Toast.LENGTH_LONG).show();
