@@ -36,11 +36,11 @@ public class PosterCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
-        String result = "[ ";
+        /*String result = "[ ";
         for (String s : cursor.getColumnNames()) {
             result += s + " ";
         }
-        Log.d(TAG, "Cursor getColumns: " + result + "]");
+        Log.d(TAG, "Cursor getColumns: " + result + "]");*/
 
         TextView titleTV = (TextView) view.findViewById(R.id.poster_item_title);
         TextView subtitleTV = (TextView) view.findViewById(R.id.poster_item_subtitle);

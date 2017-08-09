@@ -55,11 +55,12 @@
     <string name="help10">Here, you can check or uncheck where a poster has been posted at, and you can see, at a glance, how many places and where the selected poster is published. Simply tap on a checkbox to check or uncheck it when you are posting or removing a poster from a kiosk. \n</string>
     <string name="help11">Add/Edit Poster</string>
     <string name="help12">On the add/edit page, you can edit and set the information of a poster. The only required field is the name of the poster, but the Name, as well as the organization and event date, will be visible in the lists on the Poster Tab and the Kiosk Details Page. Any expired posters will be highlighted in the list as a reminder to take it down.</string>
-    <string name="delete_poster_text">Are you sure you want to Delete this poster and all its information?</string>
+    <string name="delete_poster_text">Are you sure you want to delete this poster and all its information?</string>
     <string name="date_picker_btn">(OPTIONAL)</string>
     <string name="sort_mode_choose">Sort posters by:</string>
     <string name="ok">Ok</string>
     <string name="sortby">Sort By:</string>
+    <string name="unsaved_question">Any unsaved changes will be lost. Continue?</string>
 
 
 </resources>
