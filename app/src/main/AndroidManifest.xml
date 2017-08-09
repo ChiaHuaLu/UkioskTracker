@@ -46,6 +46,7 @@
         </activity>
         <activity
             android:name=".AboutActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_about"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -74,11 +75,13 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".KioskDetailActivity"
+            android:screenOrientation="portrait"
             android:label="Kiosk Detail"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".PosterChecklistActivity" />
 
         <activity android:name=".HelpActivity"
+            android:screenOrientation="portrait"
             android:label="@string/help"
             android:allowTaskReparenting="true"
             android:parentActivityName=".MainActivity"/>
