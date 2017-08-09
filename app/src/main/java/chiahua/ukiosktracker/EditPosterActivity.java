@@ -322,12 +322,12 @@ public class EditPosterActivity extends AppCompatActivity {
     }
 
     public void addEditButton() {
-        String name = nameField.getText().toString();
-        String org = orgField.getText().toString();
-        String location = locationField.getText().toString();
-        String description = descriptionField.getText().toString();
+        String name = nameField.getText().toString().trim();
+        String org = orgField.getText().toString().trim();
+        String location = locationField.getText().toString().trim();
+        String description = descriptionField.getText().toString().trim();
 
-        if (name.trim().equals("")) {
+        if (name.equals("")) {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field", Toast.LENGTH_SHORT).show();
         }
