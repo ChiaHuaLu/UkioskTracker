@@ -42,6 +42,7 @@ import java.util.Calendar;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class EditPosterActivity extends AppCompatActivity {
@@ -468,7 +469,7 @@ public class EditPosterActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         Log.d("TAG", "Creating Image File in createImageFile Method");
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(

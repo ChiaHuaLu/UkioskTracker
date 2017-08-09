@@ -52,7 +52,6 @@ public class PosterTab extends Fragment {
                 posterListAdapter.swapCursor(cursor);
                 posterListAdapter.notifyDataSetChanged();
                 allPostersLV.setAdapter(posterListAdapter);
-                cursor.close();
             }
         }
     };
@@ -98,7 +97,6 @@ public class PosterTab extends Fragment {
         Cursor cursor = SugarRecord.getCursor(
                 Poster.class, null, null, null, getSortMode(mode), null);
         posterListAdapter = new PosterCursorAdapter(getActivity(), cursor);
-        cursor.close();
 
         allPostersLV = (ListView) rootView.findViewById(R.id.allPostersLV);
         fab.setImageResource(R.drawable.add);
@@ -118,7 +116,6 @@ public class PosterTab extends Fragment {
         posterListAdapter.swapCursor(cursor);
         posterListAdapter.notifyDataSetChanged();
         allPostersLV.setAdapter(posterListAdapter);
-        cursor.close();
     }
 
     @Override
