@@ -1,6 +1,9 @@
 package chiahua.ukiosktracker;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,13 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             .bearing(0).tilt(0).build();
     private GoogleMap mMap;
     public List<Kiosk> allKiosks;
+
+    public static final int LOCATION_FINE_REQ_CODE = 24;
+    public static final int LOCATION_COARSE_REQ_CODE = 25;
+    private boolean locationFineAccess = false;
+    private boolean locationCoarseAccess = false;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +106,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
                     .title(kiosk.getId().toString()));
         }
-        mMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Intent kioskDetailsIntent =
@@ -108,5 +120,58 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             }
         });
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
+        //Check permission for location
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Log.d("TAG", "Locations Permissions Granted, Enable Current Location");
+                mMap.setMyLocationEnabled(true);
+            }
+            else {
+                Log.d("TAG", "Request Fine Location Permissions");
+                ActivityCompat.requestPermissions(this.getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_FINE_REQ_CODE);
+            }
+        }
+        else {
+            Log.d("TAG", "Request Coarse Location Permissions");
+            ActivityCompat.requestPermissions(this.getActivity(),
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_COARSE_REQ_CODE);
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[],
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_FINE_REQ_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationFineAccess = true;
+                    Log.d("TAG", "Locations Permissions Granted, Enable Current Location");
+                    mMap.setMyLocationEnabled(true);
+                    break;
+                }
+                else {
+                    locationFineAccess = false;
+                }
+                Log.d("TAG", "fine location is: " + locationFineAccess);
+            }
+            case LOCATION_COARSE_REQ_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationCoarseAccess = true;
+                    ActivityCompat.requestPermissions(this.getActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_FINE_REQ_CODE);
+                    break;
+                }
+                else {
+                    locationCoarseAccess = false;
+                }
+                Log.d("TAG", "coarse location is: " + locationCoarseAccess);
+            }
+        }
+    }
+
 }
