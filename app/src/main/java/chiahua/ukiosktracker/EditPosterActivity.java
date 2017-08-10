@@ -249,7 +249,7 @@ public class EditPosterActivity extends AppCompatActivity {
                     mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
                     mImageView.setImageBitmap(mImageBitmap);
 
-                    if (poster.getImagePath() != null && !poster.getImagePath().equals(mCurrentPhotoPath))
+                    if (poster != null && poster.getImagePath() != null && !poster.getImagePath().equals(mCurrentPhotoPath))
                         imageChanged = true;
 
                     mPreviousPhotoPath = mCurrentPhotoPath;
