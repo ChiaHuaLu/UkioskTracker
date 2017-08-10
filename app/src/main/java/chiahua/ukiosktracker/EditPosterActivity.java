@@ -246,13 +246,17 @@ public class EditPosterActivity extends AppCompatActivity {
                     matrix.postRotate(setOrientation());
                     mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
                     mImageView.setImageBitmap(mImageBitmap);
+
+                    if (poster.getImagePath() != null && !poster.getImagePath().equals(mCurrentPhotoPath))
+                        imageChanged = true;
+
                     mPreviousPhotoPath = mCurrentPhotoPath;
                     mPrevAbsFilePath = mAbsFilePath;
-                    imageChanged = true;
+
                 }
                 else {
                     Log.d("TAG", "Image Bitmap is null.");
-                    if (mCurrentPhotoPath == mPreviousPhotoPath) {
+                    if (mCurrentPhotoPath.equals(mPreviousPhotoPath)) {
                         mImageView.setImageResource(R.drawable.noimageavailable);
                     }
                     else {
