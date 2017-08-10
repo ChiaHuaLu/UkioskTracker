@@ -122,6 +122,8 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                     kp.save();
                     allKPs.add(kp);
                     relevantKPs.add(kp);
+                    kiosk.updatePosterCount(kiosk.getPosterCount() + 1);
+                    kiosk.save();
                     poster.increaseCount();
                     poster.save();
                 }
@@ -130,6 +132,8 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
                     marker.setIcon(BitmapDescriptorFactory.fromResource(android.R.drawable.checkbox_off_background));
                     allKPs.remove(kp);
                     relevantKPs.remove(kp);
+                    kiosk.updatePosterCount(kiosk.getPosterCount() - 1);
+                    kiosk.save();
                     KioskPoster.delete(kp);
                     poster.decreaseCount();
                     poster.save();

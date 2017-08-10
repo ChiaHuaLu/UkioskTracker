@@ -18,6 +18,8 @@ public class Kiosk extends SugarRecord {
     // Short name / name for kioskID
     private String name;
 
+    private int posterCount;
+
     // Leave empty constructor for SugarRecords
     public Kiosk() {}
 
@@ -26,6 +28,7 @@ public class Kiosk extends SugarRecord {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
+        this.posterCount = 0;
     }
 
     //Get latitude coordinate
@@ -40,6 +43,10 @@ public class Kiosk extends SugarRecord {
 
     //Get Kiosk Name
     public String name() { return this.name; }
+
+    public int getPosterCount() {
+        return this.posterCount;
+    }
 
     // Create the list of all kiosks (please only run this once!)
     // This is gacky, but it'll do (should be in a file)
@@ -66,15 +73,10 @@ public class Kiosk extends SugarRecord {
         return Math.sqrt(result) * 111000;
     }
 
-    public int posterCount() {
-        int result = 0;
-        ArrayList<KioskPoster> allKPs =
-                (ArrayList<KioskPoster>) SugarRecord.listAll(KioskPoster.class);
-        for (KioskPoster KP : allKPs) {
-            if (KP.matchKiosk(this))
-                result++;
-        }
-        return result;
+    public void updatePosterCount(int result) {
+        Log.d("Kiosk", "Kiosk" + this.getId() + " had " + posterCount + " posters.");
+        posterCount = result;
+        Log.d("Kiosk", "Kiosk" + this.getId() + " now has " + posterCount + " posters.");
     }
 }
 

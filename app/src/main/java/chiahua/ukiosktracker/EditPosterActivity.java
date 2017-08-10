@@ -575,8 +575,9 @@ public class EditPosterActivity extends AppCompatActivity {
         allPosters.remove(poster);
         List<KioskPoster> allKPs = KioskPoster.listAll(KioskPoster.class);
         for (KioskPoster kp : allKPs) {
-            if (kp.matchPoster(poster))
+            if (kp.matchPoster(poster)) {
                 kp.delete();
+            }
         }
         poster.delete();
         finish();

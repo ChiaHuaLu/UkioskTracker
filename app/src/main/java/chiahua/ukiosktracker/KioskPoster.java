@@ -23,6 +23,10 @@ public class KioskPoster extends SugarRecord {
         this.poster = poster;
     }
 
+    public Kiosk getKiosk() {
+        return kiosk;
+    }
+
     public boolean matchPoster(Poster p) {
         Log.d("TAG", "poster is null = " + (poster==null));
         if (!poster.title().equals(p.title()))

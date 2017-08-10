@@ -41,7 +41,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             .bearing(0).tilt(0).build();
     private GoogleMap mMap;
     public ArrayList<Kiosk> allKiosks;
-    public HashMap<Marker, Kiosk> markerKioskHashMap;
+    public HashMap<Marker, Integer> markerKioskHashMap;
 
     public static final int LOCATION_FINE_REQ_CODE = 24;
     public static final int LOCATION_COARSE_REQ_CODE = 25;
@@ -69,6 +69,12 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
         markerKioskHashMap = new HashMap<>();
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
     }
 
     /**
@@ -106,10 +112,21 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         for (Kiosk kiosk : allKiosks) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
-                    .title(kiosk.name())
-                    .snippet("Posters: " + kiosk.posterCount()));
-            markerKioskHashMap.put(marker, kiosk);
+                    .title(kiosk.name()));
+            markerKioskHashMap.put(marker, kiosk.getId().intValue());
         }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int kioskID = markerKioskHashMap.get(marker);
+                Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                Log.d(TAG, "Kiosk Marker says: " + kiosk.getPosterCount() + " posters are here.");
+                marker.setSnippet("Posters: " + kiosk.getPosterCount());
+                marker.showInfoWindow();
+                return true;
+            }
+        });
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -117,7 +134,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 Intent kioskDetailsIntent =
                         new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
                 // send in the kioskID ID (based on database)
-                int kioskID = markerKioskHashMap.get(marker).getId().intValue();
+                int kioskID = markerKioskHashMap.get(marker);
                 Log.d(TAG, "testing - send in kioskID [" + kioskID + "] to kioskDetails");
                 kioskDetailsIntent.putExtra("kioskID", kioskID);
                 startActivity(kioskDetailsIntent);
