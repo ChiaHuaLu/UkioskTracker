@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +42,8 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poster_checklist);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Intent receivedIntent = getIntent();
         long posterID = receivedIntent.getLongExtra("PosterID", -1);
@@ -150,5 +153,15 @@ public class PosterChecklistActivity extends AppCompatActivity implements OnMapR
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return(super.onOptionsItemSelected(item));
     }
 }
