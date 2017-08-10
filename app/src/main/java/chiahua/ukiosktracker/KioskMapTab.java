@@ -3,6 +3,7 @@ package chiahua.ukiosktracker;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -46,7 +47,6 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
     public static final int LOCATION_COARSE_REQ_CODE = 25;
     private boolean locationFineAccess = false;
     private boolean locationCoarseAccess = false;
-
 
 
     @Override
@@ -108,7 +108,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
                     .title(kiosk.name())
                     .snippet("Posters: " + kiosk.posterCount()));
-            markerKioskHashMap.put(marker,kiosk);
+            markerKioskHashMap.put(marker, kiosk);
         }
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -129,15 +129,13 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Log.d("TAG", "Locations Permissions Granted, Enable Current Location");
                 mMap.setMyLocationEnabled(true);
-            }
-            else {
+            } else {
                 Log.d("TAG", "Request Fine Location Permissions");
                 ActivityCompat.requestPermissions(this.getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         LOCATION_FINE_REQ_CODE);
             }
-        }
-        else {
+        } else {
             Log.d("TAG", "Request Coarse Location Permissions");
             ActivityCompat.requestPermissions(this.getActivity(),
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -147,13 +145,31 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case LOCATION_FINE_REQ_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationFineAccess = true;
+                    ActivityCompat.requestPermissions(this.getActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            LOCATION_FINE_REQ_CODE);
                     Log.d("TAG", "Locations Permissions Granted, Enable Current Location");
+                    if (ActivityCompat.checkSelfPermission(this.getActivity(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this.getActivity(),
+                            Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     mMap.setMyLocationEnabled(true);
                     break;
                 }
@@ -166,8 +182,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationCoarseAccess = true;
                     ActivityCompat.requestPermissions(this.getActivity(),
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            LOCATION_FINE_REQ_CODE);
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            LOCATION_COARSE_REQ_CODE);
                     break;
                 }
                 else {
