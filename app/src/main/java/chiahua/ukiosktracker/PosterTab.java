@@ -131,17 +131,18 @@ public class PosterTab extends Fragment {
                 sortMode = "TITLE";
                 break;
             case 1:
-                sortMode = "ORGANIZATION";
+                sortMode = "ORGANIZATION IS NULL OR ORGANIZATION='', ORGANIZATION, TITLE";
                 break;
             case 2:
-                sortMode = "COUNT";
+                sortMode = "COUNT DESC, TITLE";
                 break;
             case 3:
-                sortMode = "EVENT_TIME";
+                sortMode = "EVENT_TIME IS NULL OR EVENT_TIME='', EVENT_TIME, TITLE";
                 break;
             default:
                 sortMode = null;
         }
+        Log.d(TAG, sortMode);
         return sortMode;
     }
 }

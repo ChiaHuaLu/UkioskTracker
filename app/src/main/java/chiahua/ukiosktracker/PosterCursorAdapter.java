@@ -73,13 +73,16 @@ public class PosterCursorAdapter extends CursorAdapter {
                 v.getContext().startActivity(intent);
             }
         });
+
         String eventTime = cursor.getString(cursor.getColumnIndexOrThrow("EVENT_TIME"));
+        view.setBackgroundColor(Color.TRANSPARENT);
         if (eventTime.length() > 0) {
             if (Integer.parseInt(eventTime)+1 < Integer.parseInt(
                     new SimpleDateFormat("yyyyMMdd", Locale.US).format(new Date()))) {
                 view.setBackgroundColor(Color.parseColor("#fca9a9"));
             }
         }
+
         Date currentDate = new Date();
         currentDate.getYear();
     }

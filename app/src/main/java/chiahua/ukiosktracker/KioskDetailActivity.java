@@ -157,13 +157,13 @@ public class KioskDetailActivity extends AppCompatActivity {
                 sortMode = "TITLE";
                 break;
             case 1:
-                sortMode = "ORGANIZATION";
+                sortMode = "ORGANIZATION, TITLE";
                 break;
             case 2:
-                sortMode = "COUNT";
+                sortMode = "COUNT, TITLE DESC";
                 break;
             case 3:
-                sortMode = "EVENT_TIME";
+                sortMode = "EVENT_TIME, TITLE";
                 break;
             default:
                 sortMode = null;
