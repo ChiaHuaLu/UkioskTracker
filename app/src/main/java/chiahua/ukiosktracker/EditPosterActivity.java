@@ -414,6 +414,8 @@ public class EditPosterActivity extends AppCompatActivity {
                     poster.increaseCount();
                     poster.save();
                     Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                    kiosk.updatePosterCount(kiosk.getPosterCount() + 1);
+                    kiosk.save();
                     KioskPoster kp = new KioskPoster(kiosk, poster);
                     kp.save();
                     finish();
