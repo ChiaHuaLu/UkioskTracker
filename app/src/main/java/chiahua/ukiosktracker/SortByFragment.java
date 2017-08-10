@@ -1,8 +1,9 @@
 package chiahua.ukiosktracker;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -16,10 +17,7 @@ import android.util.Log;
 public class SortByFragment extends DialogFragment {
     private static final String TAG = "SortBy Dialog";
     private static final String SORT_MODE = "sortBy";
-    /**
-     * Create a new instance of Difficulty, initialized to
-     * show the current difficulty.
-     */
+
     public static SortByFragment newInstance(int sortMode) {
         SortByFragment result = new SortByFragment();
         // Supply sortMode input as an argument.
@@ -43,7 +41,8 @@ public class SortByFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // save the mode
+                                // save the mode by:
+                                // Poster Title, Organization, Number Posted, Expiration Date
                                 getArguments().putInt(SORT_MODE, which);
                             }
                         })
@@ -54,17 +53,15 @@ public class SortByFragment extends DialogFragment {
                         // user pressed okay, so we are going to change the mode
                         int newMode = getArguments().getInt(SORT_MODE, 0);
                         Log.d(TAG, "User clicked okay. Changing mode to: " + newMode);
-                        SharedPreferences pref = getActivity().getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
-                        pref.edit().putString("SORTMODE", newMode+"").commit();
-
-
+                        SharedPreferences pref = getActivity().
+                                getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
+                        pref.edit().putInt("SORTMODE", newMode).apply();
                         dismiss();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // don't change difficulty
                         dismiss();
                     }
                 });

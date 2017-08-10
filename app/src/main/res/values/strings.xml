@@ -27,7 +27,7 @@
     <string name="title_concept">Concept &amp; Core Features Design</string>
     <string name="title_graphic">Graphics &amp; Photos</string>
     <string name="title_locations">Kiosk Locations Mapping</string>
-    <string name="dots">...</string>
+    <string name="dots">&#8230;</string>
     <string name="hint_optional">(Optional)</string>
     <string name="hint_required">(Required)</string>
     <string name="title_activity_edit_poster">Edit Poster</string>
@@ -46,7 +46,7 @@
     <string name="help1">Help</string>
     <string name="help2">Posted - UT Kiosk Tracker is an app designed to assist University of Texas Student Organization promotion officers keep track of which posters are posted where, and remind them if any poster is no longer relevant and should be taken down.\n</string>
     <string name="help3">Kiosks Tab</string>
-    <string name="help4">On the kiosks tab, you can see the exact location of where every kiosk on campus is located at, as well as your current location. By clicking on a marker, you can examine which posters are posted at that kiosk location on the Kiosk Details page.\n</string>
+    <string name="help4">On the kiosks tab, you can see the exact location of where every kiosk on campus is located at. By clicking on a marker\'s tooltip, you can examine which posters are posted at that kiosk location on the Kiosk Details page.\n</string>
     <string name="help5">Posters Tab</string>
     <string name="help6">"On the posters tab, you can see a list of every poster you have ever posted. Any expired posters will be highlighted to stand out, and you can also choose how you want the posters to be sorted by. To add a new poster, just click on the floating add button near the bottom right corner and enter new poster's details, but the Poster Title field is the only field required to be filled out. You can click on the edit icon to the right of a poster to modify its information. You can even scan the poster by clicking the camera icon button.\n\nBy clicking on a poster, it opens the map checklist page, which will be discussed in detail below.\n"</string>
     <string name="help7">Kiosk Details</string>
@@ -55,11 +55,12 @@
     <string name="help10">Here, you can check or uncheck where a poster has been posted at, and you can see, at a glance, how many places and where the selected poster is published. Simply tap on a checkbox to check or uncheck it when you are posting or removing a poster from a kiosk. \n</string>
     <string name="help11">Add/Edit Poster</string>
     <string name="help12">On the add/edit page, you can edit and set the information of a poster. The only required field is the name of the poster, but the Name, as well as the organization and event date, will be visible in the lists on the Poster Tab and the Kiosk Details Page. A picture of the poster is also available at the bottom if you\'ve scanned a picture in before. Any expired posters will be highlighted in the list as a reminder to take it down.</string>
-    <string name="delete_poster_text">Are you sure you want to Delete this poster and all its information?</string>
+    <string name="delete_poster_text">Are you sure you want to delete this poster and all its information?</string>
     <string name="date_picker_btn">(OPTIONAL)</string>
     <string name="sort_mode_choose">Sort posters by:</string>
     <string name="ok">Ok</string>
-    <string name="sortby">Sort By</string>
+    <string name="sortby">Sort By:</string>
+    <string name="unsaved_question">Any unsaved changes will be lost. Continue?</string>
 
 
 </resources>

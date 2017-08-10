@@ -6,19 +6,13 @@
         android:id="@+id/help"
         android:orderInCategory="100"
         android:title="@string/help"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@drawable/help"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/about"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        android:icon="@android:drawable/ic_menu_info_details"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/sortBy"
-        android:orderInCategory="100"
-        android:title="@string/sortby"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/about"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -3,6 +3,7 @@ package chiahua.ukiosktracker;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -36,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class EditPosterActivity extends AppCompatActivity {
@@ -50,6 +53,14 @@ public class EditPosterActivity extends AppCompatActivity {
     private Poster poster;
     boolean addNew;
     int kioskID;
+
+    private String oldName;
+    private String oldOrg;
+    private String oldLocation;
+    private String oldDate;
+    private String oldDescription;
+
+    private boolean imageChanged;
 
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
     public static final int FILE_WRITE_PERMISSION_REQUEST_CODE = 16;
@@ -103,8 +114,8 @@ public class EditPosterActivity extends AppCompatActivity {
                         Manifest.permission.CAMERA);
                 int permissionCheck2 = ContextCompat.checkSelfPermission(EditPosterActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if ((permissionCheck == PackageManager.PERMISSION_GRANTED && permissionCheck2 == PackageManager.PERMISSION_GRANTED)
-                        ||(fileAccess && cameraAccess)) {
+                if ((permissionCheck == PackageManager.PERMISSION_GRANTED && permissionCheck2 ==
+                        PackageManager.PERMISSION_GRANTED) ||(fileAccess && cameraAccess)) {
                     Log.d("TAG", "Permissions Granted, Invoking Camera");
                     invokeCamera();
                     return;
@@ -119,12 +130,20 @@ public class EditPosterActivity extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         addNew = receivedIntent.getBooleanExtra("addNew", true);
         kioskID = receivedIntent.getIntExtra("KioskID", -1);
+
         Log.d("TAG", "KioskID is: " + kioskID);
         Log.d("TAG", "addNew is: " + addNew);
         if (!addNew) {
             Log.d("TAG", "Editing Poster");
             long posterID = receivedIntent.getLongExtra("PosterID", -1);
             poster = Poster.findById(Poster.class, posterID);
+
+            oldName = poster.title();
+            oldOrg = poster.organization();
+            oldLocation = poster.eventLocation();
+            oldDate = poster.eventTime();
+            oldDescription = poster.details();
+
             nameField.setText(poster.title());
             orgField.setText(poster.organization());
             locationField.setText((poster.eventLocation()));
@@ -142,6 +161,11 @@ public class EditPosterActivity extends AppCompatActivity {
         else {
             setTitle(R.string.add_new_poster);
             Log.d("TAG", "Adding New Poster.");
+            oldName = "";
+            oldOrg = "";
+            oldLocation = "";
+            oldDate = "";
+            oldDescription = "";
         }
     }
 
@@ -179,6 +203,35 @@ public class EditPosterActivity extends AppCompatActivity {
         displayImage();
     }
 
+    @Override
+    public void onBackPressed() {
+        String name = nameField.getText().toString();
+        String org = orgField.getText().toString();
+        String location = locationField.getText().toString();
+        String description = descriptionField.getText().toString();
+
+        Log.d("ChangedTest", "Old Values: [" + oldName + ", " + oldOrg + ", " + oldLocation + ", " +
+                oldDate + ", " + oldDescription + "]");
+
+        Log.d("ChangedTest", "New Values: [" + name + ", " + org + ", " + location + ", " +
+                getDateString() + ", " + description + ", " + "]");
+
+        // if any changes (date/image + name, org, loc, description) were made, display dialog
+        if (imageChanged
+                || !oldName.equals(name)
+                || !oldOrg.equals(org)
+                || !oldLocation.equals(location)
+                || !oldDate.equals(getDateString())
+                || !oldDescription.equals(description)) {
+
+            FragmentManager fm = getFragmentManager();
+            UnsavedDialogFragment unsavedDialogFragment = new UnsavedDialogFragment();
+            unsavedDialogFragment.show(fm, "quit");
+        } else { // otherwise, just quit
+            super.onBackPressed();
+        }
+    }
+
     private void displayImage() {
         if (mCurrentPhotoPath == null){
             Log.d("TAG", "mCurrentPhotoPath is null.");
@@ -196,6 +249,7 @@ public class EditPosterActivity extends AppCompatActivity {
                     mImageView.setImageBitmap(mImageBitmap);
                     mPreviousPhotoPath = mCurrentPhotoPath;
                     mPrevAbsFilePath = mAbsFilePath;
+                    imageChanged = true;
                 }
                 else {
                     Log.d("TAG", "Image Bitmap is null.");
@@ -242,8 +296,8 @@ public class EditPosterActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case CAMERA_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -276,7 +330,8 @@ public class EditPosterActivity extends AppCompatActivity {
 
     public void updateDate() {
         new DatePickerDialog(this, dateSetListener,
-                date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH)).show();
+                date.get(Calendar.YEAR), date.get(Calendar.MONTH),
+                date.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -290,7 +345,10 @@ public class EditPosterActivity extends AppCompatActivity {
     };
 
     private void updateDateText() {
-        datePicker.setText((date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.DAY_OF_MONTH)+"/"+date.get(Calendar.YEAR));}
+        String newDate = (date.get(Calendar.MONTH)+1)+"/" +
+                date.get(Calendar.DAY_OF_MONTH) + "/" + date.get(Calendar.YEAR);
+        datePicker.setText(newDate);
+    }
 
 
     private void invokeCamera() {
@@ -311,8 +369,8 @@ public class EditPosterActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Log.d("TAG", "Accessing Camera...");
-                Uri photoURI = FileProvider.getUriForFile(EditPosterActivity.this, "chiahua.ukiosktracker.provider",
-                        photoFile);
+                Uri photoURI = FileProvider.getUriForFile(EditPosterActivity.this,
+                        "chiahua.ukiosktracker.provider", photoFile);
                 Log.d("TAG", "Photo URI is: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 Log.d("TAG", "Placed Extra in Picture Intent");
@@ -329,12 +387,12 @@ public class EditPosterActivity extends AppCompatActivity {
 
         if (name.equals("")) {
             Toast.makeText(getApplicationContext(),
-                    "Poster Name is a required field", Toast.LENGTH_SHORT).show();
+                    "Poster Name is a required field.", Toast.LENGTH_SHORT).show();
         }
         else if (alreadyContains(name) && addNew) {
             Toast.makeText(getApplicationContext(),
-                    "There is already a poster titled \""+name+"\". Please choose a different title.",
-                    Toast.LENGTH_LONG).show();
+                    "There is already a poster titled \""+name+"\". " +
+                            "Please choose a different title.", Toast.LENGTH_LONG).show();
         }
         else {
             if (addNew) {
@@ -346,7 +404,7 @@ public class EditPosterActivity extends AppCompatActivity {
                     poster.save();
                     finish();
                 }
-                //Add new poster and autoconnect it to a kiosk
+                //Add new poster and auto-connect it to a kiosk
                 else {
                     poster.increaseCount();
                     poster.save();
@@ -357,7 +415,8 @@ public class EditPosterActivity extends AppCompatActivity {
                 }
             }
             else {
-                poster.modify(name, org, location, getDateString(), description, mCurrentPhotoPath, mAbsFilePath);
+                poster.modify(name, org, location, getDateString(),
+                        description, mCurrentPhotoPath, mAbsFilePath);
                 poster.save();
                 finish();
             }
@@ -383,7 +442,6 @@ public class EditPosterActivity extends AppCompatActivity {
         }
     }
 
-
     private String getDateString() {
         String result = "";
         if (!datePicker.getText().equals(getString(R.string.date_picker_btn))) {
@@ -406,14 +464,13 @@ public class EditPosterActivity extends AppCompatActivity {
         return result.toString();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_edit_menu, menu);
         if (addNew) {
-            MenuItem deleteCancelMenu = (MenuItem) menu.findItem(R.id.delete_cancel);
-            MenuItem editAddMenu = (MenuItem) menu.findItem(R.id.add_save);
+            MenuItem deleteCancelMenu = menu.findItem(R.id.delete_cancel);
+            MenuItem editAddMenu = menu.findItem(R.id.add_save);
             Log.d("TAG", "DeleteCancel is null " + (deleteCancelMenu==null));
             deleteCancelMenu.setTitle(R.string.cancel);
             editAddMenu.setTitle(R.string.add);
@@ -449,7 +506,7 @@ public class EditPosterActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         Log.d("TAG", "Creating Image File in createImageFile Method");
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
