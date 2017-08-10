@@ -6,8 +6,6 @@ package chiahua.ukiosktracker;
 
 import android.util.Log;
 import com.orm.SugarRecord;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
