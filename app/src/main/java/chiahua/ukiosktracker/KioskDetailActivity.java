@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -79,13 +80,6 @@ public class KioskDetailActivity extends AppCompatActivity {
         Log.d(TAG, "Kiosk " + kioskID + " is named " + kiosk.name());
         kioskDetailsLV = (ListView) findViewById(R.id.kioskDetailLV);
 
-        Cursor kpcursor = SugarRecord.getCursor(KioskPoster.class, null, null, null, null, null);
-        String result = "[ ";
-        for (String s : kpcursor.getColumnNames()) {
-            result += s + " ";
-        }
-        Log.d(TAG, "Cursor getColumns(KP): " + result + "]");
-
         sharedPreferences =
                 getSharedPreferences("SORTMODE", Context.MODE_PRIVATE);
 
@@ -105,6 +99,7 @@ public class KioskDetailActivity extends AppCompatActivity {
         Log.d("SetImage KioskID", kioskID + "");
         kioskImage.setImageResource(kioskImages.getResourceId(kioskID, -1));
         kioskImages.recycle();
+
 
         kioskDetailsLV.setAdapter(kioskDetailsAdapter);
 
@@ -162,7 +157,7 @@ public class KioskDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String getSortMode(int mode) {
+    private String getSortMode(int mode) {
         String sortMode;
         switch(mode) {
             case 0:

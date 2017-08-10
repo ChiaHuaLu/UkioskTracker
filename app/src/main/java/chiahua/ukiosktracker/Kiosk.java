@@ -6,6 +6,8 @@ package chiahua.ukiosktracker;
 
 import android.util.Log;
 import com.orm.SugarRecord;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class Kiosk extends SugarRecord {
     public String name() { return this.name; }
 
     // Create the list of all kiosks (please only run this once!)
+    // This is gacky, but it'll do (should be in a file)
     public static void initializeKiosks() {
         String[] kioskNames = new String[] {"Kinsolving",     "SSB",     "RLM","Hearst Student Media", "Burdine",     "Bio", "Welch-Painter", "Guadalupe",     "FAC",   "Tower", "Waggner", "Winship", "Art Building",     "GSB", "Littlefield Fountain",     "PCL", "Gregory", "RecSports Center", "School of Music"};
         double[] latitude = new double[] {    30.289897,  30.289754, 30.289301,              30.288817, 30.288587, 30.287434,       30.287372,   30.285797, 30.285912, 30.285683, 30.285526, 30.285587,      30.285494, 30.284337,              30.283790, 30.283373, 30.283512,          30.281537,         30.286861};
@@ -65,6 +68,15 @@ public class Kiosk extends SugarRecord {
         return Math.sqrt(result) * 111000;
     }
 
-
+    public int posterCount() {
+        int result = 0;
+        ArrayList<KioskPoster> allKPs =
+                (ArrayList<KioskPoster>) SugarRecord.listAll(KioskPoster.class);
+        for (KioskPoster KP : allKPs) {
+            if (KP.matchKiosk(this))
+                result++;
+        }
+        return result;
+    }
 }
 

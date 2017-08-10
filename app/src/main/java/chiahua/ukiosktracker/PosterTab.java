@@ -124,7 +124,7 @@ public class PosterTab extends Fragment {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(spChanged);
     }
 
-    public String getSortMode(int mode) {
+    private String getSortMode(int mode) {
         String sortMode;
         switch(mode) {
             case 0:
