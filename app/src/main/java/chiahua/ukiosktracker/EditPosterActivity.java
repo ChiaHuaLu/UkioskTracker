@@ -87,6 +87,8 @@ public class EditPosterActivity extends AppCompatActivity {
         orgField = (EditText) findViewById(R.id.edit_orgET);
         locationField = (EditText) findViewById(R.id.edit_locationET);
         descriptionField = (EditText) findViewById(R.id.edit_descriptionET);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         datePicker = (Button) findViewById(R.id.datePickerButton);
         clearDate = (Button) findViewById(R.id.clearDate);
@@ -497,10 +499,12 @@ public class EditPosterActivity extends AppCompatActivity {
                 confirmDelete.show(getFragmentManager(), "Delete");
             }
             return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
+        return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private File createImageFile() throws IOException {
         // Create an image file name
