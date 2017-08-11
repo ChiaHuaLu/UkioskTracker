@@ -48,10 +48,24 @@ public class PosterCursorAdapter extends CursorAdapter {
         String title = cursor.getString(cursor.getColumnIndexOrThrow("TITLE"));
         int count = cursor.getInt(cursor.getColumnIndexOrThrow("COUNT"));
         String organization = cursor.getString(cursor.getColumnIndexOrThrow("ORGANIZATION"));
+        int maxTitleLength = 24;
+        int maxOrgLength = 28;
         String subtitle = "Poster Locations: " + count + "    " +
-                convertMMDDYYYY(cursor) + "    " + organization;
+                convertMMDDYYYY(cursor) + "    ";
+        if (organization.length()>maxOrgLength-convertMMDDYYYY(cursor).length()) {
+            subtitle += organization.substring(0, maxOrgLength-convertMMDDYYYY(cursor).length()) + "...";
+        }
+        else {
+            subtitle += organization;
+        }
+        if (title.length()>maxTitleLength) {
+            titleTV.setText(title.substring(0, maxTitleLength) + "...");
+        }
+        else {
+            titleTV.setText(title);
+        }
 
-        titleTV.setText(title);
+
         subtitleTV.setText(subtitle);
 
         final long posterIDToEdit = cursor.getInt(cursor.getColumnIndexOrThrow("ID"));
