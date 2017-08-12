@@ -60,6 +60,7 @@
     <string name="sort_mode_choose">Sort posters by:</string>
     <string name="ok">Ok</string>
     <string name="sortby">Sort By</string>
+    <string name="unsaved_question">Any unsaved changes will be lost. Continue?</string>
 
 
 </resources>

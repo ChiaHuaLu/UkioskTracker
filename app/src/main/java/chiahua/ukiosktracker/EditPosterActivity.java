@@ -3,6 +3,7 @@ package chiahua.ukiosktracker;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,6 +51,14 @@ public class EditPosterActivity extends AppCompatActivity {
     private Poster poster;
     boolean addNew;
     int kioskID;
+
+    private String oldName;
+    private String oldOrg;
+    private String oldLocation;
+    private String oldDate;
+    private String oldDescription;
+
+    private boolean imageChanged;
 
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 15;
     public static final int FILE_WRITE_PERMISSION_REQUEST_CODE = 16;
@@ -125,6 +134,13 @@ public class EditPosterActivity extends AppCompatActivity {
             Log.d("TAG", "Editing Poster");
             long posterID = receivedIntent.getLongExtra("PosterID", -1);
             poster = Poster.findById(Poster.class, posterID);
+
+            oldName = poster.title();
+            oldOrg = poster.organization();
+            oldLocation = poster.eventLocation();
+            oldDate = poster.eventTime();
+            oldDescription = poster.details();
+
             nameField.setText(poster.title());
             orgField.setText(poster.organization());
             locationField.setText((poster.eventLocation()));
@@ -142,6 +158,11 @@ public class EditPosterActivity extends AppCompatActivity {
         else {
             setTitle(R.string.add_new_poster);
             Log.d("TAG", "Adding New Poster.");
+            oldName = "";
+            oldOrg = "";
+            oldLocation = "";
+            oldDate = "";
+            oldDescription = "";
         }
     }
 
@@ -179,6 +200,36 @@ public class EditPosterActivity extends AppCompatActivity {
         displayImage();
     }
 
+    @Override
+    public void onBackPressed() {
+        String name = nameField.getText().toString();
+        String org = orgField.getText().toString();
+        String location = locationField.getText().toString();
+        String description = descriptionField.getText().toString();
+
+        Log.d("ChangedTest", "Old Values: [" + oldName + ", " + oldOrg + ", " + oldLocation + ", " +
+                oldDate + ", " + oldDescription + "]");
+
+        Log.d("ChangedTest", "New Values: [" + name + ", " + org + ", " + location + ", " +
+                getDateString() + ", " + description + ", " + "]");
+
+        // if any changes (date/image + name, org, loc, description) were made, display dialog
+        if (imageChanged
+                || !oldName.equals(name)
+                || !oldOrg.equals(org)
+                || !oldLocation.equals(location)
+                || !oldDate.equals(getDateString())
+                || !oldDescription.equals(description)) {
+
+            FragmentManager fm = getFragmentManager();
+            UnsavedDialogFragment unsavedDialogFragment = new UnsavedDialogFragment();
+            unsavedDialogFragment.show(fm, "quit");
+        } else { // otherwise, just quit
+            super.onBackPressed();
+        }
+    }
+
+
     private void displayImage() {
         if (mCurrentPhotoPath == null){
             Log.d("TAG", "mCurrentPhotoPath is null.");
@@ -187,19 +238,25 @@ public class EditPosterActivity extends AppCompatActivity {
             Log.d("TAG", "Setting Image Bitmap to mImageView");
             try {
                 //mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                  //      Uri.parse(mCurrentPhotoPath));
+                //      Uri.parse(mCurrentPhotoPath));
                 mImageBitmap = decodeSampledBitmapFromUri(getApplicationContext(), Uri.parse(mCurrentPhotoPath), mWidth, mHeight);
                 if (mImageBitmap != null) {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(setOrientation());
                     mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
                     mImageView.setImageBitmap(mImageBitmap);
+
+                   // if (poster != null && poster.getImagePath() != null && !poster.getImagePath().equals(mCurrentPhotoPath))
+                    imageChanged = true;
+
                     mPreviousPhotoPath = mCurrentPhotoPath;
                     mPrevAbsFilePath = mAbsFilePath;
+
+
                 }
                 else {
                     Log.d("TAG", "Image Bitmap is null.");
-                    if (mCurrentPhotoPath == mPreviousPhotoPath) {
+                    if (mCurrentPhotoPath.equals(mPreviousPhotoPath)) {
                         mImageView.setImageResource(R.drawable.noimageavailable);
                     }
                     else {
