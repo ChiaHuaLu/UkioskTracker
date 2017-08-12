@@ -42,4 +42,6 @@ public class KioskPoster extends SugarRecord {
         return poster;
     }
 
+    public Kiosk getKiosk() { return kiosk; }
+
 }
