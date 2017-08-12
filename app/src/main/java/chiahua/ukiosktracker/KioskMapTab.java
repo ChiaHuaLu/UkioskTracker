@@ -3,6 +3,7 @@ package chiahua.ukiosktracker;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -109,6 +110,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
 
+        mMap.getUiSettings().setMapToolbarEnabled(true);
+
         for (Kiosk kiosk : allKiosks) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
@@ -121,10 +124,10 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 int kioskID = markerKioskHashMap.get(marker);
                 Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+
                 Log.d(TAG, "Kiosk Marker says: " + kiosk.getPosterCount() + " posters are here.");
                 marker.setSnippet("Posters: " + kiosk.getPosterCount());
-                marker.showInfoWindow();
-                return true;
+                return false;
             }
         });
 
@@ -140,6 +143,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 startActivity(kioskDetailsIntent);
             }
         });
+
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
         //Check permission for location
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
