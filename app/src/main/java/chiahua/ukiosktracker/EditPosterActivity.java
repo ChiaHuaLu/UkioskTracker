@@ -253,7 +253,10 @@ public class EditPosterActivity extends AppCompatActivity {
                     mImageBitmap = Bitmap.createBitmap(mImageBitmap, 0, 0, mImageBitmap.getWidth(), mImageBitmap.getHeight(), matrix, true);
                     mImageView.setImageBitmap(mImageBitmap);
 
-                    if (poster != null && poster.getImagePath() != null && !poster.getImagePath().equals(mCurrentPhotoPath))
+                    // if new path was null, and old path was null, nothing changed
+                    // otherwise compare the two
+                    boolean bothNull = mPreviousPhotoPath == null && mCurrentPhotoPath == null;
+                    if (!bothNull || !mPreviousPhotoPath.equals(mCurrentPhotoPath))
                         imageChanged = true;
 
                     mPreviousPhotoPath = mCurrentPhotoPath;
@@ -501,7 +504,7 @@ public class EditPosterActivity extends AppCompatActivity {
         } else if (id == R.id.delete_cancel) {
             if (addNew) {
                 //cancel Editing Poster
-                finish();
+                onBackPressed();
             }
             else {
                 ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
