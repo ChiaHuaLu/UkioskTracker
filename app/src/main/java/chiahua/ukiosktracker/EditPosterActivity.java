@@ -151,7 +151,7 @@ public class EditPosterActivity extends AppCompatActivity {
             descriptionField.setText(poster.details());
 
             if (!poster.eventTime().equals("")) {
-                restoreDateInfo();
+                restoreDateInfo(poster.getDetailArray()[3]);
                 updateDateText();
             }
             mImageView.setImageResource(R.drawable.noimageavailable);
@@ -175,6 +175,7 @@ public class EditPosterActivity extends AppCompatActivity {
         Log.d("TAG", "Entering onSaveInstanceState");
         outState.putCharSequence("nameField", nameField.getText());
         outState.putCharSequence("orgField", orgField.getText());
+        outState.putString("date", getDateString());
         outState.putCharSequence("locationField", locationField.getText());
         outState.putCharSequence("descriptionField", descriptionField.getText());
         outState.putInt("kioskID", kioskID);
@@ -201,6 +202,9 @@ public class EditPosterActivity extends AppCompatActivity {
         mPrevAbsFilePath = savedInstanceState.getString("mPrevAbsFilePath");
         cameraAccess = savedInstanceState.getBoolean("cameraAccess");
         fileAccess = savedInstanceState.getBoolean("fileAccess");
+        String dateString = savedInstanceState.getString("date");
+        restoreDateInfo(dateString);
+        updateDateText();
         displayImage();
     }
 
@@ -440,8 +444,7 @@ public class EditPosterActivity extends AppCompatActivity {
     }
 
 
-    private void restoreDateInfo() {
-        String yyyymmdd = poster.getDetailArray()[3];
+    private void restoreDateInfo(String yyyymmdd) {
         if (yyyymmdd.length()>0) {
             date.set(Calendar.MONTH, Integer.parseInt(yyyymmdd.substring(4, 6))-1);
             date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(yyyymmdd.substring(6)));
