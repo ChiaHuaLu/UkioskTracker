@@ -47,7 +47,6 @@
             android:name=".AboutActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -68,23 +67,23 @@
         <activity
             android:name=".EditPosterActivity"
             android:label="@string/title_activity_edit_poster"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".KioskDetailActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:label="Kiosk Detail"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".PosterChecklistActivity" />
+            android:label="Kiosk Detail" />
+        <activity android:name=".PosterChecklistActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".HelpActivity"
             android:allowTaskReparenting="true"
             android:screenOrientation="portrait"
-            android:label="@string/help"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".Refresh"></activity>
+            android:label="@string/help" />
+        <activity android:name=".Refresh"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -82,6 +82,8 @@ public class EditPosterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_poster);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         nameField = (EditText) findViewById(R.id.edit_nameET);
         orgField = (EditText) findViewById(R.id.edit_orgET);
         locationField = (EditText) findViewById(R.id.edit_locationET);
@@ -499,6 +501,9 @@ public class EditPosterActivity extends AppCompatActivity {
                 ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
                 confirmDelete.show(getFragmentManager(), "Delete");
             }
+            return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
