@@ -160,6 +160,12 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[],
                                            int[] grantResults) {
