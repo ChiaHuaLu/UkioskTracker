@@ -134,7 +134,7 @@ public class PosterTab extends Fragment {
                 sortMode = "ORGANIZATION IS NULL OR ORGANIZATION='', ORGANIZATION, TITLE";
                 break;
             case 2:
-                sortMode = "COUNT DESC, TITLE";
+                sortMode = "COUNT ASC, TITLE";
                 break;
             case 3:
                 sortMode = "EVENT_TIME IS NULL OR EVENT_TIME='', EVENT_TIME, TITLE";
