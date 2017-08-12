@@ -18,6 +18,9 @@ public class Kiosk extends SugarRecord {
     // Short name / name for kioskID
     private String name;
 
+    private int posterCount;
+
+
     // Leave empty constructor for SugarRecords
     public Kiosk() {}
 
@@ -63,6 +66,16 @@ public class Kiosk extends SugarRecord {
         double result = (latitudeDelta * latitudeDelta) +
                 (longitudeDelta * longitudeDelta);
         return Math.sqrt(result) * 111000;
+    }
+
+    public int getPosterCount() {
+        return this.posterCount;
+    }
+
+    public void updatePosterCount(int result) {
+        Log.d("Kiosk", "Kiosk" + this.getId() + " had " + posterCount + " posters.");
+        posterCount = result;
+        Log.d("Kiosk", "Kiosk" + this.getId() + " now has " + posterCount + " posters.");
     }
 
 

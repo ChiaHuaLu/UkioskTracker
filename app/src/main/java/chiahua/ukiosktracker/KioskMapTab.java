@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class KioskMapTab extends Fragment implements OnMapReadyCallback {
@@ -47,6 +48,9 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
     private boolean locationFineAccess = false;
     private boolean locationCoarseAccess = false;
 
+    public HashMap<Marker, Integer> markerKioskHashMap;
+
+
 
 
     @Override
@@ -67,6 +71,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         Log.d(TAG, "test if Kiosk database is empty: " + Kiosk.count(Kiosk.class) + " entries");
         allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
+        markerKioskHashMap = new HashMap<>();
         return rootView;
     }
 
@@ -102,21 +107,34 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
         mMap.setMinZoomPreference(DEFAULT_MIN_ZOOM);
         mMap.setMaxZoomPreference(DEFAULT_MAX_ZOOM);
         for (Kiosk kiosk : allKiosks) {
-            mMap.addMarker(new MarkerOptions()
+            Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
-                    .title(kiosk.getId().toString()));
+                    .title(kiosk.name()));
+            markerKioskHashMap.put(marker, kiosk.getId().intValue());
+
         }
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                int kioskID = markerKioskHashMap.get(marker);
+                Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
+                Log.d(TAG, "Kiosk Marker says: " + kiosk.getPosterCount() + " posters are here.");
+                marker.setSnippet("Posters: " + kiosk.getPosterCount());
+                marker.showInfoWindow();
+                return true;
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
                 Intent kioskDetailsIntent =
                         new Intent(KioskMapTab.this.getActivity(), KioskDetailActivity.class);
                 // send in the kioskID ID (based on database)
-                int kioskID = Integer.parseInt(marker.getTitle());
+                int kioskID = markerKioskHashMap.get(marker);
                 Log.d(TAG, "testing - send in kioskID [" + kioskID + "] to kioskDetails");
                 kioskDetailsIntent.putExtra("kioskID", kioskID);
                 startActivity(kioskDetailsIntent);
-                return true;
             }
         });
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(UT_AUSTIN_CAMERA));
