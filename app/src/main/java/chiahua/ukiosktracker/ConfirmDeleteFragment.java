@@ -12,12 +12,6 @@ import android.os.Bundle;
 
 public class ConfirmDeleteFragment extends DialogFragment {
 
-    private EditPosterActivity parent;
-
-    public ConfirmDeleteFragment(EditPosterActivity parent) {
-        this.parent = parent;
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -27,7 +21,7 @@ public class ConfirmDeleteFragment extends DialogFragment {
                 .setPositiveButton(R.string.delete,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                parent.delete();
+                                ((EditPosterActivity) getActivity()).delete();
                                 dismiss();
                             }
                         })
