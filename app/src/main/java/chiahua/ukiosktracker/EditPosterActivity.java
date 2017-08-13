@@ -203,8 +203,10 @@ public class EditPosterActivity extends AppCompatActivity {
         cameraAccess = savedInstanceState.getBoolean("cameraAccess");
         fileAccess = savedInstanceState.getBoolean("fileAccess");
         String dateString = savedInstanceState.getString("date");
-        restoreDateInfo(dateString);
-        updateDateText();
+        if (!dateString.equals("")) {
+            restoreDateInfo(dateString);
+            updateDateText();
+        }
         displayImage();
     }
 
@@ -448,7 +450,7 @@ public class EditPosterActivity extends AppCompatActivity {
 
 
     private void restoreDateInfo(String yyyymmdd) {
-        if (yyyymmdd.length()>0) {
+        if (!yyyymmdd.equals("")) {
             date.set(Calendar.MONTH, Integer.parseInt(yyyymmdd.substring(4, 6))-1);
             date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(yyyymmdd.substring(6)));
             date.set(Calendar.YEAR, Integer.parseInt(yyyymmdd.substring(0, 4)));
