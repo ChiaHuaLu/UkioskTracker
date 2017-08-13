@@ -507,7 +507,7 @@ public class EditPosterActivity extends AppCompatActivity {
                 onBackPressed();
             }
             else {
-                ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment(this);
+                ConfirmDeleteFragment confirmDelete = new ConfirmDeleteFragment();
                 confirmDelete.show(getFragmentManager(), "Delete");
             }
             return true;
