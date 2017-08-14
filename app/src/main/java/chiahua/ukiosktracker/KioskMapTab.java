@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -116,6 +117,15 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
                     .title(kiosk.name()));
+            if (kiosk.getPosterCount() == 0) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(270));
+            }
+            else {
+                float color = 150-10*kiosk.getPosterCount();
+                if (kiosk.getPosterCount() > 15)
+                    color = 0;
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
+            }
             markerKioskHashMap.put(marker, kiosk.getId().intValue());
         }
 
@@ -126,7 +136,8 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 Kiosk kiosk = Kiosk.findById(Kiosk.class, kioskID);
 
                 Log.d(TAG, "Kiosk Marker says: " + kiosk.getPosterCount() + " posters are here.");
-                marker.setSnippet("Posters: " + kiosk.getPosterCount());
+                marker.setSnippet(getString(R.string.infowindow_posters) + kiosk.getPosterCount());
+
                 return false;
             }
         });

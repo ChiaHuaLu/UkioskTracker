@@ -46,7 +46,7 @@
     <string name="help1">Help</string>
     <string name="help2">Posted - UT Kiosk Tracker is an app designed to assist University of Texas Student Organization promotion officers keep track of which posters are posted where, and remind them if any poster is no longer relevant and should be taken down.\n</string>
     <string name="help3">Kiosks Tab</string>
-    <string name="help4">On the kiosks tab, you can see the exact location of where every kiosk on campus is located at. By clicking on a marker\'s tooltip, you can examine which posters are posted at that kiosk location on the Kiosk Details page.\n</string>
+    <string name="help4">On the kiosks tab, you can see the exact location of where every kiosk on campus is located at. By clicking on a marker\'s tooltip, you can examine which posters are posted at that kiosk location on the Kiosk Details page.\nThe locations are color coded by how many posters are present:\n0 Posters - Purple\n1 Poster - Green\n9 Posters - Yellow\n12 Posters - Orange\n15+ Posters - Red\n</string>
     <string name="help5">Posters Tab</string>
     <string name="help6">"On the posters tab, you can see a list of every poster you have ever posted. Any expired posters will be highlighted to stand out, and you can also choose how you want the posters to be sorted by. To add a new poster, just click on the floating add button near the bottom right corner and enter new poster's details, but the Poster Title field is the only field required to be filled out. You can click on the edit icon to the right of a poster to modify its information. You can even scan the poster by clicking the camera icon button.\n\nBy clicking on a poster, it opens the map checklist page, which will be discussed in detail below.\n"</string>
     <string name="help7">Kiosk Details</string>
@@ -61,6 +61,7 @@
     <string name="ok">Ok</string>
     <string name="sortby">Sort By:</string>
     <string name="unsaved_question">Any unsaved changes will be lost. Continue?</string>
+    <string name="infowindow_posters">Posters:</string>
 
 
 </resources>
