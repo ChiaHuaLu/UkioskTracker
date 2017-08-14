@@ -71,8 +71,7 @@
         <activity
             android:name=".KioskDetailActivity"
             android:screenOrientation="portrait"
-            android:label="Kiosk Detail"
-            android:parentActivityName=".MainActivity" />
+            android:label="Kiosk Detail" />
         <activity android:name=".PosterChecklistActivity"
             android:screenOrientation="portrait"/>
 

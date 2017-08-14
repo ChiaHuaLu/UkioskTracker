@@ -77,6 +77,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         allKiosks = (ArrayList<Kiosk>) Kiosk.listAll(Kiosk.class);
+        updateMarkers();
     }
 
     /**
@@ -117,7 +118,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(kiosk.latit(), kiosk.longit()))
                     .title(kiosk.name()));
-            if (kiosk.getPosterCount() == 0) {
+            /*if (kiosk.getPosterCount() == 0) {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(270));
             }
             else {
@@ -125,9 +126,10 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
                 if (kiosk.getPosterCount() > 15)
                     color = 0;
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
-            }
+            }*/
             markerKioskHashMap.put(marker, kiosk.getId().intValue());
         }
+        updateMarkers();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -137,6 +139,7 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
 
                 Log.d(TAG, "Kiosk Marker says: " + kiosk.getPosterCount() + " posters are here.");
                 marker.setSnippet(getString(R.string.infowindow_posters) + kiosk.getPosterCount());
+
 
                 return false;
             }
@@ -172,6 +175,24 @@ public class KioskMapTab extends Fragment implements OnMapReadyCallback {
             ActivityCompat.requestPermissions(this.getActivity(),
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     LOCATION_COARSE_REQ_CODE);
+        }
+    }
+
+    public void updateMarkers() {
+        for (Marker marker : markerKioskHashMap.keySet()) {
+            int kioskID = markerKioskHashMap.get(marker);
+            int numPosters = allKiosks.get(kioskID-1).getPosterCount();
+            Log.d(TAG, "Kiosk Marker says: " + numPosters + " posters are here.");
+           // marker.setSnippet(getString(R.string.infowindow_posters) + numPosters);
+            if (numPosters == 0) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(240));
+            }
+            else {
+                float color = 150-10*numPosters;
+                if (numPosters > 15)
+                    color = 0;
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(color));
+            }
         }
     }
 

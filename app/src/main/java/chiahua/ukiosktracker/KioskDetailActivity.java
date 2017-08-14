@@ -62,6 +62,8 @@ public class KioskDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kiosk_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle extras = getIntent().getExtras();
         kioskID = extras.getInt("kioskID");
         whereClause = "ID IN (SELECT p.ID from KIOSK_POSTER kp INNER JOIN " +
@@ -110,6 +112,11 @@ public class KioskDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "Notify dataset has been changed onResume");
@@ -145,6 +152,9 @@ public class KioskDetailActivity extends AppCompatActivity {
             SortByFragment sortByFragment
                     = SortByFragment.newInstance(mode);
             sortByFragment.show(getSupportFragmentManager(), "SortBy");
+            return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
