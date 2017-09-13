@@ -403,7 +403,7 @@ public class EditPosterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "Poster Name is a required field.", Toast.LENGTH_SHORT).show();
         }
-        else if (alreadyContains(name)) {
+        else if (alreadyContains(name) && addNew) {
             Toast.makeText(getApplicationContext(),
                     "There is already a poster titled \""+name+"\". " +
                             "Please choose a different title.", Toast.LENGTH_LONG).show();
