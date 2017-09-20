@@ -155,6 +155,7 @@ public class EditPosterActivity extends AppCompatActivity {
                 updateDateText();
             }
             mImageView.setImageResource(R.drawable.noimageavailable);
+            mPreviousPhotoPath = poster.getImagePath();
             mCurrentPhotoPath = poster.getImagePath();
             mAbsFilePath = poster.getAbsPath();
             displayImage();
@@ -258,8 +259,12 @@ public class EditPosterActivity extends AppCompatActivity {
                     // if new path was null, and old path was null, nothing changed
                     // otherwise compare the two
                     boolean bothNull = mPreviousPhotoPath == null && mCurrentPhotoPath == null;
-                    if (!bothNull || !mPreviousPhotoPath.equals(mCurrentPhotoPath))
-                        imageChanged = true;
+                    if (!bothNull) {
+                        if (!mPreviousPhotoPath.equals(mCurrentPhotoPath)) {
+                            imageChanged = true;
+                            Log.d("EPA", "Image marked as changed: " + mPreviousPhotoPath + " | " + mCurrentPhotoPath);
+                        }
+                    }
 
                     mPreviousPhotoPath = mCurrentPhotoPath;
                     mPrevAbsFilePath = mAbsFilePath;
